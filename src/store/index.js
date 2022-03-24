@@ -12,7 +12,7 @@ Vue.use(Vuex);
 const modules = {
 	app,
     auth,
-	permission
+	// permission
 };
 
 const store = new Vuex.Store({

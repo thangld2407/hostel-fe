@@ -1,0 +1,14 @@
+.manage-room {
+    padding: 20px;
+    &__header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        &-actions {
+            button {
+                background: #242368;
+            }
+        }
+    }
+}

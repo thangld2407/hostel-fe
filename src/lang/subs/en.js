@@ -8,7 +8,8 @@ export default {
 		LOGIN: 'Login',
 		PAGE_NOT_FOUND: 'Page Not Found',
 		DASHBOARD: 'Dashboard',
-		ACCOUNT_MANAGEMENT: 'Account Management'
+		ACCOUNT_MANAGEMENT: 'Account Management',
+		ROOM_MANAGEMENT: 'Room Management',
 	},
 	NAVBAR: {
 		LANGUAGE: 'Language',

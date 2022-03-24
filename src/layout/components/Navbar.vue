@@ -13,7 +13,7 @@
 
 		<b-collapse id="nav-collapse" is-nav>
 			<b-navbar-nav id="text-name">
-				{{ $t(title) }}
+				<!-- <img src="https://i.pinimg.com/564x/f9/92/5e/f9925ef90a024cbf91ce44422d44b391.jpg" alt=""> -->
 			</b-navbar-nav>
 
 			<b-navbar-nav class="ml-auto">
@@ -94,4 +94,11 @@
 	};
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+#text-name {
+	/* img {
+		border-radius: 50%;
+		width: 50px;
+	} */
+}
+</style>

@@ -7,6 +7,7 @@ import Login from './modules/login';
 import errorRoute from './modules/error';
 import Dashboard from './modules/dashboard';
 import AccountManagement from './modules/account';
+import Room from './modules/room';
 
 
 export const constantRoutes = [
@@ -18,6 +19,7 @@ export const constantRoutes = [
 	},
 	Dashboard,
 	AccountManagement,
+	Room,
 	errorRoute,
 	{
 		path: '*',
