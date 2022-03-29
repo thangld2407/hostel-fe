@@ -76,7 +76,6 @@ import { MakeToast } from '@/toast/toastMessage';
 export default {
   name: "ManageRoom",
   components: {
-    // Layout,
     CreateRoom,
   },
   methods: {
