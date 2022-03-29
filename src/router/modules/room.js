@@ -3,7 +3,8 @@ const Room = {
 	path: '/manage-room',
 	name: 'RoomManagement',
 	meta: {
-		title: 'ROUTER.ROOM_MANAGEMENT'
+		title: 'ROUTER.ROOM_MANAGEMENT',
+		icon:"fas fa-laptop"
 	},
 	component: Layout,
 	redirect: {

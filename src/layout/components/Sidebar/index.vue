@@ -45,6 +45,7 @@
 		position: fixed;
 		left: 250px;
 		width: 0;
+		top: 0;
 		height: 100%;
 		margin-left: -250px;
 		overflow-y: auto;

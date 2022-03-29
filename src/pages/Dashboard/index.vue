@@ -26,8 +26,8 @@
 							<th colspan="2">Phòng Trống</th>
 						</thead>
 						<thead>
-							<th>Số Phòng</th>
-							<th>Giá Tièn</th>
+							<th>Phòng Số</th>
+							<th>Giá Tiền</th>
 						</thead>
 						<tbody>
 							<tr>
@@ -43,8 +43,8 @@
 							<th colspan="2">Phòng Còn Nợ Tiền</th>
 						</thead>
 						<thead>
-							<th>Số Phòng</th>
-							<th>Giá Tièn</th>
+							<th>Phòng Số</th>
+							<th>Giá Tiền</th>
 						</thead>
 						<tbody>
 							<tr>
