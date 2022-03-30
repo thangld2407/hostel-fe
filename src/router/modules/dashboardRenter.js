@@ -1,24 +1,24 @@
 import Layout from '@/layout';
 
 const Dashboard = {
-	path: '/dashboard',
-	name: 'Dashboard',
+	path: '/dashboard-renter',
+	name: 'DashboardRenter',
 	meta: {
 		title: 'ROUTER.DASHBOARD',
 		icon:"fas fa-tachometer-alt",
 	},
 	component: Layout,
 	redirect: {
-		name: 'DashboardIndex'
+		name: 'DashboardRenter'
 	},
 	children: [
 		{
 			path: 'index',
-			name: 'DashboardIndex',
+			name: 'DashboardRenter',
 			meta: {
 				title: 'ROUTER.DASHBOARD',
 			},
-			component: () => import(/* webpackChunkName: "Dashboard" */ '@/pages/Dashboard/index')
+			component: () => import('../../pages/Dashboard/DashboardRenter/index.vue')
 		}
 	]
 };

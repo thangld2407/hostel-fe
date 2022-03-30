@@ -1,6 +1,6 @@
 import i18n from '@/lang';
 
-const TITLE = process.env.MIX_APP_TITLE;
+const TITLE = "HOSTEL MANAGEMENT";
 
 export default function getPageTitle(key) {
 	const HASKEY = i18n.te(`${key}`);

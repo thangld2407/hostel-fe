@@ -3,7 +3,7 @@ import i18n from '@/lang';
 import { getLanguage } from '@/lang/helper/getLang';
 import { MakeToast } from '@/toast/toastMessage';
 
-const baseURL = process.env.MIX_BASE_API;
+const baseURL = process.env.VUE_APP_BASE_URL;
 
 const service = axios.create({
 	baseURL: baseURL,

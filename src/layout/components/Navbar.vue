@@ -1,8 +1,10 @@
 <template>
-	<b-navbar toggleable="lg" type="dark">
-		<b-navbar-brand @click.prevent.stop="$emit('toggle')">
-			<i id="toggle-menu" class="icofont-navigation-menu" />
-		</b-navbar-brand>
+	<div id="navbar">
+		<nav>
+			<span>{{$t('NAVBAR.AREA')}}</span>
+			<input type="text" />
+		</nav>
+		<b-navbar toggleable="lg" type="dark">
 
 		<b-navbar-toggle target="nav-collapse">
 			<template #default="{ expanded }">
@@ -13,22 +15,10 @@
 
 		<b-collapse id="nav-collapse" is-nav>
 			<b-navbar-nav id="text-name">
-				{{ $t(title) }}
+				<!-- <img src="https://i.pinimg.com/564x/f9/92/5e/f9925ef90a024cbf91ce44422d44b391.jpg" alt=""> -->
 			</b-navbar-nav>
 
 			<b-navbar-nav class="ml-auto">
-				<b-nav-item-dropdown right>
-					<template #button-content1>
-						{{ $t('NAVBAR.LANGUAGE') }}
-					</template>
-					<b-dropdown-item href="#" @click="setLanguage('en')">
-						{{ $t('NAVBAR.ENGLISH') }}
-					</b-dropdown-item>
-					<b-dropdown-item href="#" @click="setLanguage('vn')">
-						{{ $t('NAVBAR.VIETNAMESE') }}
-					</b-dropdown-item>
-				</b-nav-item-dropdown>
-
 				<b-dropdown id="dropdown-profile" text="Change" block class="m-2">
 					<template #button-content1>
 						{{ $t('NAVBAR.LANGUAGE') }}
@@ -52,15 +42,16 @@
 						:disabled="routePath === '/dashboard/profile'"
 						@click="$router.push('/dashboard/profile')"
 					>
-						{{ $t('routes.profile') }}
+						{{ $t('NAVBAR.PROFILE') }}
 					</b-dropdown-item>
 					<b-dropdown-item class="text" @click="logout">{{
-						$t('navbar.logout')
+						$t('NAVBAR.LOGOUT')
 					}}</b-dropdown-item>
 				</b-dropdown>
 			</b-navbar-nav>
 		</b-collapse>
 	</b-navbar>
+	</div>
 </template>
 
 <script>
@@ -94,4 +85,25 @@
 	};
 </script>
 
-<style></style>
+<style scoped>
+#navbar {
+  background: #ECECEC;
+  height: 50px;
+  position: fixed;
+  top: 0;
+  width: calc(100% - 250px);
+  left: 250px;
+  display: flex !important;
+  align-items: center;
+  justify-content: end;
+  z-index: 999;
+
+}
+#navbar nav input {
+  margin-left: 10px;
+  width: 150px;
+  border-radius: 5px;
+  border: none;
+  
+}
+</style>

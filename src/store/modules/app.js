@@ -3,7 +3,16 @@ import { getLanguage } from '@/lang/helper/getLang';
 import ConstCookie from '@/const/cookie';
 
 const state = {
-	language: getLanguage()
+	language: getLanguage(),
+	list: [
+		{
+			id:1,
+			price:12,
+			description:"abc"
+		}
+	],
+  	room_info:[],
+	list_account:[]
 };
 
 const mutations = {
