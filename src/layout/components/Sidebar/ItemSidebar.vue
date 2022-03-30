@@ -2,6 +2,7 @@
 	<div>
 		<li v-for="(item, index) in routes" :key="`router-${index}`">
 			<router-link :to="item['path']">
+				<i :class="(item['meta']['icon'])" />
 				{{ $t(item['meta']['title']) }}
 			</router-link>
 		</li>
@@ -60,6 +61,10 @@
 		a {
 			color: $white !important;
 			text-decoration: none;
+			i{
+				width: 16px;
+				margin: 0px 20px 0px 15px;
+			}
 		}
 
 		a.nav-link {
@@ -69,7 +74,7 @@
 			}
 		}
 
-		a.router-link-active {
+		.router-link-active {
 			color: yellow !important;
 		}
 	}

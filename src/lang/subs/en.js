@@ -10,11 +10,22 @@ export default {
 		DASHBOARD: 'Dashboard',
 		ACCOUNT_MANAGEMENT: 'Account Management',
 		ROOM_MANAGEMENT: 'Room Management',
+		ROOM_REGISTER: 'Room Register',
+		NOTIFICATION: 'Notification',
+		CUSTOMER: 'Customer',
+		REVENUE: 'Revenue',
+		AREA: 'Area',
+		BILL: 'Bill',
+		REPORT: 'Report'
+		
 	},
 	NAVBAR: {
 		LANGUAGE: 'Language',
 		ENGLISH: 'English',
-		VIETNAMESE: 'Vietnamese'
+		VIETNAMESE: 'Vietnamese',
+		AREA: 'Area',
+		PROFILE: 'Profile',
+		LOGOUT: 'Logout'
 	},
 	LOGIN: {
 		TITLE: 'Login',
@@ -75,5 +86,44 @@ export default {
 				ACTIONS: "Actions",
 			}
 		}
-	}
+	},
+	MANAGER: {
+		TITLE: 'List Of Rooms',
+		CREATE: 'Create Room',
+    	SUCCESS: 'Create Success',
+		EDIT: 'Edit room',
+		SELECT_ROOM: {
+			TOTAL: 'Total',
+			RENTED: 'Being Rented',
+			EMPTY: 'Empty'
+    	},
+		SEARCH: {
+			TITLE: 'Search',
+			PLACEHOLDER: 'Enter room number'
+		},
+		TABLE: {
+			ID: 'Room No',
+			PRICE: 'Price (VND)',
+			STATUS: 'Status',
+			DESCRIPTION: 'Description',
+			DETAIL: 'Detail',
+			EDIT: 'Edit',
+			DELETE: 'Delete'
+
+		},
+		FORM: {
+			TITLE: 'Create room',
+			CATEGORY_NAME: 'Category name',
+			START_DATE: 'Start date',
+			END_DATE: 'End date',
+			DESCRIPTION: 'Description',
+			CREATE: 'Create',
+			SUCCESS: 'Create Successfully',
+			SAVE: 'SAVE',
+			CLOSE: 'Close',
+			MESSAGE: {
+				SPACE: 'You must enter a valid value'
+			}
+		},
+	},
 };

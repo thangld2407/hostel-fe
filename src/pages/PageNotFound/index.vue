@@ -11,10 +11,10 @@
 				</div>
 
 				<div class="display-page-not-found__control">
-					<b-button class="btn-go-to-home">
+					<router-link to="/dashboard"><b-button class="btn-go-to-home">
 						<i class="fas fa-home-lg"></i>
 						{{ $t('PAGE_NOT_FOUND.GO_TO_HOME') }}
-					</b-button>
+					</b-button></router-link>
 				</div>
 			</div>
 		</b-container>
