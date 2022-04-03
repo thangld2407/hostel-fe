@@ -16,16 +16,16 @@ router.beforeEach(async (to, from, next) => {
 		if (to.path === '/login') {
 			next({ path: '/' });
 		} else {
-			const hasRoles = 'admin';
+			const hasRoles = store.getters.roles;
 
 			if (hasRoles) {
 				next();
 			} else {
 				try {
 					// const res = await store.dispatch('auth/getUserInfo');
-					// const ROLES = res['roles'];
+					const ROLES = res['roles'];
 					const accessRoutes = await store.dispatch('permission/generateRoutes', {
-						roles: 'admin',
+						roles: ROLES,
 						permissions: []
 					});
 					console.log(accessRoutes, "accessRoutes");

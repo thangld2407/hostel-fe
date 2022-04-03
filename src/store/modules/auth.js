@@ -13,7 +13,6 @@ export function getToken() {
 
 	return  '';
 }
-
 const state = {
 	_id: '',
 	fullname: '',
@@ -25,6 +24,7 @@ const state = {
 const mutations = {
 	SET_ID: (state, id) => {
 		state._id = id;
+		
 	},
 	SET_NAME: (state, name) => {
 		state.fullname = name;
@@ -39,6 +39,7 @@ const mutations = {
 		state.accessToken = token;
 		Cookies.set(ConstCookie['TOKEN'], token);
 	}
+	
 };
 
 const actions = {
