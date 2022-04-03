@@ -9,17 +9,17 @@ const Notification = {
 	},
 	component: Layout,
 	redirect: {
-		name: 'Report'
+		name: 'ReportList'
 	},
 	children: [
 		{
-            path: 'index',
-            name: 'Report',
+            path: 'list',
+            name: 'ReportList',
             meta: {
                 title: "ROUTER.REPORT"
             },
             component: () => import(
-                '../../pages/Report/report.vue'
+                '../../pages/ReportProblem/report.vue'
             )
 		}
 	]

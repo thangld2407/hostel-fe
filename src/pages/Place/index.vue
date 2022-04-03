@@ -1,22 +1,26 @@
 <template>
-  <div id="area">
+  <div id="place">
     <div class="title">
-      <span>Khu vực</span>
-      <button>Tạo khu vực</button>
+      <span>Địa điểm</span>
+      <button>Tạo dãy trọ</button>
     </div>
     <div class="container">
         <table class="table table-bordered">
             <thead>
               <tr>
                 <th scope="col" class="col-1">ID</th>
-                <th scope="col" class="col-2">Tên khu vực</th>
-                <th scope="col" class="col-2">Ngày tạo</th>
+                <th scope="col" class="col-1">Tên khu vực</th>
+                <th scope="col" class="col-1">Tên dãy trọ</th>
+                <th scope="col" class="col-1">Địa chỉ</th>
+                <th scope="col" class="col-1">Ngày tạo</th>
                 <th scope="col" class="col-1"></th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <th scope="row">1</th>
+                <td>1</td>
+                <td>1</td>
                 <td>1</td>
                 <td>1</td>
                 <td class="actions">
@@ -41,7 +45,7 @@ export default {
 </script>
 
 <style scoped>
-#area .title {
+#place .title {
   position: fixed;
   width: 100%;
   top: 50px;
@@ -54,7 +58,7 @@ export default {
   align-items: center;
 
 }
-#area .title button{
+#place .title button{
   border: none;
   border-radius: 5px;
   margin-left: 1050px;

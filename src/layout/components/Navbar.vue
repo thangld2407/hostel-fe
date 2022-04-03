@@ -14,10 +14,6 @@
 		</b-navbar-toggle>
 
 		<b-collapse id="nav-collapse" is-nav>
-			<b-navbar-nav id="text-name">
-				<!-- <img src="https://i.pinimg.com/564x/f9/92/5e/f9925ef90a024cbf91ce44422d44b391.jpg" alt=""> -->
-			</b-navbar-nav>
-
 			<b-navbar-nav class="ml-auto">
 				<b-dropdown id="dropdown-profile" text="Change" block class="m-2">
 					<template #button-content1>

@@ -48,6 +48,7 @@
 		top: 0;
 		height: 100%;
 		margin-left: -250px;
+		overflow-x: hidden;
 		overflow-y: auto;
 		background: #052c50 99%;
 		-webkit-transition: all 0.5s ease;

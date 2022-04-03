@@ -20,6 +20,7 @@
 										autofocus
 										@keyup.enter="doLogin()"
 										:disabled="isProcess"
+										v-model="User.email"
 									/>
 								</div>
 
@@ -33,6 +34,7 @@
 											autocomplete="off"
 											@keyup.enter="doLogin()"
 											:disabled="isProcess"
+											v-model="User.password"
 										/>
 										<b-input-group-append is-text v-if="User.password">
 											<i
@@ -68,15 +70,16 @@
 
 <script>
 	// import Logo from '@/assets/images/student.png';
-	// import { getCSRF } from '@/api/modules/auth';
 	import { setRoutes } from '@/utils/setRoutes';
 	import { MakeToast } from '@/toast/toastMessage';
+	import {postLogin} from "@/api/modules/auth";
+	import {setToken} from '../../const/cookie'
 	export default {
 		name: 'Login',
 		data() {
 			return {
 				User: {
-					account: '',
+					email: '',
 					password: ''
 				},
 				showPassword: false,
@@ -85,17 +88,41 @@
 		},
 		methods: {
 			doLogin() {
+				
 				this.isProcess = true;
-				this.$store.dispatch('auth/doLogin');
-				const ROLES = this.$store.getters.roles;
+				const Account = {
+					email: this.User.email ,
+					password: this.User.password 
+				};
+				
+				postLogin('auth/login',Account)
+					.then(async(res)=>{
+						const ROLES = res.data.role_id.role_name;
+						setToken('access_token',res.accessToken)
+						try {
+						const accessRoutes = this.$store.dispatch(
+							'permission/generateRoutes',
+							{
+								roles: ROLES,
+								permissions: []
+							}
+						);
+						console.log(accessRoutes);
+						await setRoutes(accessRoutes);
+						this.$router.push('/');
 
-				const accessRoutes = this.$store.dispatch('permission/generateRoutes', {
-					roles: 'Admin',
-					permissions: []
-				});
+						MakeToast({
+							variant: 'success',
+							title: this.$t('TOAST.SUCCESS'),
+							content: this.$t('LOGIN.LOGIN_SUCCESS')
+						});
+						} catch (error) {
+							console.log(error);
+						}
 
-				setRoutes(accessRoutes);
-				this.$router.push('/');
+					})
+
+			
 			},
 
 			handleShowPassword() {

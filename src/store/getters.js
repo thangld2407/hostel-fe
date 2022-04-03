@@ -1,8 +1,9 @@
 const getters = {
-	id: state => state.auth.id,
-	name: state => state.auth.name,
+	id: state => state.auth.role_id,
+	name: state => state.auth.fullname,
 	email: state => state.auth.email,
-	roles: state => state.auth.roles,
+	roles: state => state.auth.role_name,
+	token: state => state.auth.token,
 	addRoutes: state => state.permission.addRoutes,
 	permissionRoutes: state => state.permission.routes,
 	language: state => state.app.language

@@ -1,32 +1,34 @@
 import router from '@/router';
 import store from '@/store';
-import { isLogged } from '@/utils/auth';
 import getPageTitle from '@/utils/getPageTitle';
 import { setRoutes } from '@/utils/setRoutes';
+import { getTokenAccess } from '../const/cookie';
+import { getToken } from '../store/modules/auth';
 
 const whiteList = ['/login'];
 
 router.beforeEach(async (to, from, next) => {
 	document.title = getPageTitle(to.meta.title);
 
-	const isUserLogged = isLogged();
-
+	const isUserLogged = getTokenAccess('access_token');
+	console.log(isUserLogged);
 	if (isUserLogged) {
 		if (to.path === '/login') {
 			next({ path: '/' });
 		} else {
-			const hasRoles = store.getters.roles && store.getters.roles.length > 0;
+			const hasRoles = 'admin';
 
 			if (hasRoles) {
 				next();
 			} else {
 				try {
-					const res = await store.dispatch('auth/getUserInfo');
-					const ROLES = res['roles'];
+					// const res = await store.dispatch('auth/getUserInfo');
+					// const ROLES = res['roles'];
 					const accessRoutes = await store.dispatch('permission/generateRoutes', {
-						roles: ROLES,
+						roles: 'admin',
 						permissions: []
 					});
+					console.log(accessRoutes, "accessRoutes");
 					setRoutes(accessRoutes);
 					next({ ...to, replace: true });
 				} catch {

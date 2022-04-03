@@ -13,7 +13,7 @@ const service = axios.create({
 service.interceptors.request.use(
 	config => {
 		config.headers['Accept-Language'] = getLanguage();
-
+		config.headers['Authorization'] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VycyI6eyJfaWQiOiI2MjQ2YmM3OWU1MzJjMzM2NmUxYzk1MDciLCJyb2xlX2lkIjp7Il9pZCI6IjYyNDQ3YWNlYzYzNjVlNTBiY2MyZDM5ZiIsInJvbGVfbmFtZSI6ImFkbWluIiwiX192IjowfSwidXNlcl9pZCI6eyJfaWQiOiI2MjQ2YmM3OWU1MzJjMzM2NmUxYzk1MDYiLCJmdWxsbmFtZSI6IkFkbWluIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImFkbWluMjQwNyIsImNyZWF0ZWRBdCI6IjIwMjItMDQtMDFUMDg6NDg6NTcuNTEzWiIsInVwZGF0ZUF0IjoiMjAyMi0wNC0wMVQwODo0ODo1Ny41MTNaIiwiX192IjowfSwiX192IjowfSwiaWF0IjoxNjQ4ODA0MjgzfQ.Aa9rFuU6TY2b4hLstP8EGCqKP-fzNC3bnjDeJ6aBfLM`
 		return config;
 	},
 	error => {

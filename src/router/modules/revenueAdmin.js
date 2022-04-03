@@ -1,24 +1,24 @@
 import Layout from '@/layout';
 const Revenue = {
-	path: '/admin-revenue',
-	name: 'RevenueAdmin',
+	path: '/revenue',
+	name: 'Revenue',
 	meta: {
 		title: 'ROUTER.REVENUE',
 		icon:"fas fa-dollar-sign"
 	},
 	component: Layout,
 	redirect: {
-		name: 'RevenueAdmin'
+		name: 'RevenueList'
 	},
 	children: [
 		{
-            path: 'index',
-            name: 'RevenueAdmin',
+            path: 'list',
+            name: 'RevenueList',
             meta: {
                 title: "ROUTER.REVENUE"
             },
             component: () => import(
-                '../../pages/Revenue/revenueAdmin/index.vue'
+                '../../pages/Revenue/index.vue'
             )
 		}
 	]

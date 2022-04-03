@@ -1,13 +1,13 @@
 import * as RequestApi from '../request';
 
-const URL = '/users';
+const URL = 'user';
 
 export function postUser(data) {
 	return RequestApi.postOne(URL, data);
 }
 
-export function getUserTable(params) {
-	return RequestApi.getAll(URL, params);
+export function getUserTable() {
+	return RequestApi.getAll(`${URL}/getall`);
 }
 
 export function editUser(id, data) {
