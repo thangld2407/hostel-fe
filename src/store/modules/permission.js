@@ -50,6 +50,7 @@ const state = {
 
 const mutations = {
 	SET_ROUTES: (state, routes) => {
+		// console.log(state, routes);
 		state.addRoutes = routes;
 		state.routes = constantRoutes.concat(routes);
 	}
@@ -60,12 +61,12 @@ const actions = {
 		return new Promise(resolve => {
 			let accessedRoutes;
 
-			if (roles.includes('ADMIN')) {
+			if (roles.includes('admin')) {
 				accessedRoutes = asyncRoutes || [];
 			} else {
 				accessedRoutes = filterAsyncRoutes(asyncRoutes, roles, permissions);
 			}
-
+			console.log(accessedRoutes, "AAA");
 			commit('SET_ROUTES', accessedRoutes);
 			resolve(accessedRoutes);
 		});

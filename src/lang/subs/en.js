@@ -14,9 +14,10 @@ export default {
 		NOTIFICATION: 'Notification',
 		CUSTOMER: 'Customer',
 		REVENUE: 'Revenue',
-		AREA: 'Area',
+		AREA: 'Area Management',
 		BILL: 'Bill',
-		REPORT: 'Report'
+		REPORT: 'Report',
+		PLACE: 'Place Management'
 		
 	},
 	NAVBAR: {
@@ -103,6 +104,7 @@ export default {
 		},
 		TABLE: {
 			ID: 'Room No',
+			IMAGE: 'Image',
 			PRICE: 'Price (VND)',
 			STATUS: 'Status',
 			DESCRIPTION: 'Description',

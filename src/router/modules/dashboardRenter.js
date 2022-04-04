@@ -9,12 +9,12 @@ const Dashboard = {
 	},
 	component: Layout,
 	redirect: {
-		name: 'DashboardRenter'
+		name: 'DashboardRenterIndex'
 	},
 	children: [
 		{
 			path: 'index',
-			name: 'DashboardRenter',
+			name: 'DashboardRenterIndex',
 			meta: {
 				title: 'ROUTER.DASHBOARD',
 			},

@@ -351,12 +351,10 @@ export default {
   top: 50px;
   background: #557B83;
   height: 40px;
-  line-height: 40px !important;
+  line-height: 40px ;
   color: white;
-  font-weight: 500;
   padding-left: 20px;
   z-index: 1;
-  left: 250px;
 }
 .content .row{
     margin-top: 80px;

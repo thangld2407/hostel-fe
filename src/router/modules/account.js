@@ -20,7 +20,7 @@ const AccountManagement = {
 			},
 			component: () =>
 				import(
-					/* webpackChunkName: "Account Management List" */ '@/pages/ManageAccount/index'
+					'@/pages/ManageAccount/index'
 				)
 		}
 	]

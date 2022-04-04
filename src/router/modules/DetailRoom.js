@@ -8,12 +8,12 @@ const RoomDetail = {
 	},
 	component: Layout,
 	redirect: {
-		name: 'RoomDetail'
+		name: 'RoomDetailIndex'
 	},
 	children: [
 		{
             path: 'index',
-            name: 'RoomDetail',
+            name: 'RoomDetailIndex',
             component: () => import(
                 '../../pages/Detail/detailRoom.vue'
             )

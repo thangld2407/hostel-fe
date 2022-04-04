@@ -9,12 +9,12 @@ const Notification = {
 	},
 	component: Layout,
 	redirect: {
-		name: 'Notification'
+		name: 'NotificationList'
 	},
 	children: [
 		{
-            path: 'index',
-            name: 'Notification',
+            path: 'list',
+            name: 'NotificationList',
             meta: {
                 title: "ROUTER.NOTIFICATION"
             },
