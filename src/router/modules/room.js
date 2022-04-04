@@ -4,7 +4,8 @@ const Room = {
 	name: 'RoomManagement',
 	meta: {
 		title: 'ROUTER.ROOM_MANAGEMENT',
-		icon:"fas fa-laptop"
+		icon: 'fas fa-laptop',
+		roles: ['admin']
 	},
 	component: Layout,
 	redirect: {
@@ -12,14 +13,12 @@ const Room = {
 	},
 	children: [
 		{
-            path: 'list',
-            name: 'RoomManagementList',
-            meta: {
-                title: "ROUTER.ROOM_MANAGEMENT"
-            },
-            component: () => import(
-                '../../pages/ManageRoom/ManageRoom.vue'
-            )
+			path: 'list',
+			name: 'RoomManagementList',
+			meta: {
+				title: 'ROUTER.ROOM_MANAGEMENT'
+			},
+			component: () => import('../../pages/ManageRoom/ManageRoom.vue')
 		}
 	]
 };

@@ -5,7 +5,18 @@ export function setToken(tokenKey, value) {
 	cookies.set(tokenKey, value);
 }
 export function getTokenAccess(tokenName) {
-	return cookies.get(tokenName)
+	return cookies.get(tokenName);
+}
+export function getToken(tokenName) {
+	return cookies.get(tokenName);
+}
+export function getRole(roleName) {
+	const ROLE = cookies.get(roleName);
+	if (ROLE) {
+		return [ROLE];
+	} else {
+		return [];
+	}
 }
 export default {
 	LANGUAGE,

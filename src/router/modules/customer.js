@@ -4,7 +4,8 @@ const customer = {
 	name: 'CustomerManagement',
 	meta: {
 		title: 'ROUTER.CUSTOMER',
-		icon:"fas fa-users"
+		icon: 'fas fa-users',
+		roles: ['admin', 'customer']
 	},
 	component: Layout,
 	redirect: {
@@ -12,14 +13,12 @@ const customer = {
 	},
 	children: [
 		{
-            path: 'list',
-            name: 'CustomerManagementList',
-            meta: {
-                title: "ROUTER.CUSTOMER"
-            },
-            component: () => import(
-                '../../pages/Customer/customer.vue'
-            )
+			path: 'list',
+			name: 'CustomerManagementList',
+			meta: {
+				title: 'ROUTER.CUSTOMER'
+			},
+			component: () => import('../../pages/Customer/customer.vue')
 		}
 	]
 };

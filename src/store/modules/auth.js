@@ -11,7 +11,7 @@ export function getToken() {
 		return Token;
 	}
 
-	return  '';
+	return '';
 }
 const state = {
 	_id: '',
@@ -24,7 +24,6 @@ const state = {
 const mutations = {
 	SET_ID: (state, id) => {
 		state._id = id;
-		
 	},
 	SET_NAME: (state, name) => {
 		state.fullname = name;
@@ -35,42 +34,13 @@ const mutations = {
 	SET_ROLES: (state, roles) => {
 		state.role_name = roles;
 	},
-	SET_TOKEN:(state, token)=>{
+	SET_TOKEN: (state, token) => {
 		state.accessToken = token;
 		Cookies.set(ConstCookie['TOKEN'], token);
 	}
-	
 };
 
 const actions = {
-	doLogin({ commit }, account) {
-		return new Promise((resolve, reject) => {
-			const URL = `auth/login`;
-
-			postLogin(URL, account)
-				.then(res => {
-					console.log(res)
-					if (res['status'] !== 200) {
-						reject();
-					}
-
-					const DATA = res['data'];
-					console.log(DATA.role_id);
-					commit('SET_ID', DATA['role_id']['_id']);
-					commit('SET_NAME', DATA['user_id']['fullname']);
-					commit('SET_EMAIL', DATA['user_id']['email']);
-					commit('SET_ROLES', DATA['role_id']['role_name']);
-					commit('SET_TOKEN', res.accessToken)
-
-					setLogged('1');
-					resolve();
-				})
-				.catch(err => {
-					reject(err);
-				});
-		});
-	},
-	
 	doLogout({ commit }) {
 		commit('SET_ID', '');
 		commit('SET_NAME', '');
