@@ -64,7 +64,7 @@ const actions = {
 			} else {
 				accessedRoutes = filterAsyncRoutes(asyncRoutes, roles, permissions);
 			}
-			console.log(roles, 'LOGOOGOOG');
+			console.log(roles);
 			commit('SET_ROUTES', accessedRoutes);
 			resolve(accessedRoutes);
 		});

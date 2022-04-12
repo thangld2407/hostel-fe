@@ -1,11 +1,11 @@
 import axios from 'axios';
 import i18n from '@/lang';
 import { getLanguage } from '@/lang/helper/getLang';
-import { getToken } from '../store/modules/auth';
+import { getToken } from '../const/cookie';
 import { MakeToast } from '@/toast/toastMessage';
 
 const baseURL = process.env.VUE_APP_BASE_URL;
-
+const TOKEN = getToken('access_token');
 const service = axios.create({
 	baseURL: baseURL,
 	timeout: 100000
@@ -14,7 +14,7 @@ const service = axios.create({
 service.interceptors.request.use(
 	config => {
 		config.headers['Accept-Language'] = getLanguage();
-		config.headers['Authorization'] = getToken();
+		config.headers['Authorization'] = `Bearer ${TOKEN}`;
 		return config;
 	},
 	error => {

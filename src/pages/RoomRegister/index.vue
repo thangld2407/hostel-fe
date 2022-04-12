@@ -7,31 +7,31 @@
                     <legend >Thông tin người cho thuê</legend>
                        <label class="col-sm-2 form-control-label">Họ Tên</label>
                        <div class="col-sm-10">
-                           <input type="text" class="form-control" required placeholder="Nhập Họ Tên Người Thuê" v-model="room_info.name">
+                           <input type="text" class="form-control" required placeholder="Nhập Họ Tên Người Thuê">
                        </div>
                    </div>
                    <div class="form-group row">
                        <label class="col-sm-2 form-control-label">CMND</label>
                        <div class="col-sm-10">
-                           <input type="text" class="form-control" placeholder="Nhập CMND" required v-model="room_info.identity_card">
+                           <input type="text" class="form-control" placeholder="Nhập CMND" required >
                        </div>
                    </div>
                    <div class="form-group row">
                        <label class="col-sm-2 form-control-label">Ngày Sinh</label>
                        <div class="col-sm-10">
-                           <input type="date" class="form-control" placeholder="Nhập Ngày Sinh"  required v-model="room_info.dob">
+                           <input type="date" class="form-control" placeholder="Nhập Ngày Sinh"  required >
                        </div>
                    </div>
                    <div class="form-group row">
                        <label class="col-sm-2 form-control-label">Quê Quán</label>
                        <div class="col-sm-10">
-                           <input type="text" class="form-control" placeholder="Nhập Quê Quán" required v-model="room_info.address">
+                           <input type="text" class="form-control" placeholder="Nhập Quê Quán" required >
                        </div>
                    </div>
                    <div class="form-group row">
                        <label class="col-sm-2 form-control-label">Điện Thoại</label>
                        <div class="col-sm-10">
-                           <input type="text" class="form-control" placeholder="Nhập số điện thoại"  v-model="room_info.phone">
+                           <input type="text" class="form-control" placeholder="Nhập số điện thoại" >
                        </div>
                    </div>
 
@@ -41,13 +41,13 @@
                         <div class="col-sm-10">
                             <div class="radio">
                                 <label>
-                                    <input type="radio" value="1" checked v-model="room_info.gender">
+                                    <input type="radio" value="1" checked >
                                      Nam
                                 </label>
                             </div>
                             <div class="radio">
                                 <label>
-                                    <input type="radio" value="0" v-model="room_info.gender">
+                                    <input type="radio" value="0" >
                                      Nữ
                                 </label>
                             </div>
@@ -58,16 +58,16 @@
                     <legend>Thông tin đăng ký nhà trọ</legend>
                        <label class="col-sm-2 form-control-label">Ngày Thuê</label>
                        <div class="col-sm-10">
-                           <input type="date" class="form-control" placeholder="Nhập Nhgày Thuê"  v-model="room_info.start_at">
+                           <input type="date" class="form-control" placeholder="Nhập Nhgày Thuê"  >
                        </div>
                    </div>
 
                    <div class="form-group row">
                        <label class="col-sm-2 form-control-label">Chọn Phòng Đăng Ký</label>
                        <div class="col-sm-10">
-                           <select name="sophong">
-                               <option value="" v-for="item in options" :key="item.id" >{{item.id}}</option>
-
+                           <select v-model="selected">
+                               <option :value="null">Chọn khu vực</option>
+                               <option v-for="room in list.filter(room => !room.status)" :key="room.id" >{{room.room_name}}</option>
                            </select>
                        </div>
                    </div>                  
@@ -77,17 +77,17 @@
                        <div class="col-sm-10">
                            <div class="checkbox">
                                <label>
-                                   <input type="checkbox" value="1" v-model="room_info.service"> Internet (220 000 VND)
+                                   <input type="checkbox" value="1"> Internet (220 000 VND)
                                </label>
                            </div>
 
-                           <input type="text" class="form-control" placeholder="Nhập giá tiền các dịch vụ khác(phát sinh , rác ,gửi xe ,....)" v-model="room_info.service_other">
+                           <input type="text" class="form-control" placeholder="Nhập giá tiền các dịch vụ khác(phát sinh , rác ,gửi xe ,....)" >
                        </div>
 
                    </div>
                    <div class="form-group row">
                        <div class="col-sm-offset-2 col-sm-10">
-                           <router-link to="/manage-room"><button name="btnSubmit" type="submit" class="btn btn-primary" @click="save">Đồng Ý</button></router-link>
+                           <router-link to="/manage-room"><button name="btnSubmit" type="submit" class="btn btn-primary" >Đồng Ý</button></router-link>
                        </div>
                    </div>
                </form>
@@ -96,46 +96,31 @@
 </template>
 
 <script>
-
+import { getRoomTable, getOneRoom } from '@/api/modules/room';
 export default {
-  name: "roomRegister",
-  components: {
-   
-  },
-  data(){
-      return{}
-  },
-  computed:{
-      options(){
-          return this.$store.state.app.list
-          
-      },
-    room_info(){
-      return this.$store.state.app.room_info
-    }
-    
-  },
-  methods:{
-      save(){
-          console.log(this.room_info);
-          this.room_info={
-              name:'',
-              identity_card:'',
-              dob:'',
-              address:'',
-              phone:'',
-              gender:'',
-              start_at:'',
-              room_number:'',
-              service:'',
-              service_other:'',
-
-          }
-      }
+    name: "roomRegister",
+    data(){
+        return{
+            list:[],
+            selected:null
+        }
+    },
+    created(){
+			this.handleGetListRoom()
+	},
+    methods:{
+        async handleGetListRoom() {
+		    await getRoomTable()
+			    .then(res => {
+				    this.list = res.data
+				    console.log(this.list);
+			    }
+			    )
+			    .catch(err => {
+				    console.log(err);
+			    });
+	    },
   }
-// created(){
-//     this.options = this.$store.state.app.list
-// }
 };
 </script>
 

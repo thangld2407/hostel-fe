@@ -1,10 +1,9 @@
 <template>
   <div id="manageRoom">
-    <!-- <CreateRoom :itemEdit="roomEdit" @save="clickAdd" /> -->
     <div class="right-content">
       <div class="title">
-        <p>{{$t('MANAGER.TITLE')}}</p>
-        <button @click="handleModal()" v-b-modal.modal-1>CreateRoom</button>
+        <span>{{$t('ROOM.TITLE')}}</span>
+        <b-button variant="light" @click="handleModal()" v-b-modal.modal-1>Create Room</b-button>
       </div>
       <div class="rooms-content">
         <div class="zone-header-page">
@@ -12,47 +11,44 @@
             <input
               type="text"
               class="form-control"
-              placeholder="Nhập số phòng"
+              :placeholder="$t('ROOM.SEARCH.PLACEHOLDER')"
               id="product-search"
             />
           </div>
           <div class="form-group">
             <div class="col">
               <select class="form-control" id="search-option-1">
-                <option value="0">{{$t('MANAGER.SELECT_ROOM.TOTAL')}}</option>
-                <option value="1">{{$t('MANAGER.SELECT_ROOM.RENTED')}}</option>
-                <option value="2">{{$t('MANAGER.SELECT_ROOM.EMPTY')}}</option>
+                <option value="0">{{$t('ROOM.SELECT_ROOM.TOTAL')}}</option>
+                <option value="1">{{$t('ROOM.SELECT_ROOM.RENTED')}}</option>
+                <option value="2">{{$t('ROOM.SELECT_ROOM.EMPTY')}}</option>
               </select>
             </div>
           </div>
-          <button><i class="fa fa-search"></i>{{$t('MANAGER.SEARCH.TITLE')}}</button>
+          <button><i class="fa fa-search"></i>{{$t('ROOM.SEARCH.TITLE')}}</button>
         </div>
         <div class="container">
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th scope="col" class="col-1">{{$t('MANAGER.TABLE.ID')}}</th>
-                <th scope="col" class="col-1">{{$t('MANAGER.TABLE.IMAGE')}}</th>
-                <th scope="col" class="col-2">{{$t('MANAGER.TABLE.PRICE')}}</th>
-                <th scope="col" class="col-1">{{$t('MANAGER.TABLE.STATUS')}}</th>
-                <th scope="col" class="col-4">{{$t('MANAGER.TABLE.DESCRIPTION')}}</th>
+                <th scope="col" class="col-1">{{$t('ROOM.TABLE.NAME')}}</th>
+                <th scope="col" class="col-2">{{$t('ROOM.TABLE.PRICE')}}</th>
+                <th scope="col" class="col-1">{{$t('ROOM.TABLE.STATUS')}}</th>
+                <th scope="col" class="col-4">{{$t('ROOM.TABLE.DESCRIPTION')}}</th>
                 <th scope="col" class="col-1"></th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(item, index) in list" :key="index">
-                <th scope="row">{{ item._id }}</th>
-                <td>{{ item.image }}</td>
+                <td>{{ item.room_name }}</td>
                 <td>{{ item.price }}</td>
                 <td>
-                  {{ item.status }}
-                  <div class="btn btn-success">Active</div>
-                  <div class="btn btn-danger">Trống</div>
+                  <div class="btn btn-success" v-if="item.status">Active</div>
+                  <div class="btn btn-danger" v-else>Trống</div>
                 </td>
-                <td>{{ item.furniture_type }}</td>
+                <td>{{ item.description }}</td>
                 <td class="actions">
-                  <div class="btn btn-info">
-                    <router-link to="/detail-room"><i class="fas fa-info-circle"></i></router-link>
+                  <div class="btn btn-info" @click="handleDetailRoom(item._id)">
+                    <i class="fas fa-info-circle"></i>
                   </div>
                   <div class="btn btn-warning" @click="handleModal(item._id)">
                     <i class="fa fa-edit"></i>
@@ -68,47 +64,42 @@
           <b-modal
             id="modal-1"
             v-model="showModal"
-            :title="action === 'CREATE' ? 'Tạo phòng' : 'EDIT Room'"
+            :title="action === 'CREATE' ? $t('ROOM.FORM.TITLE') : $t('ROOM.FORM.EDIT')"
             centered
           >
             <div class="row mt-2">
               <div class="col-md-12 col-sm-12 col-lg-12">
-                <label for="">Giá phòng</label>
+                <label for="">{{$t('ROOM.FORM.NAME')}}</label>
+                <b-form-input v-model="new_room.name"></b-form-input>
+              </div>
+              <div class="col-md-12 col-sm-12 col-lg-12">
+                <label for="">{{$t('ROOM.FORM.ROOM_PRICE')}}</label>
                 <b-form-input v-model="new_room.price"></b-form-input>
               </div>
               <div class="col-md-12 col-sm-12 col-lg-12 mt-2">
-                <label for="">Giá điện</label>
+                <label for="">{{$t('ROOM.FORM.ELECTRICITY_PRICE')}}</label>
                 <b-form-input disabled></b-form-input>
               </div>
               <div class="col-md-12 col-sm-12 col-lg-12 mt-2">
-                <label for="">Giá nước</label>
+                <label for="">{{$t('ROOM.FORM.WATER_PRICE')}}</label>
                 <b-form-input disabled></b-form-input>
-              </div>
-              <div class="col-md-12 col-sm-12 col-lg-12 mt-2">
-                <label for="">{{ $t('USER.FORM.AVATAR') }}</label>
-                <b-form-file
-                  id="upload-images"
-                  type="file"
-                  accept="image/*"
-                  v-model="newUser.avatar"
-                ></b-form-file>
               </div>
               <div class="col-md-12 col-sm-12 col-lg-12">
-                <label for="">Mô tả</label>
+                <label for="">{{$t('ROOM.FORM.DESCRIPTION')}}</label>
                 <b-form-textarea
                   id="textarea-rows"
                   rows="4"
-                  v-model="new_room.furniture_type"
+                  v-model="new_room.description"
                 ></b-form-textarea>
               </div>
               <div class="col-md-12 col-sm-12 col-lg-12">
-                <label for="">Trạng Thái</label>
+                <label for="">{{$t('ROOM.FORM.STATUS')}}</label>
                 <input
                   v-model="new_room.status"
                   type="radio"
                   style="margin: 0px 5px 0px 15px"
-                  checked
-                />Trống
+                  :value="false"
+                />{{$t('ROOM.FORM.EMPTY')}}
               </div>
             </div>
             <template #modal-footer>
@@ -118,7 +109,7 @@
                   v-if="action === 'CREATE'"
                   @click="handleCreateRoom()"
                 >
-                  Tạo
+                  {{$t('ROOM.FORM.CREATE')}}
                 </b-button>
 
                 <b-button
@@ -126,11 +117,11 @@
                   v-if="action === 'EDIT'"
                   @click="handleEditRoom()"
                 >
-                  Lưu
+                  {{$t('ROOM.FORM.SAVE')}}
                 </b-button>
 
                 <b-button class="btn btn-danger" @click="showModal = false">
-                  Đóng
+                  {{$t('ROOM.FORM.CLOSE')}}
                 </b-button>
               </div>
             </template>
@@ -143,25 +134,45 @@
 
 <script>
 
-// import CreateRoom from "./CreateRoom.vue";
 import { MakeToast } from '@/toast/toastMessage';
 import { isEmptyOrWhiteSpace } from '../../utils/validate';
 import { getRoomTable, postRoom, deleteRoom, getOneRoom, editRoom } from '@/api/modules/room';
 export default {
   name: "ManageRoom",
-  components: {
-    // CreateRoom,
+  data() {
+    return {
+     
+      new_room:{
+        name: "",
+        price: "",
+        status: false,
+        description: "",
+        
+      },
+      isLoading: false,
+      showModal: false,
+      list:[],
+      action: '',
+      ids: 0,
+      
+      }
     
   },
+  created() {
+			this.handleGetListRoom();
+	},
   methods: {
-			async handleModal(_id) {
-				this.ids = _id;
+    async handleDetailRoom(item) {
+				this.$router.push(`/detail-room/list/${item}`);
+			},
+			async handleModal(id) {
+				this.ids = id;
 				if (this.ids) {
 					this.action = 'EDIT';
-					await getOneRoom(_id)
+					await getOneRoom(id)
 						.then(res => {
 							this.new_room.price = res.data.price;
-							this.new_room.furniture_type = res.data.furniture_type;
+							this.new_room.description = res.data.description;
 							this.new_room.status = res.data.status;
 						})
 						.catch(err => {
@@ -178,12 +189,11 @@ export default {
 				this.isLoading = true;
 				await getRoomTable()
 					.then(res => {
-						if (res.status === 200) {
-							this.list = res.data.data
+							this.list = res.data
               console.log(this.list);
 							this.isLoading = false;
 						}
-					})
+					)
 					.catch(err => {
 						console.log(err);
 					});
@@ -191,13 +201,13 @@ export default {
 			async handleCreateRoom() {
 				const data = {
 					price: this.new_room.price,
-					furniture_type: this.new_room.furniture_type,
+					description: this.new_room.description,
 					status: this.new_room.status,
 				};
 				console.log(data);
 				if (
 					isEmptyOrWhiteSpace(data.price) ||
-					isEmptyOrWhiteSpace(data.furniture_type) 
+					isEmptyOrWhiteSpace(data.description) 
 				) {
 					MakeToast({
 						variant: 'warning',
@@ -207,7 +217,8 @@ export default {
 				} else {
 					await postRoom(data)
 						.then(res => {
-							if (res.status === 200) {
+              // this.new_room.id = res.data.id
+              console.log(res);
 								MakeToast({
 									variant: 'success',
 									title: this.$t('TOAST.SUCCESS'),
@@ -217,7 +228,7 @@ export default {
 								this.showModal = false;
 								this.isResetDataModal();
 							}
-						})
+						)
 						.catch(err => {
 							console.log(err);
 						});
@@ -226,13 +237,14 @@ export default {
 			async handleEditRoom() {
 				this.action = 'EDIT';
 				const data = {
+          room_id:this.ids,
 					price: this.new_room.price,
-					furniture_type: this.new_room.furniture_type,
+					description: this.new_room.description,
 					status: this.new_room.status,
 				};
 				if (
 					isEmptyOrWhiteSpace(data.price) ||
-					isEmptyOrWhiteSpace(data.furniture_type) 
+					isEmptyOrWhiteSpace(data.description) 
 				) {
 					MakeToast({
 						variant: 'warning',
@@ -241,9 +253,8 @@ export default {
 					});
 				} else {
 					console.log(data);
-					await editRoom(this.ids, data)
+					await editRoom( data)
 						.then(res => {
-							if (res.status == 200) {
 								MakeToast({
 									variant: 'success',
 									title: this.$t('TOAST.SUCCESS'),
@@ -253,13 +264,13 @@ export default {
 								this.showModal = false;
 								this.isResetDataModal();
 							}
-						})
+						)
 						.catch(err => {
 							console.log(err);
 						});
 				}
 			},
-			handleDeleteRoom(_id) {
+			handleDeleteRoom(id) {
 				this.$bvModal
 					.msgBoxConfirm('Do you want to delete this room?', {
 						title: 'Warning',
@@ -274,26 +285,25 @@ export default {
 					})
 					.then(value => {
 						if (value === true) {
-							deleteRoom(_id)
+							deleteRoom({room_id:id})
 								.then(res => {
-									if (res.status === 200) {
 										MakeToast({
 											variant: 'success',
 											title: this.$t('TOAST.SUCCESS'),
 											content: 'Successfully to delete this room'
 										});
 										this.handleGetListRoom();
-									} else {
+									console.log(res);
+								})
+								.catch(err => {
+									console.log(err);
+                  	{
 										MakeToast({
 											variant: 'warning',
 											title: this.$t('TOAST.WARNING'),
 											content: 'You can not delete this room'
 										});
 									}
-									console.log(res);
-								})
-								.catch(err => {
-									console.log(err);
 								});
 						}
 					});
@@ -302,81 +312,11 @@ export default {
 				console.log('RESET DATA');
 				this.new_room = {
 					price: '',
-					furniture_type: '',
+					description: '',
 					status: '',
-          image:''
 				};
 			},
-    // clickAdd(itemSave) {
-      
-    //   // this.list.push(itemSave)
-    //   let index = this.list.findIndex((e) => e.id === itemSave.id);
-    //   if (index >= 0) {
-    //     this.list.splice(index, 1, itemSave);
-    //   } else {
-    //     var max = 0;
-    //     var newId = 0;
-    //     for (let i = 0; i < this.list.length; i++) {
-    //       if (this.list[i].id > max) {
-    //         max = this.list[i].id;
-    //       }
-    //     }
-    //     newId = max + 1;
-    //     itemSave.id = newId;
-    //     this.list.push(itemSave);
-    //     MakeToast({
-		// 					variant: 'success',
-		// 					title: this.$t('TOAST.SUCCESS'),
-		// 					content: this.$t('MANAGER.SUCCESS')
-		// 				})
-    //   }
-    //   return;
-    // },
-    // clickDelete(itemDelete) {
-    //   const choice = confirm("Are you sure ???");
-    //   if (choice == true) {
-    //     for (let i = 0; i < this.list.length; i++) {
-    //       if (itemDelete.id === this.list[i].id) {
-    //         this.list.splice(i, 1);
-    //       }
-    //     }
-    //   }
-    // },
-    // clickEdit(itemEdit) {
-    //   this.roomEdit = itemEdit;
-    //   this.$bvModal.show("modal-prevent-closing");
-    // },
   },
-  // computed:{
-  //   list(){
-  //     return this.$store.state.app.list
-      
-  //   }
-    
-  // },
-  data() {
-    return {
-     
-      new_room:{
-        _id: "",
-        price: "",
-        status: "",
-        furniture_type: "",
-        image
-      },
-      nameState: null,
-      submittedNames: [],
-      showModal: false,
-      list:[],
-      action: '',
-      ids: 0
-      }
-    
-  },
-  // created() {
-  //   this.list = this.$store.getters.roomItem;
-  //   console.log(this.roomItem);
-  // },
 };
 </script>
 
@@ -386,19 +326,20 @@ export default {
   top: 100px;
 }
 .right-content .title {
+  z-index: 1;
   position: fixed;
   width: 100%;
   top: 50px;
   background: #557B83;
   height: 40px;
+  line-height: 40px ;
   color: white;
-  font-weight: 500;
   padding-left: 20px;
-  display: flex;
-  align-items: center;
 }
-.right-content .title p{
-  margin-top: 15px;
+.right-content .title button{
+  padding: 1px;
+  float: right;
+  margin: 5px 320px 0px 0px;
 }
 .rooms-content .zone-header-page {
   display: flex;

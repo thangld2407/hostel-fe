@@ -29,7 +29,8 @@
             }
         }
         .table{
-            justify-content: space-around;
+            display: flex !important;
+            justify-content: space-between !important;
         
         }
     }

@@ -1,51 +1,96 @@
 <template>
   <div id="report">
     <div class="title">
-      <p>Báo cáo sự cố</p>
+      <p>{{$t('ISSUES.TITLE')}}</p>
     </div>
     <div class="content">
-        <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-      <b-form-group
-        id="input-group-1"
-        label="Nội dung:"
-        label-for="input-1"
-      >
-        <b-form-textarea
-          id="input-1"
-          rows="4"
-          v-model="form.content"
-          type="email"
-          placeholder="Nhập nội dung"
-          required
-        ></b-form-textarea>
-      </b-form-group>
-
-      <b-button type="submit" variant="primary">Submit</b-button>
-      <b-button type="reset" variant="danger">Reset</b-button>
-    </b-form>
+        <div class="row mt-2">
+            <div class="col-md-12 col-sm-12 col-lg-12">
+                <label for="">Name</label>
+                <b-form-input id="input-1" v-model="form.fullname" readonly></b-form-input>
+            </div>
+            <div class="col-md-12 col-sm-12 col-lg-12">
+              <label for="">{{$t('ISSUES.NAME')}}</label>
+              <b-form-input id="input-1" v-model="form.issues_name" required></b-form-input>
+            </div>
+            <div class="col-md-12 col-sm-12 col-lg-12">
+              <label for="">{{$t('ISSUES.CONTENT')}}</label>
+              <b-form-textarea rows="4" id="input-2" v-model="form.issues_content" required></b-form-textarea>
+            </div>
+        </div>
+        <b-button type="submit" variant="primary" @click="handleCreateIssues()">{{$t('ISSUES.SUBMIT')}}</b-button>
     </div>
   </div>
 </template>
 
 <script>
+import { MakeToast } from '@/toast/toastMessage';
+import { postIssues} from '@/api/modules/issues';
+import { getOneUser } from '@/api/modules/user';
 export default {
     data() {
       return {
         form: {
-          content: '',
+          user_id:'',
+          issues_name: '',
+          issues_content:''
         },
         show: true
       }
     },
+    computed:{
+      id(){
+        return this.$store.getters.id;
+      }
+    },
     methods: {
-      onSubmit(event) {
-        event.preventDefault()
-        alert(JSON.stringify(this.form))
-      },
+      async handleCreateIssues() {
+				const data = {
+          user_id:this.form.user_id,
+					issues_name: this.form.issues_name,
+          issues_content: this.form.issues_content
+				};
+				console.log(data);
+					await postIssues(data)
+						.then(res => {
+								MakeToast({
+									variant: 'success',
+									title: this.$t('TOAST.SUCCESS'),
+									content: this.$t('MANAGER.FORM.SUCCESS')
+								});
+								this.isResetDataModal();
+							}
+						)
+						.catch(err => {
+							console.log(err);
+						});
+      //     await getOneUser(id)
+			// 				.then(res => {
+			// 					this.form.fullname = res.data.user_id.fullname;
+			// 				})
+			// 				.catch(err => {
+			// 					console.log(err);
+			// })
+				
+			},
+    
+      isResetDataModal() {
+				console.log('RESET DATA');
+				this.form = {
+					issues_name: '',
+          issues_content:''
+
+				};
+			},
+      // onSubmit(event) {
+      //   event.preventDefault()
+      //   alert(JSON.stringify(this.form))
+      // },
       onReset(event) {
         event.preventDefault()
         // Reset our form values
-        this.form.email = ''
+        this.form.issues_name = ''
+        this.form.issues_content =''
         // Trick to reset/clear native browser form validation state
         this.show = false
         this.$nextTick(() => {

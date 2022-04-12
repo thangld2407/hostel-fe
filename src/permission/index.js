@@ -1,10 +1,7 @@
 import router from '@/router';
-import store from '@/store';
 import getPageTitle from '@/utils/getPageTitle';
-import { setRoutes } from '@/utils/setRoutes';
 import { getTokenAccess } from '../const/cookie';
 import { resetRouter } from '../router';
-import { getToken } from '../store/modules/auth';
 
 const whiteList = ['/login'];
 

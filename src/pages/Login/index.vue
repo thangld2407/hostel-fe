@@ -115,6 +115,11 @@
 						});
 					} catch (error) {
 						console.log(error);
+							MakeToast({
+								variant: 'warning',
+								title: this.$t('TOAST.WARNING'),
+								content: 'You can not delete this room'
+							});
 					}
 				});
 			},
