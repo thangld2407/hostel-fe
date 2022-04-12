@@ -1,9 +1,9 @@
 <template>
     <div id="revenue">
-		<div class="title">Doanh Thu</div>
+		<div class="title">{{$t('REVENUE.TITLE')}}</div>
 		<div class="revenue-management_searching-filter">
       <b-form-select v-model="selected">
-					<b-form-select-option :value="null">Chọn khu vực</b-form-select-option>
+					<b-form-select-option :value="null">{{$t('REVENUE.SELECT.AREA')}}</b-form-select-option>
 					<b-form-select-option
 						v-for="(type, index) in month"
 						:key="index"
@@ -11,7 +11,7 @@
 					>
 				</b-form-select>
         <b-form-select v-model="selected">
-					<b-form-select-option :value="null">Chọn địa điểm</b-form-select-option>
+					<b-form-select-option :value="null">{{$t('REVENUE.SELECT.ADDRESS')}}</b-form-select-option>
 					<b-form-select-option
 						v-for="(type, index) in month"
 						:key="index"
@@ -19,7 +19,7 @@
 					>
 				</b-form-select>
 				<b-form-select v-model="selected">
-					<b-form-select-option :value="null">Chọn Tháng</b-form-select-option>
+					<b-form-select-option :value="null">{{$t('REVENUE.SELECT.MONTH')}}</b-form-select-option>
 					<b-form-select-option
 						v-for="(type, index) in month"
 						:key="index"
@@ -29,15 +29,15 @@
 		</div>
         <div class="revenue-header">
 			<div class="header-box">
-				<h2><i class="fas fa-shopping-bag"></i> Số phòng được thuê </h2>
+				<h2><i class="fas fa-shopping-bag"></i>{{$t('REVENUE.BOX.RENTED_ROOM')}}</h2>
 				<h3> 250 </h3>
 			</div>
 			<div class="header-box">
-				<h2><i class="fas fa-sync"></i> Doanh số </h2>
+				<h2><i class="fas fa-sync"></i>{{$t('REVENUE.BOX.REVENUE')}}</h2>
 				<h3> 220 </h3>
 			</div>
 			<div class="header-box">
-				<h2> <i class="far fa-clock"></i>Khách nợ </h2>
+				<h2> <i class="far fa-clock"></i>{{$t('REVENUE.BOX.DEBT')}}</h2>
 				<h3> 30 </h3>
 			</div>
 		</div>
@@ -45,12 +45,12 @@
             <table class="table table-bordered">
             <thead>
               <tr>
-                <th scope="col" class="col-1">Tên khu vực</th>
-                <th scope="col" class="col-2">Địa chỉ</th>
-                <th scope="col" class="col-1">Tổng số phòng</th>
-                <th scope="col" class="col-1">Người quản lý</th>
-                <th scope="col" class="col-1">Tổng tiền</th>
-                <th scope="col" class="col-1">Nợ</th>
+                <th scope="col" class="col-1">{{$t('REVENUE.TABLE.AREA')}}</th>
+                <th scope="col" class="col-2">{{$t('REVENUE.TABLE.ADDRESS')}}</th>
+                <th scope="col" class="col-1">{{$t('REVENUE.TABLE.TOTAL_ROOM')}}</th>
+                <th scope="col" class="col-1">{{$t('REVENUE.TABLE.MANAGER')}}</th>
+                <th scope="col" class="col-1">{{$t('REVENUE.TABLE.TOTAL_PRICE')}}</th>
+                <th scope="col" class="col-1">{{$t('REVENUE.TABLE.DEBT')}}</th>
               </tr>
             </thead>
             <tbody>
@@ -133,7 +133,6 @@ export default {
   width: 200px;
 }
 .container .table{
-    width: 1250px ;
-    margin: 50px 0px 0px -70px;
+    margin-top: 30px;
 }
 </style>

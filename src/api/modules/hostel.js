@@ -1,22 +1,22 @@
 import * as RequestApi from '../request';
 
-const URL = 'user';
+const URL = 'hostel';
 
-export function postUser(data) {
+export function postHostel(data) {
 	return RequestApi.postOne(`${URL}/create`, data);
 }
 
-export function getUserTable() {
+export function getHostelTable() {
 	return RequestApi.getAll(`${URL}/getall`);
 }
 
-export function editUser(data) {
+export function editHostel(data) {
 	return RequestApi.putOne(`${URL}/update`, data);
 }
-export function getOneUser(id) {
+export function getOneHostel(id) {
 	return RequestApi.getOne(`${URL}/getone`,id);
 }
 
-export function deleteUser(id) {
+export function deleteHostel(id) {
 	return RequestApi.deleteOne(`${URL}/delete`,id);
 }

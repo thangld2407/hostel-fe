@@ -72,8 +72,8 @@
 	// import Logo from '@/assets/images/student.png';
 	import { setRoutes } from '@/utils/setRoutes';
 	import { MakeToast } from '@/toast/toastMessage';
-	import {postLogin} from "@/api/modules/auth";
-	import {setToken} from '../../const/cookie'
+	import { postLogin } from '@/api/modules/auth';
+	import { setToken } from '../../const/cookie';
 	export default {
 		name: 'Login',
 		data() {
@@ -88,27 +88,24 @@
 		},
 		methods: {
 			doLogin() {
-				
 				this.isProcess = true;
 				const Account = {
-					email: this.User.email ,
-					password: this.User.password 
+					email: this.User.email,
+					password: this.User.password
 				};
-				
-				postLogin('auth/login',Account)
-					.then(async(res)=>{
-						const ROLES = res.data.role_id.role_name;
-						setToken('access_token',res.accessToken)
-						try {
-						const accessRoutes = this.$store.dispatch(
-							'permission/generateRoutes',
-							{
-								roles: ROLES,
-								permissions: []
-							}
-						);
-						console.log(accessRoutes);
+
+				postLogin('auth/login', Account).then(async res => {
+					const ROLES = res.data.role_id.role_name || [];
+					console.log(ROLES);
+					setToken('access_token', res.accessToken);
+					setToken('roles', [ROLES]);
+					try {
+						const accessRoutes = this.$store.dispatch('permission/generateRoutes', {
+							roles: ROLES,
+							permissions: []
+						});
 						await setRoutes(accessRoutes);
+
 						this.$router.push('/');
 
 						MakeToast({
@@ -116,13 +113,15 @@
 							title: this.$t('TOAST.SUCCESS'),
 							content: this.$t('LOGIN.LOGIN_SUCCESS')
 						});
-						} catch (error) {
-							console.log(error);
-						}
-
-					})
-
-			
+					} catch (error) {
+						console.log(error);
+							MakeToast({
+								variant: 'warning',
+								title: this.$t('TOAST.WARNING'),
+								content: 'You can not delete this room'
+							});
+					}
+				});
 			},
 
 			handleShowPassword() {

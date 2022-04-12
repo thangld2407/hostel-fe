@@ -1,27 +1,27 @@
 <template>
   <div id="customer">
-      <div class="title">Khách hàng</div>
+      <div class="title">{{$t('CUSTOMER.TITLE')}}</div>
       <div class="customer-content">
         <div class="zone-header-page">
           <div class="form-group">
             <input
               type="text"
               class="form-control"
-              placeholder="Nhập số phòng hoặc tên KH"
+              :placeholder="$t('CUSTOMER.SEARCH.PLACEHOLDER')"
               id="product-search"
             />
           </div>
-          <button><i class="fa fa-search"></i> Tìm kiếm</button>
+          <button><i class="fa fa-search"></i>{{$t('CUSTOMER.SEARCH.TITLE')}}</button>
         </div>
 			  <table class="table table-bordered">
             <thead>
               <tr>
-                <th scope="col" class="col-1">Phòng Số</th>
-                <th scope="col" class="col-2">Chủ Phòng</th>
-                <th scope="col">Điện Thoại</th>
-                <th scope="col" class="col-3">Địa Chỉ</th>
-                <th scope="col">Ngày Thuê</th>
-                <th scope="col">Tổng Nợ</th>
+                <th scope="col" class="col-1">{{$t('CUSTOMER.TABLE.ID')}}</th>
+                <th scope="col" class="col-2">{{$t('CUSTOMER.TABLE.NAME')}}</th>
+                <th scope="col">{{$t('CUSTOMER.TABLE.PHONE')}}</th>
+                <th scope="col" class="col-3">{{$t('CUSTOMER.TABLE.ADDRESS')}}</th>
+                <th scope="col">{{$t('CUSTOMER.TABLE.START_AT')}}</th>
+                <th scope="col">{{$t('CUSTOMER.TABLE.TOTAL_DEPT')}}</th>
                 <th scope="col" class="col-1"></th>
               </tr>
             </thead>
@@ -82,6 +82,7 @@ export default {
 
 <style scoped>
 #customer .title {
+  z-index: 1;
   position: fixed;
   width: 100%;
   top: 50px;
@@ -89,7 +90,6 @@ export default {
   height: 40px;
   line-height: 40px !important;
   color: white;
-  font-weight: 500;
   padding-left:20px ;
 }
 #customer .customer-content{

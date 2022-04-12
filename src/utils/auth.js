@@ -1,13 +1,13 @@
 import Cookies from 'js-cookie';
 
-const TokenKey = 'isLogged';
+const TokenKey = 'access_token';
 
 export function isLogged() {
 	return Cookies.get(TokenKey) === '1';
 }
 
-export function setLogged(isLogged) {
-	return Cookies.set(TokenKey, isLogged);
+export function setLogged(access_token) {
+	return Cookies.set(TokenKey, access_token);
 }
 
 export function removeToken() {

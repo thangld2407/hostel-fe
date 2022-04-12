@@ -9,24 +9,27 @@ import Dashboard from './modules/dashboard';
 import AccountManagement from './modules/account';
 import Room from './modules/room';
 import RoomRegister from './modules/RoomRegister';
-import Notification from "./modules/Notification";
-import RoomDetail from "./modules/DetailRoom";
-import Customer from "./modules/customer";
-import RevenueAdmin from "./modules/revenueAdmin";
-import Area from "./modules/area";
-import DashboardRenter from "./modules/dashboardRenter";
-import Bill from "./modules/bill";
-import Report from "./modules/report";
-import Place from "./modules/place";
+import Notification from './modules/Notification';
+import RoomDetail from './modules/DetailRoom';
+import Customer from './modules/customer';
+import RevenueAdmin from './modules/revenueAdmin';
+import Area from './modules/area';
+import DashboardRenter from './modules/dashboardRenter';
+import Bill from './modules/bill';
+import Report from './modules/report';
+import Place from './modules/place';
 
 export const constantRoutes = [
 	Login,
+	Dashboard,
 	{
 		path: '/',
 		redirect: { name: 'Dashboard' },
 		hidden: true
-	},
-	Dashboard,
+	}
+];
+
+export const asyncRoutes = [
 	Room,
 	RoomRegister,
 	Notification,
@@ -46,8 +49,6 @@ export const constantRoutes = [
 		redirect: { name: 'PageNotFound' }
 	}
 ];
-
-export const asyncRoutes = [];
 
 const createRouter = () =>
 	new VueRouter({

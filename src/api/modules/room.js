@@ -1,22 +1,22 @@
 import * as RequestApi from '../request';
 
-const URL = '/room';
+const URL = 'room';
 
 export function postRoom(data) {
-	return RequestApi.postOne(URL, data);
+	return RequestApi.postOne(`${URL}/create`, data);
 }
 
-export function getRoomTable(params) {
-	return RequestApi.getAll(URL, params);
+export function getRoomTable() {
+	return RequestApi.getAll(`${URL}/getall`);
 }
 
-export function editRoom(id, data) {
-	return RequestApi.putOne(`${URL}/${id}`, data);
+export function editRoom( data) {
+	return RequestApi.putOne(`${URL}/update`, data);
 }
 export function getOneRoom(id) {
-	return RequestApi.getOne(`${URL}/${id}`);
+	return RequestApi.getOne(`${URL}/getone`,id);
 }
 
 export function deleteRoom(id) {
-	return RequestApi.deleteOne(`${URL}/${id}`);
+	return RequestApi.deleteOne(`${URL}/delete`,id);
 }

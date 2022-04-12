@@ -12,14 +12,14 @@ const state = {
 		}
 	],
   	room_info:[],
-	list_account:[]
 };
 
 const mutations = {
 	SET_LANGUAGE: (state, language) => {
 		state.language = language;
 		Cookies.set(ConstCookie['LANGUAGE'], language);
-	}
+	},
+
 };
 
 const actions = {

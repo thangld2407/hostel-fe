@@ -1,35 +1,35 @@
 <template>
   <div id="detail">
       <div class="content mt-3">
+          <div class="title">Chi tiết phòng</div>
         <div class="container">
-            <div class="title">Chi tiết phòng</div>
-            <div class="row" v-for="info in list" :key="info.id">
+            <div class="row">
                 <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                    <h3>Thông tin Phòng Trọ : {{info.id}}</h3>
+                    <h3>Thông tin Phòng Trọ : {{room_name}}</h3>
                     <table class="table table-hover">
                         <tbody>
                             <tr>
                                 <td>Số Phòng</td>
-                                <td>{{info.id}}</td>
+                                <td>{{room_name}}</td>
                             </tr>
                             <tr>
                                 <td>Trạng Thái</td>
-                                <td>{{info.status}}</td>
+                                <td>{{}}</td>
                             </tr>
                             <tr>
                                 <td>Ngày Thuê</td>
-                                <td>{{room_info.start_at}}</td>
+                                <td>{{}}</td>
                             </tr>
                             <tr>
                                 <td>Dịch Vụ</td>
                                 <td>
                                     <p><input type="checkbox" value="220000" disabled=""> Internet Cáp Quang (220 000VND)</p>
-                                    <p><input type="text" disabled v-model="room_info.service_other"></p>
+                                    <p><input type="text" disabled ></p>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Giá Phòng</td>
-                                <td>{{info.price}}</td>
+                                <td>{{}}</td>
                             </tr>
                             <tr>
                                 <td>Nợ</td>
@@ -37,7 +37,7 @@
                             </tr>
                             <tr>
                                 <td><p>Tổng Tiền Ước Tính:</p><p>(chưa bao gồm điện,nước)</p></td>
-                                <td>{{TotalPrice}}</td>
+                                <td>{{}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -54,12 +54,12 @@
                             <p>Giới Tính</p>
                         </div>
                         <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
-                            <p>{{room_info.name}}</p>
-                            <p>{{room_info.identity_card}}</p>
-                            <p>{{room_info.dob}}</p>
-                            <p>{{room_info.address}}</p>
-                            <p>{{room_info.phone}}</p>
-                            <p>{{room_info.gender}}</p>
+                            <p>{{}}</p>
+                            <p>{{}}</p>
+                            <p>{{}}</p>
+                            <p>{{}}</p>
+                            <p>{{}}</p>
+                            <p>{{}}</p>
                         </div>
                     </div>
                 </div>
@@ -126,7 +126,7 @@
             </form>
         </b-modal>
   </div>
-        <div class="row">
+        <!-- <div class="row">
             <h4>Người Ở Cùng</h4>
             <div class="table-responsive">
                 <table class="table table-hover">
@@ -231,9 +231,9 @@
                     </div>
                 </div>
                 </transition>
-            </div>
+            </div> -->
                         
-        </div> 
+        <!-- </div>  -->
                
     </div> 
 </div>
@@ -243,15 +243,15 @@
 </template>
 
 <script>
-
+import { getRoomTable, getOneRoom } from '@/api/modules/room';
 export default {
     name:'roomDetail',
 
     data(){
         return{
-            modal:false,
-            modals:false,
-            roommates:[],
+            room_name:'',
+            detailRoom:[],
+            list:[],
             new_roommates:{
                 name:'',
                 identity_card:'',
@@ -264,47 +264,43 @@ export default {
         }
     },
     computed:{
-        room_info(){
-            return this.$store.state.app.room_info  
-        },
-        list(){
-            return this.$store.state.app.list  
-        },
+        // room_info(){
+        //     return this.$store.state.app.room_info  
+        // },
+        // list(){
+        //     return this.$store.state.app.list  
+        // },
         TotalPrice(){
             return Math.round(this.list.price + this.room_info.service)
         }
     },
+    created(){
+        this.handleGetListRoom();
+    },
     methods:{
-        Add(){
-            console.log(this.roommates);
-            this.roommates.push({
-                name : this.new_roommates.name,
-                identity_card : this.new_roommates.identity_card,
-                dob : this.new_roommates.dob,
-                phone : this.new_roommates.phone,
-                address : this.new_roommates.address,
-                gender : this.new_roommates.gender
-            });
-            this.modal = false
-            this.new_roommates={
-                name:'',
-                identity_card:'',
-                dob:'',
-                phone:'',
-                address:'',
-                gender:''
-            }
-        },
-        Delete(itemDelete) {
-            const choice = confirm("Are you sure ???");
-            if (choice == true) {
-                for (let i = 0; i < this.roommates.length; i++) {
-                if (itemDelete.id === this.roommates[i].id) {
-                    this.roommates.splice(i, 1);
-                }
-                }
-            }
-        },
+        async handleGetListRoom() {
+				await getRoomTable()
+					.then(res => {
+						this.list = res.data
+                        console.log(this.list);
+                        this.list.map(item => {
+							getOneRoom({ id: item._id })
+								.then(result => {
+									this.room_name = result.data.room_name;
+                                    console.log(this.room_name,'asass');
+									this.area_id = result.data.area_id
+									console.log(this.hostel_name ,'123a');
+								})
+								.catch(err => {
+									console.log(err);
+								});
+						});
+					}
+					)
+					.catch(err => {
+						console.log(err);
+					});
+		},
         Open(){
             this.$bvModal.show("modal-prevent-closing");
         },

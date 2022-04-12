@@ -1,5 +1,5 @@
 const getters = {
-	id: state => state.auth.role_id,
+	id: state => state.auth._id,
 	name: state => state.auth.fullname,
 	email: state => state.auth.email,
 	roles: state => state.auth.role_name,

@@ -1,7 +1,7 @@
 import request from './config';
 
-export function getOne(url) {
-	return request.getRequest(url);
+export function getOne(url, data) {
+	return request.getRequest(url, data);
 }
 
 export function getAll(url) {
@@ -16,8 +16,8 @@ export function putOne(url, data) {
 	return request.putRequest(url, data);
 }
 
-export function deleteOne(url) {
-	return request.deleteRequest(url);
+export function deleteOne(url, data) {
+	return request.deleteRequest(url, data);
 }
 
 export function deleteOneHaveBody(url, data) {

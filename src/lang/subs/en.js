@@ -25,6 +25,7 @@ export default {
 		ENGLISH: 'English',
 		VIETNAMESE: 'Vietnamese',
 		AREA: 'Area',
+		ADDRESS:'Address',
 		PROFILE: 'Profile',
 		LOGOUT: 'Logout'
 	},
@@ -49,6 +50,21 @@ export default {
 		CHANGE_LANGUAGE: {
 			SUCCESS: 'Change language successfully.',
 			FAILED: 'Language change failed.'
+		}
+	},
+	DASHBOARD:{
+		BOX:{
+			TOTAL_ROOM:'Total Room',
+			RENTED_ROOM:'Rented Room',
+			EMPTY_ROOM: 'Empty Room',
+			TOTAL_DEPT_ROOM: 'Total Dept Room',
+
+		},
+		TABLE:{
+			EMPTY_ROOM: 'Empty Room',
+			DEPT_ROOM: 'Dept Room',
+			ID: 'Room Name',
+			PRICE: 'Price'
 		}
 	},
 	USER: {
@@ -88,7 +104,7 @@ export default {
 			}
 		}
 	},
-	MANAGER: {
+	ROOM: {
 		TITLE: 'List Of Rooms',
 		CREATE: 'Create Room',
     	SUCCESS: 'Create Success',
@@ -103,7 +119,8 @@ export default {
 			PLACEHOLDER: 'Enter room number'
 		},
 		TABLE: {
-			ID: 'Room No',
+			ID: 'ID',
+			NAME:'Room Name',
 			IMAGE: 'Image',
 			PRICE: 'Price (VND)',
 			STATUS: 'Status',
@@ -114,11 +131,15 @@ export default {
 
 		},
 		FORM: {
-			TITLE: 'Create room',
-			CATEGORY_NAME: 'Category name',
-			START_DATE: 'Start date',
-			END_DATE: 'End date',
+			TITLE: 'Create new room',
+			EDIT:'Edit Room',
+			ROOM_PRICE: 'Room Price',
+			NAME:'Room Name',
+			ELECTRICITY_PRICE: 'Electricity Price',
+			WATER_PRICE: 'Water Price',
 			DESCRIPTION: 'Description',
+			STATUS: 'Status',
+			EMPTY:'Empty',
 			CREATE: 'Create',
 			SUCCESS: 'Create Successfully',
 			SAVE: 'SAVE',
@@ -128,4 +149,82 @@ export default {
 			}
 		},
 	},
-};
+	NOTIFICATION:{
+		TITLE:'Notification',
+		SEARCH: {
+			TITLE: 'Search',
+			PLACEHOLDER: 'Enter room number'
+		},
+		TABLE:{
+			ID:'Room No.',
+			NAME:'Customer Name',
+			ISSUES:'Issues',
+			CONTENT:'Content',
+			STATUS:'Status',
+		}
+	},
+	CUSTOMER: {
+		TITLE: "List of Customer",
+		SEARCH: {
+			TITLE: 'Search',
+			PLACEHOLDER: 'Enter room number'
+		},
+		TABLE: {
+			ID:'Room No.',
+			NAME:'Tenant',
+			PHONE:'Phone',
+			ADDRESS:'Address',
+			START_AT:'Rented date',
+			TOTAL_DEPT:'Total Dept'
+		},
+	},
+	REVENUE:{
+		TITLE: 'Revenue',
+		SELECT:{
+			AREA:'Select Area',
+			ADDRESS:'Select Address',
+			MONTH:'Select Month'
+		},
+		BOX:{
+			RENTED_ROOM:'Rented Room',
+			REVENUE: 'Revenue',
+			DEBT: 'Debit customers',
+		},
+		TABLE:{
+			AREA:'Area',
+			ADDRESS:'Address',
+			TOTAL_ROOM:'Total Room',
+			MANAGER:'Manager',
+			TOTAL_PRICE:'Total Price',
+			DEBT:'Debt'
+		}
+	},
+	AREA:{
+		TITLE: 'Area',
+		CREATE:'Create Area',
+		FORM:{
+			TITLE:'Create new Area',
+			EDIT:'Edit Area',
+			AREA_NAME: 'Area Name',
+			DATE:'Date created',
+			CREATE: 'Create',
+			SUCCESS: 'Create Successfully',
+			SAVE: 'SAVE',
+			CLOSE: 'Close',
+			MESSAGE: {
+				SPACE: 'You must enter a valid value'
+			}
+		},
+		TABLE:{
+			ID:'ID',
+			AREA_NAME:'Area Name',
+			DATE:'Date created'
+		}
+	},
+	ISSUES:{
+		TITLE:'Report problem',
+		NAME:'Issues',
+		CONTENT:'Content',
+		SUBMIT:'Submit'
+	}
+}
