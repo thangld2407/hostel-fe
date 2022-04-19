@@ -1,37 +1,53 @@
 <template>
-  <div id="roomRegister">
-    <div class="right-content">
-      <div class="title">Room registration</div>
-                    <form @submit.prevent="" enctype="multipart/form-data">
-                   <div class="form-group row">
+	<div id="roomRegister">
+		<div class="right-content">
+			<div class="title">Room registration</div>
+			<div>
+				<div class="card-body">
+					<h5>Khách Thuê</h5>
+					<b-form-select v-model="room.user_id">
+						<b-form-select-option :value="null">Chọn role</b-form-select-option>
+						<b-form-select-option
+							v-for="(user, index) in options.filter(
+								user => user.role_id.role_name === 'customer'
+							)"
+							:key="index"
+							:value="user._id"
+							>{{ user.user_id.username }}</b-form-select-option
+						>
+					</b-form-select>
+				</div>
+			</div>
+			<form>
+				<!-- <div class="form-group row">
                     <legend >Thông tin người cho thuê</legend>
                        <label class="col-sm-2 form-control-label">Họ Tên</label>
                        <div class="col-sm-10">
-                           <input type="text" class="form-control" required placeholder="Nhập Họ Tên Người Thuê">
+                           <input type="text" class="form-control" required placeholder="Nhập Họ Tên Người Thuê" v-model="room.user_id">
                        </div>
                    </div>
                    <div class="form-group row">
                        <label class="col-sm-2 form-control-label">CMND</label>
                        <div class="col-sm-10">
-                           <input type="text" class="form-control" placeholder="Nhập CMND" required >
+                           <input type="text" class="form-control" placeholder="Nhập CMND" required v-model="room.cmnd">
                        </div>
                    </div>
                    <div class="form-group row">
                        <label class="col-sm-2 form-control-label">Ngày Sinh</label>
                        <div class="col-sm-10">
-                           <input type="date" class="form-control" placeholder="Nhập Ngày Sinh"  required >
+                           <input type="date" class="form-control" placeholder="Nhập Ngày Sinh"  required v-model="room.dob">
                        </div>
                    </div>
                    <div class="form-group row">
                        <label class="col-sm-2 form-control-label">Quê Quán</label>
                        <div class="col-sm-10">
-                           <input type="text" class="form-control" placeholder="Nhập Quê Quán" required >
+                           <input type="text" class="form-control" placeholder="Nhập Quê Quán" required v-model="room.address">
                        </div>
                    </div>
                    <div class="form-group row">
                        <label class="col-sm-2 form-control-label">Điện Thoại</label>
                        <div class="col-sm-10">
-                           <input type="text" class="form-control" placeholder="Nhập số điện thoại" >
+                           <input type="text" class="form-control" placeholder="Nhập số điện thoại" v-model="room.phone">
                        </div>
                    </div>
 
@@ -52,95 +68,152 @@
                                 </label>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
-                   <div class="form-group row">
-                    <legend>Thông tin đăng ký nhà trọ</legend>
-                       <label class="col-sm-2 form-control-label">Ngày Thuê</label>
-                       <div class="col-sm-10">
-                           <input type="date" class="form-control" placeholder="Nhập Nhgày Thuê"  >
-                       </div>
-                   </div>
+				<div class="form-group row">
+					<legend>Thông tin đăng ký nhà trọ</legend>
+					<label class="col-sm-2 form-control-label">Ngày Thuê</label>
+					<div class="col-sm-10">
+						<input type="date" class="form-control" placeholder="Nhập Nhgày Thuê" />
+					</div>
+				</div>
 
-                   <div class="form-group row">
-                       <label class="col-sm-2 form-control-label">Chọn Phòng Đăng Ký</label>
-                       <div class="col-sm-10">
-                           <select v-model="selected">
-                               <option :value="null">Chọn khu vực</option>
-                               <option v-for="room in list.filter(room => !room.status)" :key="room.id" >{{room.room_name}}</option>
-                           </select>
-                       </div>
-                   </div>                  
+				<div class="form-group row">
+					<label class="col-sm-2 form-control-label">Chọn Phòng Đăng Ký</label>
+					<div class="col-sm-10">
+						<select v-model="room.room_id">
+							<option value="null">Chọn phòng</option>
+							<option
+								v-for="room in list.filter(room => !room.status)"
+								:key="room.id"
+								:value="room._id"
+								>{{ room.room_name }}</option
+							>
+						</select>
+					</div>
+				</div>
 
-                   <div class="form-group row">
-                       <label class="col-sm-2">Dịch Vụ</label>
-                       <div class="col-sm-10">
-                           <div class="checkbox">
-                               <label>
-                                   <input type="checkbox" value="1"> Internet (220 000 VND)
-                               </label>
-                           </div>
+				<div class="form-group row">
+					<label class="col-sm-2">Dịch Vụ</label>
+					<div class="col-sm-10">
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" value="1" /> Internet (220 000 VND)
+							</label>
+						</div>
 
-                           <input type="text" class="form-control" placeholder="Nhập giá tiền các dịch vụ khác(phát sinh , rác ,gửi xe ,....)" >
-                       </div>
-
-                   </div>
-                   <div class="form-group row">
-                       <div class="col-sm-offset-2 col-sm-10">
-                           <router-link to="/manage-room"><button name="btnSubmit" type="submit" class="btn btn-primary" >Đồng Ý</button></router-link>
-                       </div>
-                   </div>
-               </form>
-      </div>
-  </div>
+						<input
+							type="text"
+							class="form-control"
+							placeholder="Nhập giá tiền các dịch vụ khác(phát sinh , rác ,gửi xe ,....)"
+						/>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button
+							name="btnSubmit"
+							type="submit"
+							class="btn btn-primary"
+							@click="handleRegister()"
+							>Đồng Ý</button
+						>
+						<!-- <router-link to="/manage-room"><button name="btnSubmit" type="submit" class="btn btn-primary" >Đồng Ý</button></router-link> -->
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
 </template>
 
 <script>
-import { getRoomTable, getOneRoom } from '@/api/modules/room';
-export default {
-    name: "roomRegister",
-    data(){
-        return{
-            list:[],
-            selected:null
-        }
-    },
-    created(){
-			this.handleGetListRoom()
-	},
-    methods:{
-        async handleGetListRoom() {
-		    await getRoomTable()
-			    .then(res => {
-				    this.list = res.data
-				    console.log(this.list);
-			    }
-			    )
-			    .catch(err => {
-				    console.log(err);
-			    });
-	    },
-  }
-};
+	import { getRoomTable, getOneRoom } from '@/api/modules/room';
+	import { getUserTable, getOneUser } from '@/api/modules/user';
+	import { RegisterRoom } from '@/api/modules/roomRegister';
+	import { MakeToast } from '@/toast/toastMessage';
+	export default {
+		name: 'roomRegister',
+		data() {
+			return {
+				list: [],
+				options: [],
+				selected: null,
+				room: {
+					user_id: '',
+					room_id: ''
+					// phone:'',
+					// dob:'',
+					// cmnd:'',
+					// address:''
+				}
+			};
+		},
+		created() {
+			this.handleGetListRoom();
+			this.getUser();
+		},
+		methods: {
+			clickAdd() {
+				console.log(this.room);
+			},
+			async handleGetListRoom() {
+				await getRoomTable()
+					.then(res => {
+						this.list = res.data;
+						console.log(this.list);
+					})
+					.catch(err => {
+						console.log(err);
+					});
+			},
+			async getUser() {
+				await getUserTable()
+					.then(res => {
+						this.options = res.data;
+					})
+					.catch(err => {
+						console.log(err);
+					});
+			},
+			async handleRegister() {
+				const data = {
+					user_id: this.room.user_id,
+					room_id: this.room.room_id
+				};
+				console.log(data);
+				await RegisterRoom()
+					.then(res => {
+						MakeToast({
+							variant: 'success',
+							title: this.$t('TOAST.SUCCESS'),
+							content: this.$t('MANAGER.FORM.SUCCESS')
+						});
+					})
+					.catch(err => {
+						console.log(err);
+					});
+			}
+		}
+	};
 </script>
 
 <style scoped>
-.right-content{
-  margin-top: 100px;
-}
-.right-content .title {
-  position: fixed;
-  width: 100%;
-  top: 50px;
-  background: #557B83;
-  height: 40px;
-  line-height: 40px !important;
-  color: white;
-  font-weight: 500;
-  padding-left:20px ;
-  z-index: 1;
-}
-.right-content form{
-  margin: 50px 150px 0px 50px;
-}
+	.right-content {
+		margin-top: 100px;
+	}
+	.right-content .title {
+		position: fixed;
+		width: 100%;
+		top: 50px;
+		background: #557b83;
+		height: 40px;
+		line-height: 40px !important;
+		color: white;
+		font-weight: 500;
+		padding-left: 20px;
+		z-index: 1;
+	}
+	.right-content form {
+		margin: 50px 150px 0px 50px;
+	}
 </style>

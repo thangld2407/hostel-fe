@@ -14,7 +14,7 @@ export function editArea(data) {
 	return RequestApi.putOne(`${URL}/update`, data);
 }
 export function getOneArea(id) {
-	return RequestApi.getOne(`${URL}/getone`, id);
+	return RequestApi.getOne(`${URL}/getone`,id);
 }
 
 export function deleteArea(id) {

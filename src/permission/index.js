@@ -9,7 +9,6 @@ router.beforeEach(async (to, from, next) => {
 	document.title = getPageTitle(to.meta.title);
 
 	const TOKEN = getTokenAccess('access_token');
-	console.log(TOKEN);
 	if (TOKEN) {
 		if (to.path === '/login') {
 			next({ path: '/' });
