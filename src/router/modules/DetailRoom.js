@@ -12,7 +12,7 @@ const RoomDetail = {
 	},
 	children: [
 		{
-            path: 'list/:room',
+            path: 'list/:roomid',
             name: 'RoomDetailIndex',
             component: () => import(
                 '../../pages/Detail/detailRoom.vue'

@@ -4,7 +4,9 @@
 		<div class="account-content">
 			<div class="panel-heading">
 				<p><i class="fas fa-user"></i>Nhân viên</p>
-				<button @click="handleModal()" v-b-modal.modal-xl>Create User</button>
+				<b-button variant="light" @click="handleModal()" v-b-modal.modal-xl
+					>Create User</b-button
+				>
 			</div>
 			<table class="table table-bordered">
 				<thead>
@@ -24,16 +26,16 @@
 						<td>{{ item.user_id.username }}</td>
 						<td>{{ item.user_id.email }}</td>
 						<td>{{ item.role_id.role_name }}</td>
-						<td>{{ hostel_name }}</td>
-						<td>{{ item.hostel_id }}</td>
+						<td>{{ item.hostels.hostel_name }}</td>
+						<td>{{ item.hostels.area_id.area_name }}</td>
 						<td>
-							<div class="btn btn-warning" @click="handleModal(item._id)">
+							<div class="btn btn-warning" @click="handleModal(item.user_id)">
 								<i class="fas fa-edit"></i>
 							</div>
 							<div
 								type="button"
 								class="btn btn-danger"
-								@click="handleDeleteUser(item._id)"
+								@click="handleDeleteUser(item.user_id)"
 							>
 								<i class="fa fa-trash"></i>
 							</div>
@@ -54,7 +56,7 @@
 							<div class="col col-sm-6">
 								<div class="col-6 col-sm-12">
 									<div>
-										<label for="">Tên người dùng</label>
+										<label for="">Tên tài khoản</label>
 										<b-form-input
 											type="text"
 											v-model="new_account.username"
@@ -98,7 +100,7 @@
 									</div>
 									<div>
 										<label for="">Khu vực</label>
-										<b-form-select v-model="selected" @change="handleFilterByArea()">
+										<b-form-select v-model="new_account.area_id">
 											<b-form-select-option :value="null"
 												>Chọn khu vực</b-form-select-option
 											>
@@ -143,6 +145,7 @@
 									<div>
 										<label for="">Ngày Sinh</label>
 										<b-form-input
+											type="date"
 											v-model="new_account.date_of_birth"
 										></b-form-input>
 									</div>
@@ -220,11 +223,11 @@
 				hostel_name: '',
 				new_account: {
 					username: '',
-					fullname:'',
+					fullname: '',
 					email: '',
 					password: '',
 					role_id: null,
-					area: null,
+					area_id: null,
 					hostel_id: null,
 					id_card_number: '',
 					date_of_birth: '',
@@ -240,22 +243,39 @@
 				options_hostel: [],
 				action: '',
 				showModal: false,
-				ids: 0,
+				ids: 0
 			};
 		},
 		created() {
 			this.handleGetListUser();
 			this.getRole();
-			this.getHostel(), 
-			this.getArea();
+			this.getHostel(), this.getArea();
 		},
 		methods: {
 			async handleModal(id) {
-				console.log(id, 'EDIT');
 				this.ids = id;
 				if (this.ids) {
-					(this.action = 'EDIT')
-
+					const id = { id: this.ids._id };
+					console.log(id);
+					await getOneUser(id)
+						.then(res => {
+							this.new_account.username = res.data.dataUser.username;
+							this.new_account.fullname = res.data.dataUser.fullname;
+							this.new_account.email = res.data.dataUser.email;
+							this.new_account.role_id = res.data['0'].role_id._id;
+							this.new_account.hostel_id = res.data.dataUser.hostel_id._id;
+							this.new_account.area_id = res.data.dataUser.hostel_id.area_id;
+							(this.new_account.id_card_number = res.data.dataUser.id_card_number),
+								(this.new_account.date_of_birth = res.data.dataUser.date_of_birth),
+								(this.new_account.telephone = res.data.dataUser.telephone),
+								(this.new_account.hometown = res.data.dataUser.hometown),
+								(this.new_account.gender = res.data.dataUser.gender),
+								(this.new_account.rental_date = res.data.dataUser.rental_date);
+						})
+						.catch(err => {
+							console.log(err);
+						});
+					this.action = 'EDIT';
 				} else {
 					this.isResetDataModal();
 					this.action = 'CREATE';
@@ -280,13 +300,6 @@
 					.catch(err => {
 						console.log(err);
 					});
-				await getOneHostel(id)
-					.then(res => {
-						this.new_account.hostel_id;
-					})
-					.catch(err => {
-						console.log(err);
-					});
 			},
 			async getArea() {
 				await getAreaTable()
@@ -301,32 +314,14 @@
 				this.isLoading = true;
 				await getUserTable()
 					.then(res => {
-						console.log(res.statusCode);
-						this.listUser = res.data.user;
-						
-						this.listUser.map(item => {
-							this._id = item.user_id._id;
-							console.log(this._id ,'abc');
-						})
-						
-						this.listUser.map(item => {
-							getOneHostel({ id: item.user_id.hostel_id })
-								.then(result => {
-									this.hostel_name = result.data.hostel_name;
-									this.area_id = result.data.area_id
-									console.log(this.hostel_name ,'123a');
-								})
-								.catch(err => {
-									console.log(err);
-								});
-						});
+						this.listUser = res.data;
 						this.isLoading = false;
 					})
 					.catch(err => {
 						console.log(err);
 					});
 			},
-			
+
 			async handleCreateUser() {
 				const data = {
 					username: this.new_account.username,
@@ -357,7 +352,6 @@
 				} else {
 					await postUser(data)
 						.then(res => {
-							this.listUser = res.data;
 							MakeToast({
 								variant: 'success',
 								title: this.$t('TOAST.SUCCESS'),
@@ -375,8 +369,8 @@
 			async handleEditUser() {
 				this.action = 'EDIT';
 				const data = {
-					user_id: this.op,
-					username:this.new_account.username,
+					user_id: this.ids,
+					username: this.new_account.username,
 					fullname: this.new_account.fullname,
 					email: this.new_account.email,
 					password: this.new_account.password,
@@ -391,8 +385,8 @@
 				};
 				if (
 					isEmptyOrWhiteSpace(data.fullname) ||
-					isEmptyOrWhiteSpace(data.email) ||
-					isEmptyOrWhiteSpace(data.password)
+					isEmptyOrWhiteSpace(data.email)
+					// isEmptyOrWhiteSpace(data.password)
 					// this.new_account.role === null
 				) {
 					MakeToast({
@@ -404,22 +398,21 @@
 					console.log(data);
 					await editUser(data)
 						.then(res => {
-								MakeToast({
-									variant: 'success',
-									title: this.$t('TOAST.SUCCESS'),
-									content: '123'
-								});
-								this.handleGetListUser();
-								this.showModal = false;
-								this.isResetDataModal();
-							
+							MakeToast({
+								variant: 'success',
+								title: this.$t('TOAST.SUCCESS'),
+								content: '123'
+							});
+							this.handleGetListUser();
+							this.showModal = false;
+							this.isResetDataModal();
 						})
 						.catch(err => {
 							console.log(err);
 						});
 				}
 			},
-			handleDeleteUser() {
+			handleDeleteUser(id) {
 				this.$bvModal
 					.msgBoxConfirm('Do you want to delete this user?', {
 						title: 'Warning',
@@ -434,25 +427,24 @@
 					})
 					.then(value => {
 						if (value === true) {
-							deleteUser({ user_id: this._id })
-							console.log(user_id,'poi')
+							deleteUser({ user_id: id })
 								.then(res => {
-										MakeToast({
-											variant: 'success',
-											title: this.$t('TOAST.SUCCESS'),
-											content: 'Successfully to delete this user'
-										});
-										this.handleGetListUser();
-									
+									MakeToast({
+										variant: 'success',
+										title: this.$t('TOAST.SUCCESS'),
+										content: 'Successfully to delete this user'
+									});
+									this.handleGetListUser();
+
 									console.log(res);
 								})
 								.catch(err => {
 									console.log(err);
 									MakeToast({
-											variant: 'warning',
-											title: this.$t('TOAST.WARNING'),
-											content: 'You can not delete this user'
-										});
+										variant: 'warning',
+										title: this.$t('TOAST.WARNING'),
+										content: 'You can not delete this user'
+									});
 								});
 						}
 					});
@@ -461,7 +453,7 @@
 				console.log('RESET DATA');
 				this.new_account = {
 					username: '',
-					fullname:'',
+					fullname: '',
 					email: '',
 					password: '',
 					role_id: null,
@@ -474,17 +466,6 @@
 					gender: '',
 					rental_date: ''
 				};
-			},
-			handleFilterByArea() {
-				this.listUser = this.listUser.filter(item => {
-					if (item.user.user_id.hostel_id === this.selected) {
-						return item;
-					} else if (this.selected === null) {
-						this.getHostel();
-					} else {
-						console.log('No data');
-					}
-				});
 			}
 		}
 	};
@@ -498,7 +479,7 @@
 		top: 50px;
 		background: #557b83;
 		height: 40px;
-		line-height: 40px ;
+		line-height: 40px;
 		color: white;
 		padding-left: 20px;
 	}
@@ -523,7 +504,11 @@
 		background: #337ab7;
 		color: white;
 		align-items: center;
-		justify-content: flex-start;
+	}
+	.account-content .panel-heading button {
+		padding: 1px;
+		margin-left: auto;
+		margin-right: 50px;
 	}
 	.account-content .panel-heading p,
 	.account-content .panel-heading i {

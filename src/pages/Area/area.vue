@@ -2,7 +2,9 @@
 	<div id="area">
 		<div class="title">
 			<span>{{ $t('AREA.TITLE') }}</span>
-			<button @click="handleModal()" v-b-modal.modal-1>{{ $t('AREA.CREATE') }}</button>
+			<b-button variant="light" @click="handleModal()" v-b-modal.modal-1>{{
+				$t('AREA.CREATE')
+			}}</b-button>
 		</div>
 		<div class="container">
 			<table class="table table-bordered">
@@ -18,7 +20,7 @@
 					<tr v-for="(area, index) in listAreas" :key="index">
 						<th scope="row">{{ index + 1 }}</th>
 						<td>{{ area.area_name }}</td>
-						<td>{{ area.date }}</td>
+						<td>{{ area.createAt }}</td>
 						<td class="actions">
 							<div class="btn btn-warning" @click="handleModal(area._id)">
 								<i class="fa fa-edit"></i>
@@ -43,7 +45,7 @@
 					</div>
 					<div class="col-md-12 col-sm-12 col-lg-12">
 						<label for="">{{ $t('AREA.FORM.DATE') }}</label>
-						<b-form-input type="date" v-model="new_area.date"></b-form-input>
+						<b-form-input type="date" v-model="new_area.createAt"></b-form-input>
 					</div>
 				</div>
 				<template #modal-footer>
@@ -84,7 +86,7 @@
 				listAreas: [],
 				new_area: {
 					area_name: '',
-					date: ''
+					createAt: ''
 				},
 				isLoading: false,
 				showModal: false,
@@ -104,6 +106,7 @@
 					getOneArea(id)
 						.then(res => {
 							this.new_area.area_name = res.area.area_name;
+							this.new_area.createAt = res.area.createAt;
 						})
 						.catch(err => {
 							console.log(err);
@@ -131,7 +134,7 @@
 			async handleCreateArea() {
 				const data = {
 					area_name: this.new_area.area_name,
-					date: this.new_area.date
+					createAt: this.new_area.createAt
 				};
 				console.log(data);
 				if (isEmptyOrWhiteSpace(data.area_name)) {
@@ -161,6 +164,7 @@
 				this.action = 'EDIT';
 				const data = {
 					area_name: this.new_area.area_name,
+					createAt: this.new_area.createAt,
 					id: this.ids
 				};
 				if (isEmptyOrWhiteSpace(data.area_name)) {
@@ -216,10 +220,10 @@
 								.catch(err => {
 									console.log(err);
 									MakeToast({
-											variant: 'warning',
-											title: this.$t('TOAST.WARNING'),
-											content: 'You can not delete this area'
-										});
+										variant: 'warning',
+										title: this.$t('TOAST.WARNING'),
+										content: 'You can not delete this area'
+									});
 								});
 						}
 					});
@@ -228,7 +232,7 @@
 				console.log('RESET DATA');
 				this.new_area = {
 					area_name: '',
-					date: ''
+					createAt: ''
 				};
 			}
 		}
@@ -243,15 +247,14 @@
 		background: #557b83;
 		height: 40px;
 		color: white;
-		font-weight: 500;
 		padding-left: 20px;
 		display: flex;
 		align-items: center;
 	}
 	#area .title button {
-		border: none;
-		border-radius: 5px;
-		margin-left: 1050px;
+		padding: 1px;
+		margin-left: auto;
+		margin-right: 320px;
 	}
 	.container {
 		margin-top: 140px;
