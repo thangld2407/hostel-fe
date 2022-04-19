@@ -54,12 +54,15 @@
 </template>
 
 <script>
+import{getHostelTable} from '@/api/modules/hostel';
+import { MakeToast } from '@/toast/toastMessage';
 	export default {
 		name: 'Navbar',
 		components: {},
 		data() {
 			return {
-				title: this.$route.meta.title
+				title: this.$route.meta.title,
+				hostel:[]
 			};
 		},
 		computed: {
@@ -70,15 +73,39 @@
 				return this.$route.path;
 			},
 			name() {
-				return this.$store.getters.name;
-			}
+				return this.$store.getters.name,
+				console.log(this.$store.getters.name,'anmmmmm');
+			},
 		},
 		watch: {
 			routeChange() {
 				this.title = this.$route.meta.title;
 			}
 		},
+		created(){
+			this.getHostel()
+		},
 		methods: {
+			setLanguage(lang) {
+				this.$store
+					.dispatch('app/setLanguage', lang)
+					.then(() => {
+						this.$i18n.locale = lang;
+
+						MakeToast({
+							variant: 'success',
+							title: this.$t('TOAST.SUCCESS'),
+							content: this.$t('I18N.CHANGE_LANGUAGE.SUCCESS')
+						});
+					})
+					.catch(() => {
+						MakeToast({
+							variant: 'danger',
+							title: this.$t('TOAST.DANGER'),
+							content: this.$t('I18N.CHANGE_LANGUAGE.FAILED')
+						});
+					});
+			},
 			logout() {
 				this.$store
 					.dispatch('auth/doLogout')

@@ -134,6 +134,7 @@ export default {
 			TITLE: 'Create new room',
 			EDIT:'Edit Room',
 			ROOM_PRICE: 'Room Price',
+			HOSTEL: 'Hostel',
 			NAME:'Room Name',
 			ELECTRICITY_PRICE: 'Electricity Price',
 			WATER_PRICE: 'Water Price',
