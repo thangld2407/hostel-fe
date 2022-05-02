@@ -2,7 +2,7 @@
     margin: 100px 20px 0px 20px;
     &-header { 
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 10px;
         text-align: center;
         
@@ -28,11 +28,10 @@
                 background-color: #FFA400;
             }
         }
-        .table{
-            display: flex !important;
-            justify-content: space-between !important;
         
-        }
+    }
+    .table{
+        text-align: center !important;
     }
     &-content {
         margin-top: 50px;

@@ -3,7 +3,7 @@ import Layout from '@/layout';
 const RoomDetail = {
 	path: '/detail-room',
 	name: 'RoomDetail',
-  meta: {
+  	meta: {
 		
 	},
 	component: Layout,

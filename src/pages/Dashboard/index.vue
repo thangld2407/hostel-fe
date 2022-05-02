@@ -13,14 +13,14 @@
 				<h2> <i class="fas fa-bed-alt"></i>{{$t('DASHBOARD.BOX.EMPTY_ROOM')}} </h2>
 				<h3> {{list.filter(room => !room.status).length}} </h3>
 			</div>
-			<div class="header-box">
+			<!-- <div class="header-box">
 				<h2> <i class="fas fa-history"></i>{{$t('DASHBOARD.BOX.TOTAL_DEPT_ROOM')}} </h2>
 				<h3> 50 </h3>
-			</div>
+			</div> -->
 		</div>
 		<div class="dashboard-content">
 			<div class="row">
-				<div class="col-md-6 col-sm-12 col-lg-6">
+				<div class="col ">
 					<table class="table border">
 						<thead class="text-center">
 							<th colspan="2">{{$t('DASHBOARD.TABLE.EMPTY_ROOM')}}</th>
@@ -37,7 +37,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div class="col-md-6 col-sm-12 col-lg-6">
+				<!-- <div class="col-md-6 col-sm-12 col-lg-6">
 					<table class="table border">
 						<thead class="text-center">
 							<th colspan="2">{{$t('DASHBOARD.TABLE.DEPT_ROOM')}}</th>
@@ -53,7 +53,7 @@
 							</tr>
 						</tbody>
 					</table>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</div>

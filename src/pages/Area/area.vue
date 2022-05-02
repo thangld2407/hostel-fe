@@ -20,7 +20,7 @@
 					<tr v-for="(area, index) in listAreas" :key="index">
 						<th scope="row">{{ index + 1 }}</th>
 						<td>{{ area.area_name }}</td>
-						<td>{{ area.createAt }}</td>
+						<td>{{ area.createAt.slice(0,10) }}</td>
 						<td class="actions">
 							<div class="btn btn-warning" @click="handleModal(area._id)">
 								<i class="fa fa-edit"></i>
@@ -94,6 +94,7 @@
 				ids: ''
 			};
 		},
+
 		created() {
 			this.handleGetListArea();
 		},

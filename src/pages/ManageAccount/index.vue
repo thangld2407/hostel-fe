@@ -1,22 +1,22 @@
 <template>
 	<div class="account">
-		<div class="title">Quản lý tài khoản</div>
+		<div class="title">{{ $t('USER.TITLE') }}</div>
 		<div class="account-content">
 			<div class="panel-heading">
-				<p><i class="fas fa-user"></i>Nhân viên</p>
+				<p><i class="fas fa-user"></i>{{ $t('USER.TABLE.NAME') }}</p>
 				<b-button variant="light" @click="handleModal()" v-b-modal.modal-xl
-					>Create User</b-button
+					>{{ $t('USER.CREATE_USER') }}</b-button
 				>
 			</div>
 			<table class="table table-bordered">
 				<thead>
 					<tr>
-						<th scope="col" class="col-1">STT</th>
-						<th scope="col" class="col-2">Tên nhân viên</th>
-						<th scope="col" class="col-2">Email</th>
-						<th scope="col" class="col-1">Chức năng</th>
-						<th scope="col" class="col-1">Khu vực</th>
-						<th scope="col" class="col-2">Địa điểm làm việc</th>
+						<th scope="col" class="col-1">{{ $t('USER.TABLE.HEADING.ID') }}</th>
+						<th scope="col" class="col-2">{{ $t('USER.TABLE.HEADING.NAME') }}</th>
+						<th scope="col" class="col-2">{{ $t('USER.TABLE.HEADING.EMAIL') }}</th>
+						<th scope="col" class="col-1">{{ $t('USER.TABLE.HEADING.ROLE') }}</th>
+						<th scope="col" class="col-1">{{ $t('USER.TABLE.HEADING.AREA') }}</th>
+						<th scope="col" class="col-2">{{ $t('USER.TABLE.HEADING.HOSTEL') }}</th>
 						<th scope="col" class="col-1"></th>
 					</tr>
 				</thead>
@@ -56,35 +56,35 @@
 							<div class="col col-sm-6">
 								<div class="col-6 col-sm-12">
 									<div>
-										<label for="">Tên tài khoản</label>
+										<label for="">{{ $t('USER.FORM.NAME_ACCOUNT') }}</label>
 										<b-form-input
 											type="text"
 											v-model="new_account.username"
 										></b-form-input>
 									</div>
 									<div>
-										<label for="">Tên người dùng</label>
+										<label for="">{{ $t('USER.FORM.NAME_USER') }}</label>
 										<b-form-input
 											type="text"
 											v-model="new_account.fullname"
 										></b-form-input>
 									</div>
 									<div>
-										<label for="">Email</label>
+										<label for="">{{ $t('USER.FORM.EMAIL') }}</label>
 										<b-form-input
 											:readonly="action === 'EDIT' ? true : false"
 											v-model="new_account.email"
 										></b-form-input>
 									</div>
 									<div>
-										<label for="">Password</label>
+										<label for="">{{ $t('USER.FORM.PASSWORD') }}</label>
 										<b-form-input
 											type="password"
 											v-model="new_account.password"
 										></b-form-input>
 									</div>
 									<div>
-										<label for="">Role</label>
+										<label for="">{{ $t('USER.FORM.ROLE') }}</label>
 										<b-form-select v-model="new_account.role_id">
 											<b-form-select-option :value="null"
 												>Chọn role</b-form-select-option
@@ -99,8 +99,8 @@
 										</b-form-select>
 									</div>
 									<div>
-										<label for="">Khu vực</label>
-										<b-form-select v-model="new_account.area_id">
+										<label for="">{{ $t('USER.FORM.AREA') }}</label>
+										<b-form-select :selected="new_account.area_id" v-model="new_account.area_id">
 											<b-form-select-option :value="null"
 												>Chọn khu vực</b-form-select-option
 											>
@@ -114,7 +114,7 @@
 										</b-form-select>
 									</div>
 									<div>
-										<label for="">Địa điểm làm việc</label>
+										<label for="">{{ $t('USER.FORM.HOSTEL') }}</label>
 										<b-form-select
 											:selected="new_account.hostel_id"
 											v-model="new_account.hostel_id"
@@ -136,42 +136,54 @@
 							<div class="col col-sm-6">
 								<div class="col-6 col-sm-12">
 									<div>
-										<label for="">CMND</label>
+										<label for="">{{ $t('USER.FORM.CARD') }}</label>
 										<b-form-input
 											type="text"
 											v-model="new_account.id_card_number"
 										></b-form-input>
 									</div>
 									<div>
-										<label for="">Ngày Sinh</label>
+										<label for="">{{ $t('USER.FORM.DOB') }}</label>
 										<b-form-input
 											type="date"
 											v-model="new_account.date_of_birth"
 										></b-form-input>
 									</div>
 									<div>
-										<label for="">SĐT</label>
+										<label for="">{{ $t('USER.FORM.PHONE') }}</label>
 										<b-form-input
 											v-model="new_account.telephone"
 										></b-form-input>
 									</div>
 									<div>
-										<label for="">Gender</label>
+										<label for="">{{ $t('USER.FORM.GENDER') }}</label>
 										<b-form-select v-model="new_account.gender">
 											<b-form-select-option :value="null"
 												>Chọn giới tính</b-form-select-option
 											>
+											<b-form-select-option
+												v-model="new_account.gender"
+												:value="0"
+											>
+												Male
+											</b-form-select-option>
+											<b-form-select-option
+												v-model="new_account.gender"
+												:value="1"
+											>
+												Female
+											</b-form-select-option>
 										</b-form-select>
 									</div>
 									<div>
-										<label for="">Ngày thuê</label>
+										<label for="">{{ $t('USER.FORM.RENTAL_DATE') }}</label>
 										<b-form-input
 											v-model="new_account.rental_date"
 											type="date"
 										></b-form-input>
 									</div>
 									<div>
-										<label for="">Quê quán</label>
+										<label for="">{{ $t('USER.FORM.HOMETOWN') }}</label>
 										<b-form-input v-model="new_account.hometown"></b-form-input>
 									</div>
 								</div>
@@ -265,12 +277,12 @@
 							this.new_account.role_id = res.data['0'].role_id._id;
 							this.new_account.hostel_id = res.data.dataUser.hostel_id._id;
 							this.new_account.area_id = res.data.dataUser.hostel_id.area_id;
-							(this.new_account.id_card_number = res.data.dataUser.id_card_number),
-								(this.new_account.date_of_birth = res.data.dataUser.date_of_birth),
-								(this.new_account.telephone = res.data.dataUser.telephone),
-								(this.new_account.hometown = res.data.dataUser.hometown),
-								(this.new_account.gender = res.data.dataUser.gender),
-								(this.new_account.rental_date = res.data.dataUser.rental_date);
+							this.new_account.id_card_number = res.data.dataUser.id_card_number,
+							this.new_account.date_of_birth = res.data.dataUser.date_of_birth,
+							this.new_account.telephone = res.data.dataUser.telephone,
+							this.new_account.hometown = res.data.dataUser.hometown,
+							this.new_account.gender = res.data.dataUser.gender,
+							this.new_account.rental_date = res.data.dataUser.rental_date;
 						})
 						.catch(err => {
 							console.log(err);
@@ -315,6 +327,7 @@
 				await getUserTable()
 					.then(res => {
 						this.listUser = res.data;
+						console.log(this.listUser);
 						this.isLoading = false;
 					})
 					.catch(err => {
@@ -330,6 +343,7 @@
 					password: this.new_account.password,
 					role_id: this.new_account.role_id,
 					hostel_id: this.new_account.hostel_id,
+					area_id: this.new_account.area_id,
 					id_card_number: this.new_account.id_card_number,
 					date_of_birth: this.new_account.date_of_birth,
 					telephone: this.new_account.telephone,
@@ -342,12 +356,21 @@
 					isEmptyOrWhiteSpace(data.username) ||
 					isEmptyOrWhiteSpace(data.email) ||
 					isEmptyOrWhiteSpace(data.password) ||
-					this.new_account.role_id === null
+					isEmptyOrWhiteSpace(data.fullname) ||
+					isEmptyOrWhiteSpace(data.id_card_number) ||
+					isEmptyOrWhiteSpace(data.date_of_birth) ||
+					isEmptyOrWhiteSpace(data.telephone) ||
+					isEmptyOrWhiteSpace(data.hometown) ||
+					isEmptyOrWhiteSpace(data.gender) ||
+					isEmptyOrWhiteSpace(data.rental_date) ||
+					this.new_account.role_id === null ||
+					this.new_account.area_id === null ||
+					this.new_account.hostel_id === null
 				) {
 					MakeToast({
 						variant: 'warning',
 						title: 'Warning',
-						content: '123'
+						content: this.$t('USER.FORM.MESSAGE.SPACE')
 					});
 				} else {
 					await postUser(data)
@@ -355,7 +378,7 @@
 							MakeToast({
 								variant: 'success',
 								title: this.$t('TOAST.SUCCESS'),
-								content: this.$t('MANAGER.FORM.SUCCESS')
+								content: this.$t('USER.FORM.SUCCESS')
 							});
 							this.handleGetListUser();
 							this.showModal = false;
@@ -378,6 +401,7 @@
 					hostel_id: this.new_account.hostel_id,
 					id_card_number: this.new_account.id_card_number,
 					date_of_birth: this.new_account.date_of_birth,
+					area_id: this.new_account.area_id,
 					telephone: this.new_account.telephone,
 					hometown: this.new_account.hometown,
 					gender: this.new_account.gender,
@@ -385,9 +409,16 @@
 				};
 				if (
 					isEmptyOrWhiteSpace(data.fullname) ||
-					isEmptyOrWhiteSpace(data.email)
-					// isEmptyOrWhiteSpace(data.password)
-					// this.new_account.role === null
+					isEmptyOrWhiteSpace(data.username) ||
+					isEmptyOrWhiteSpace(data.email) ||
+					// isEmptyOrWhiteSpace(data.telephone) ||
+					// isEmptyOrWhiteSpace(data.id_card_number) ||
+					// isEmptyOrWhiteSpace(data.hometown) ||
+					// isEmptyOrWhiteSpace(data.gender) ||
+					// isEmptyOrWhiteSpace(data.rental_date) ||
+					this.new_account.hostel_id === null ||
+					this.new_account.role_id === null ||
+					this.new_account.area_id === null
 				) {
 					MakeToast({
 						variant: 'warning',
@@ -401,7 +432,7 @@
 							MakeToast({
 								variant: 'success',
 								title: this.$t('TOAST.SUCCESS'),
-								content: '123'
+								content: this.$t('USER.FORM.SUCCESS')
 							});
 							this.handleGetListUser();
 							this.showModal = false;
