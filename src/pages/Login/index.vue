@@ -94,34 +94,48 @@
 					password: this.User.password
 				};
 
-				postLogin('auth/login', Account).then(async res => {
-					const ROLES = res.data.role_id.role_name || [];
-					console.log(ROLES);
-					setToken('access_token', res.accessToken);
-					setToken('roles', [ROLES]);
-					try {
-						const accessRoutes = this.$store.dispatch('permission/generateRoutes', {
-							roles: ROLES,
-							permissions: []
-						});
-						await setRoutes(accessRoutes);
-
-						this.$router.push('/');
-
-						MakeToast({
-							variant: 'success',
-							title: this.$t('TOAST.SUCCESS'),
-							content: this.$t('LOGIN.LOGIN_SUCCESS')
-						});
-					} catch (error) {
-						console.log(error);
-							MakeToast({
-								variant: 'warning',
-								title: this.$t('TOAST.WARNING'),
-								content: 'You can not delete this room'
+				postLogin('auth/login', Account)
+					.then(async res => {
+						const ROLES = res.data.role_id.role_name || [];
+						console.log(ROLES);
+						setToken('access_token', res.accessToken);
+						setToken('roles', [ROLES]);
+						setToken('username', res.data.user_id.username);
+						setToken('_id', res.data.user_id._id);
+						setToken('hostel_id', res.data.user_id.hostel_id);
+						setToken('email', res.data.user_id.email);
+						try {
+							const accessRoutes = this.$store.dispatch('permission/generateRoutes', {
+								roles: ROLES,
+								permissions: []
 							});
-					}
-				});
+							await setRoutes(accessRoutes);
+
+							this.$router.push('/');
+
+							MakeToast({
+								variant: 'success',
+								title: this.$t('TOAST.SUCCESS'),
+								content: this.$t('LOGIN.LOGIN_SUCCESS')
+							});
+						} catch (error) {
+							console.log(error);
+							MakeToast({
+								variant: 'danger',
+								title: this.$t('TOAST.DANGER'),
+								content: this.$t('LOGIN.LOGIN_ERROR')
+							});
+							this.isProcess = false;
+						}
+					})
+					.catch(() => {
+						MakeToast({
+							variant: 'danger',
+							title: this.$t('TOAST.DANGER'),
+							content: this.$t('LOGIN.LOGIN_ERROR')
+						});
+						this.isProcess = false;
+					});
 			},
 
 			handleShowPassword() {

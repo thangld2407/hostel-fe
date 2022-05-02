@@ -29,17 +29,12 @@
 					</thead>
 					<tbody>
 						<tr v-for="issues in listIssues" :key="issues._id">
-							<th scope="row">1</th>
-							<td>1</td>
+							<th scope="row">{{issues.room.room_id.room_name}}</th>
+							<td>{{ issues.user_id.username }}</td>
 							<td>{{ issues.issues_name }}</td>
 							<td>{{ issues.issues_content }}</td>
 							<td>
-								<input
-									v-model="issues.status"
-									type="checkbox"
-									v-if="issues.status"
-								/>
-								<input type="checkbox" v-model="issues.status" v-else />
+								<input type="checkbox" v-model="issues.status">{{issues.status}}
 							</td>
 							<td class="actions">
 								<div type="button" class="btn btn-danger">
@@ -61,8 +56,6 @@
 		data() {
 			return {
 				listIssues: [],
-				status: false,
-				isLoading: false,
 				showModal: false
 			};
 		},
@@ -71,12 +64,10 @@
 		},
 		methods: {
 			async handleGetListIssues() {
-				this.isLoading = true;
 				await getIssuesTable()
 					.then(res => {
 						this.listIssues = res.data;
-						console.log(this.listAreas);
-						this.isLoading = false;
+						console.log(this.listIssues);
 					})
 					.catch(err => {
 						console.log(err);

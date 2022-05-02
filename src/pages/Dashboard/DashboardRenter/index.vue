@@ -1,8 +1,8 @@
 <template>
   <div id="header-dashboard">
     <div class="header-userName">
-        <h2>Hi, ADMIN!</h2>
-        <p>Email : 123@123</p>
+        <h2>Hi, {{name}}!</h2>
+        <p>Email : {{email}}</p>
         <p>Role : ADMIN</p>
     </div>
         <div class="header-img">
@@ -12,12 +12,27 @@
 </template>
 
 <script>
+import { getToken } from '@/const/cookie';
 export default {
   data(){
     return{
-      wellcome : wellcome
+      
     }
-  }
+  },
+  computed: {
+      name(){
+        const name = getToken('username')
+        return name;
+      },
+			email() {
+				const email = getToken('email');
+				return email;
+			},
+			role(){
+				const id = getToken('roles');
+				return id;
+			}
+	},
 }
 </script>
 

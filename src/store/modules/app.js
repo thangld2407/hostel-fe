@@ -4,14 +4,6 @@ import ConstCookie from '@/const/cookie';
 
 const state = {
 	language: getLanguage(),
-	list: [
-		{
-			id:1,
-			price:12,
-			description:"abc"
-		}
-	],
-  	room_info:[],
 };
 
 const mutations = {

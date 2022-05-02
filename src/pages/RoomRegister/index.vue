@@ -12,7 +12,7 @@
 								user => user.role_id.role_name === 'customer'
 							)"
 							:key="index"
-							:value="user._id"
+							:value="user.user_id._id"
 							>{{ user.user_id.username }}</b-form-select-option
 						>
 					</b-form-select>
@@ -74,7 +74,7 @@
 					<legend>Thông tin đăng ký nhà trọ</legend>
 					<label class="col-sm-2 form-control-label">Ngày Thuê</label>
 					<div class="col-sm-10">
-						<input type="date" class="form-control" placeholder="Nhập Nhgày Thuê" />
+						<input type="date" class="form-control" v-model="room.date" />
 					</div>
 				</div>
 
@@ -96,7 +96,7 @@
 				<div class="form-group row">
 					<label class="col-sm-2">Dịch Vụ</label>
 					<div class="col-sm-10">
-						<div class="checkbox">
+						<!-- <div class="checkbox">
 							<label>
 								<input type="checkbox" value="1" /> Internet (220 000 VND)
 							</label>
@@ -106,7 +106,47 @@
 							type="text"
 							class="form-control"
 							placeholder="Nhập giá tiền các dịch vụ khác(phát sinh , rác ,gửi xe ,....)"
-						/>
+						/> -->
+						<div class="zone-table-answer">
+							<b-table-simple :bordered="true" :outlined="false" :fixed="false">
+								<b-thead>
+									<b-tr>
+										<b-th class="zone-min-width">
+											<span>Name</span>
+										</b-th>
+
+										<b-th>
+											<span>Price</span>
+										</b-th>
+
+										<b-th class="zone-min-width">
+											<span>Actions</span>
+										</b-th>
+									</b-tr>
+								</b-thead>
+
+								<b-tbody>
+									<b-tr>
+										<b-td class="zone-min-width">
+											<b-form-input />
+										</b-td>
+
+										<b-td>
+											<b-form-input />
+										</b-td>
+
+										<b-td class="zone-min-width">
+											<b-button @click="handleDeleteAnswer(indexAnswer)">
+												Delete
+											</b-button>
+										</b-td>
+									</b-tr>
+								</b-tbody>
+							</b-table-simple>
+						</div>
+						<div class="zone-add-quiz">
+							<div @click="handleAddService()">+</div>
+						</div>
 					</div>
 				</div>
 				<div class="form-group row">
@@ -131,6 +171,7 @@
 	import { getUserTable, getOneUser } from '@/api/modules/user';
 	import { RegisterRoom } from '@/api/modules/roomRegister';
 	import { MakeToast } from '@/toast/toastMessage';
+	import { isEmptyOrWhiteSpace } from '../../utils/validate';
 	export default {
 		name: 'roomRegister',
 		data() {
@@ -138,9 +179,16 @@
 				list: [],
 				options: [],
 				selected: null,
+				other_service: [
+					{
+						name: '',
+						price: ''
+					}
+				],
 				room: {
 					user_id: '',
-					room_id: ''
+					room_id: '',
+					date: ''
 					// phone:'',
 					// dob:'',
 					// cmnd:'',
@@ -181,17 +229,39 @@
 					room_id: this.room.room_id
 				};
 				console.log(data);
-				await RegisterRoom()
-					.then(res => {
-						MakeToast({
-							variant: 'success',
-							title: this.$t('TOAST.SUCCESS'),
-							content: this.$t('MANAGER.FORM.SUCCESS')
-						});
-					})
-					.catch(err => {
-						console.log(err);
+				if (isEmptyOrWhiteSpace(data.user_id) || isEmptyOrWhiteSpace(data.room_id)) {
+					MakeToast({
+						variant: 'warning',
+						title: 'Warning',
+						content: this.$t('ROOM.FORM.MESSAGE.SPACE')
 					});
+				} else {
+					await RegisterRoom(data)
+						.then(res => {
+							MakeToast({
+								variant: 'success',
+								title: this.$t('TOAST.SUCCESS'),
+								content: this.$t('MANAGER.FORM.SUCCESS')
+							});
+							this.$router.push(`/manage-room/list`);
+						})
+						.catch(err => {
+							console.log(err);
+							MakeToast({
+								variant: 'success',
+								title: this.$t('TOAST.WARNING'),
+								content: this.$t('MANAGER.FORM.SUCCESS')
+							});
+						});
+				}
+			},
+			handleAddService() {
+				const SERVICE = {
+					name: '',
+					price: ''
+				};
+
+				this.Quiz.question_answers.push(SERVICE);
 			}
 		}
 	};
@@ -215,5 +285,16 @@
 	}
 	.right-content form {
 		margin: 50px 150px 0px 50px;
+	}
+	.right-content .zone-add-quiz {
+		background-color: orange;
+		border-radius: 50%;
+		width: 25px;
+		height: 25px;
+	}
+	.right-content .zone-add-quiz div {
+		color: white;
+		text-align: center;
+		font-weight: 700;
 	}
 </style>

@@ -2,11 +2,11 @@
 	<div id="navbar">
 		<nav>
 			<span>{{ $t('NAVBAR.AREA') }}</span>
-			<input type="text" />
+			<input type="text" v-model="area_name"/>
 		</nav>
 		<nav>
 			<span>{{ $t('NAVBAR.ADDRESS') }}</span>
-			<input type="text" />
+			<input type="text" v-model="address"/>
 		</nav>
 		<b-navbar toggleable="lg" type="dark">
 			<b-navbar-toggle target="nav-collapse">
@@ -54,15 +54,18 @@
 </template>
 
 <script>
-import{getHostelTable} from '@/api/modules/hostel';
-import { MakeToast } from '@/toast/toastMessage';
+	import { getOneUser } from '@/api/modules/user';
+	import { MakeToast } from '@/toast/toastMessage';
+	import { getToken } from '../../const/cookie';
 	export default {
 		name: 'Navbar',
 		components: {},
 		data() {
 			return {
 				title: this.$route.meta.title,
-				hostel:[]
+				hostel: [],
+				area_name:'',
+				address:''
 			};
 		},
 		computed: {
@@ -73,25 +76,40 @@ import { MakeToast } from '@/toast/toastMessage';
 				return this.$route.path;
 			},
 			name() {
-				return this.$store.getters.name,
-				console.log(this.$store.getters.name,'anmmmmm');
+				const name = getToken('username');
+				return name;
 			},
+			id(){
+				const id = getToken('_id');
+				return id;
+			}
 		},
 		watch: {
 			routeChange() {
 				this.title = this.$route.meta.title;
 			}
 		},
-		created(){
-			this.getHostel()
+		created() {
+			this.getUser();
 		},
 		methods: {
+			async getUser(){
+				console.log(this.id,'asdasdds');
+				await getOneUser({id:this.id})
+					.then(res => {
+							this.area_name = res.data.dataArea.area_name;
+							this.address = res.data.dataUser.hostel_id.address;
+						})
+					.catch(err => {
+							console.log(err);
+					});
+			},
 			setLanguage(lang) {
 				this.$store
 					.dispatch('app/setLanguage', lang)
 					.then(() => {
 						this.$i18n.locale = lang;
-
+						console.log(lang,'sda');
 						MakeToast({
 							variant: 'success',
 							title: this.$t('TOAST.SUCCESS'),

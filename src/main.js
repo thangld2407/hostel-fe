@@ -1,9 +1,9 @@
 import 'core-js';
 
-import Vue from 'vue';
-import App from './App.vue';
+// import Vue from 'vue';
+// import App from './App.vue';
 
-import router from '@/router';
+// import router from '@/router';
 import i18n from '@/lang';
 import store from '@/store';
 import '@/permission';
@@ -17,6 +17,12 @@ import '@/scss/_index.scss';
 
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
+
+import Vue from 'vue';
+import App from './App.vue';
+
+import router from '@/router';
+
 Vue.config.productionTip = false
 
 new Vue({
