@@ -24,7 +24,7 @@
 						<td>{{ hostel.area_id.area_name }}</td>
 						<td>{{ hostel.hostel_name }}</td>
 						<td>{{ hostel.address }}</td>
-						<td>{{ hostel.createAt }}</td>
+						<td>{{ hostel.createAt.slice(0, 10) }}</td>
 						<td class="actions">
 							<div class="btn btn-warning" @click="handleModal(hostel._id)">
 								<i class="fa fa-edit"></i>
@@ -63,6 +63,14 @@
 					<div class="col-md-12 col-sm-12 col-lg-12">
 						<label for="">Địa chỉ</label>
 						<b-form-input v-model="new_hostel.address"></b-form-input>
+					</div>
+					<div class="col-md-12 col-sm-12 col-lg-12">
+						<label for="">Giá Nước</label>
+						<b-form-input v-model="new_hostel.price_water" type="number"></b-form-input>
+					</div>
+					<div class="col-md-12 col-sm-12 col-lg-12">
+						<label for="">Giá Điện</label>
+						<b-form-input v-model="new_hostel.price_electric" type="number"></b-form-input>
 					</div>
 					<div class="col-md-12 col-sm-12 col-lg-12">
 						<label for="">Ngày tạo</label>
@@ -118,7 +126,9 @@
 					hostel_name: '',
 					address: '',
 					area_id: null,
-					createAt: ''
+					createAt: '',
+					price_water:'',
+					price_electric:''
 				},
 				options_area: [],
 				isLoading: false,
@@ -142,6 +152,9 @@
 							this.new_hostel.hostel_name = res.data.hostel_name;
 							this.new_hostel.address = res.data.address;
 							this.new_hostel.createAt = res.data.createAt;
+							this.new_hostel.area_id = res.data.area_id._id;
+							this.new_hostel.price_water = res.data.price_water;
+							this.new_hostel.price_electric = res.data.price_electric;
 						})
 						.catch(err => {
 							console.log(err);
@@ -179,13 +192,18 @@
 					area_id: this.new_hostel.area_id,
 					hostel_name: this.new_hostel.hostel_name,
 					address: this.new_hostel.address,
-					createAt: this.new_hostel.createAt
+					createAt: this.new_hostel.createAt,
+					price_water: this.new_hostel.price_water,
+					price_electric: this.new_hostel.price_electric
 				};
 				console.log(data);
 				if (
 					isEmptyOrWhiteSpace(data.hostel_name) ||
 					isEmptyOrWhiteSpace(data.address) ||
-					isEmptyOrWhiteSpace(data.createAt)
+					isEmptyOrWhiteSpace(data.createAt)||
+					isEmptyOrWhiteSpace(data.area_id)||
+					isEmptyOrWhiteSpace(data.price_water)||
+					isEmptyOrWhiteSpace(data.price_electric)
 				) {
 					MakeToast({
 						variant: 'warning',
@@ -213,9 +231,12 @@
 				this.action = 'EDIT';
 				const data = {
 					hostel_id: this.ids,
-					hostel_name: this.new_hostel.hostel_name,
 					area_id: this.new_hostel.area_id,
-					address: this.new_hostel.address
+					hostel_name: this.new_hostel.hostel_name,
+					address: this.new_hostel.address,
+					createAt: this.new_hostel.createAt,
+					price_water: this.new_hostel.price_water,
+					price_electric: this.new_hostel.price_electric
 				};
 				if (
 					isEmptyOrWhiteSpace(data.hostel_name) ||
@@ -288,7 +309,10 @@
 				this.new_hostel = {
 					hostel_name: '',
 					address: '',
-					createAt: ''
+					area_id: null,
+					createAt: '',
+					price_water:'',
+					price_electric:''
 				};
 			}
 		}

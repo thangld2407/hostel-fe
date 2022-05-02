@@ -17,7 +17,7 @@ export default {
 		AREA: 'Area Management',
 		BILL: 'Bill',
 		REPORT: 'Report',
-		PLACE: 'Place Management'
+		PLACE: 'Hostel Management'
 		
 	},
 	NAVBAR: {
@@ -75,10 +75,19 @@ export default {
 			TITLE: "Create User",
 			PASSWORD: "Password",
 			EMAIL: "Email",
-			NAME: "Name",
+			NAME_ACCOUNT: "Account Name",
+			NAME_USER: "User Name",
 			BIRTH: "Date of Birth",
 			CREATE: "Create",
 			ROLE: "Role",
+			AREA:"Area",
+			HOSTEL:'Hostel',
+			CARD: "ID Card number",
+			DOB: "Date of birth",
+			PHONE: "Phone Number",
+			GENDER: "Gender",
+			RENTAL_DATE: "Rental Date",
+			HOMETOWN: "Hometown",
 			SUCCESS: "Create Successfully",
 			SAVE: "SAVE",
 			CLOSE: "Close",
@@ -94,15 +103,54 @@ export default {
 			PLACEHOLDER_KEYWORD: "Enter the keyword"
 		},
 		TABLE: {
+			NAME: "User",
 			HEADING: {
 				ID: 'ID',
 				EMAIL: "Email",
 				NAME: "Fullname",
 				ROLE: "Role",
+				AREA:"Area",
+				HOSTEL: "Hostel",
 				BIRTH: "Date of Birth",
 				ACTIONS: "Actions",
 			}
 		}
+	},
+	ROOM_DETAIL:{
+		TITLE:"Room Detail",
+		NAME: "Room Information",
+		ID:"Room Name",
+		STATUS:"Status",
+		RENTAL_DATE: "Rental Date",
+		SERVICE: "Service",
+		PRICE: 'Price (VND)',
+		TOTAL: "Total Estimated Amount",
+		BILL: "Calculate bill",
+		CHECKOUT: "Cancel Room",
+		CUSTOMER:"Customer",
+		NAME_USER: "User Name",
+		CARD: "ID Card number",
+		DOB: "Date of birth",
+		PHONE: "Phone Number",
+		HOMETOWN: "Hometown",
+		GENDER: "Gender",
+		MESSAGE: {
+			CHECKOUT:"Cancel room Success",
+		},
+		FORM:{
+			BILL: "Calculate bill",
+			FEES: "Other fees",
+			PRICE: "Room Price",
+			WATER: "Water",
+			ELECTRIC:"Electric",
+			WATER_PRICE: "Total Water Bill",
+			ELECTRIC_PRICE:"Total Electric Bill",
+			TOTAL:"Total Bill"
+		}
+		
+	},
+	REGISTER:{
+		SUCCESS: 'Successfull room registration'
 	},
 	ROOM: {
 		TITLE: 'List Of Rooms',
@@ -145,6 +193,7 @@ export default {
 			SUCCESS: 'Create Successfully',
 			SAVE: 'SAVE',
 			CLOSE: 'Close',
+			SEND:'Send Invoice',
 			MESSAGE: {
 				SPACE: 'You must enter a valid value'
 			}

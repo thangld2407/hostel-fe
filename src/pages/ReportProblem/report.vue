@@ -7,7 +7,13 @@
 			<div class="row mt-2">
 				<div class="col-md-12 col-sm-12 col-lg-12">
 					<label for="">Name</label>
-					<b-form-input id="input-1" v-model="form.fullname" readonly></b-form-input>
+					<b-form-input
+						id="input-1"
+						readonly
+						v-model="name"
+						value="user_id"
+					></b-form-input>
+					{{ id }}
 				</div>
 				<div class="col-md-12 col-sm-12 col-lg-12">
 					<label for="">{{ $t('ISSUES.NAME') }}</label>
@@ -33,7 +39,7 @@
 <script>
 	import { MakeToast } from '@/toast/toastMessage';
 	import { postIssues } from '@/api/modules/issues';
-	import { getOneUser } from '@/api/modules/user';
+	import { getToken } from '../../const/cookie';
 	export default {
 		data() {
 			return {
@@ -46,14 +52,20 @@
 			};
 		},
 		computed: {
+			name() {
+				const name = getToken('username');
+				return name;
+			},
 			id() {
-				return this.$store.getters.id;
+				const id = getToken('_id');
+				return id;
 			}
 		},
 		methods: {
-			async handleCreateIssues() {
+			async handleCreateIssues(id) {
+				id = this.id;
 				const data = {
-					user_id: this.form.user_id,
+					user_id: this.id,
 					issues_name: this.form.issues_name,
 					issues_content: this.form.issues_content
 				};

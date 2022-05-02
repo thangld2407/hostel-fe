@@ -8,6 +8,9 @@
 				>
 			</div>
 			<div class="rooms-content">
+				<!-- <div class="upload">
+					<b-button @click="isShowModalPost = !isShowModalPost">Upload Invoice</b-button>
+				</div> -->
 				<div class="zone-header-page">
 					<div class="form-group">
 						<input
@@ -65,6 +68,42 @@
 							</tr>
 						</tbody>
 					</table>
+
+					<b-modal
+						v-model="isShowModalPost"
+						id="modal-upload"
+						title="Upload Invoice"
+						size="lg"
+					>
+						<div class="row mt-2">
+							<div class="col-md-12 col-sm-12 col-lg-12 mt-3">
+								<label for="">{{ $t('IDEA.UPLOAD.ACTIONS') }}</label>
+
+								<b-form-file
+									multiple="multiple"
+									ref="file"
+									accept="/*"
+									id="upload-invoice"
+								></b-form-file>
+							</div>
+						</div>
+
+						<template #modal-footer>
+							<div>
+								<b-button class="btn btn-danger" @click="showModalCreate(false)">
+									{{ $t('USER.FORM.CLOSE') }}
+								</b-button>
+								<b-button
+									type="submit"
+									class="btn btn-primary"
+									@click="handlePostIdea()"
+								>
+									Post
+								</b-button>
+							</div>
+						</template>
+					</b-modal>
+
 					<b-modal
 						id="modal-1"
 						v-model="showModal"
@@ -74,7 +113,7 @@
 						<div class="row mt-2">
 							<div class="col-md-12 col-sm-12 col-lg-12">
 								<label for="">{{ $t('ROOM.FORM.HOSTEL') }}</label>
-								<b-form-input v-model="new_room.hostel_id" readonly></b-form-input>
+								<b-form-input v-model="hostel_name" readonly></b-form-input>
 							</div>
 							<div class="col-md-12 col-sm-12 col-lg-12">
 								<label for="">{{ $t('ROOM.FORM.NAME') }}</label>
@@ -86,11 +125,11 @@
 							</div>
 							<div class="col-md-12 col-sm-12 col-lg-12 mt-2">
 								<label for="">{{ $t('ROOM.FORM.ELECTRICITY_PRICE') }}</label>
-								<b-form-input disabled></b-form-input>
+								<b-form-input v-model="price_electric" disabled></b-form-input>
 							</div>
 							<div class="col-md-12 col-sm-12 col-lg-12 mt-2">
 								<label for="">{{ $t('ROOM.FORM.WATER_PRICE') }}</label>
-								<b-form-input disabled></b-form-input>
+								<b-form-input v-model="price_water" disabled></b-form-input>
 							</div>
 							<div class="col-md-12 col-sm-12 col-lg-12">
 								<label for="">{{ $t('ROOM.FORM.DESCRIPTION') }}</label>
@@ -143,16 +182,20 @@
 	import { MakeToast } from '@/toast/toastMessage';
 	import { isEmptyOrWhiteSpace } from '../../utils/validate';
 	import { getRoomTable, postRoom, deleteRoom, getOneRoom, editRoom } from '@/api/modules/room';
-	import { getUserTable, getOneUser } from '@/api/modules/user';
+	import { getOneUser } from '@/api/modules/user';
+	import { UploadInvoice } from '@/api/modules/invoice';
+	import { getOneHostel } from '@/api/modules/hostel';
+	import { getToken } from '../../const/cookie';
 	export default {
 		name: 'ManageRoom',
 		data() {
 			return {
+				isShowModalPost: false,
 				new_room: {
 					hostel_id: '',
 					room_name: '',
 					price: '',
-					status: true,
+					status: false,
 					description: ''
 				},
 				isLoading: false,
@@ -160,21 +203,41 @@
 				list: [],
 				action: '',
 				ids: 0,
-				hostel: ''
+				hostel: '',
+				hostel_name: '',
+				price_electric: '',
+				price_water: ''
 			};
 		},
 		created() {
 			this.handleGetListRoom();
 			this.getHostel();
 		},
+		computed: {
+			id() {
+				const id = getToken('_id');
+				return id;
+			},
+			hostelID() {
+				const id = getToken('hostel_id');
+				return id;
+			}
+		},
 		methods: {
 			async handleDetailRoom(item) {
 				this.$router.push(`/detail-room/list/${item}`);
 			},
 			async getHostel() {
-				await getUserTable().then(res => {
-					this.hostel = res.data.hostels;
-				});
+				await getOneUser({ id: this.id })
+					.then(res => {
+						this.area_name = res.data.dataArea.area_name;
+						this.hostel_name = res.data.dataUser.hostel_id.hostel_name;
+						this.price_water = res.data.dataUser.hostel_id.price_water;
+						this.price_electric = res.data.dataUser.hostel_id.price_electric;
+					})
+					.catch(err => {
+						console.log(err);
+					});
 			},
 			async handleModal(id) {
 				this.ids = id;
@@ -211,6 +274,8 @@
 			},
 			async handleCreateRoom() {
 				const data = {
+					hostel_id: this.hostelID,
+					room_name: this.new_room.room_name,
 					price: this.new_room.price,
 					description: this.new_room.description,
 					status: this.new_room.status
@@ -220,17 +285,16 @@
 					MakeToast({
 						variant: 'warning',
 						title: 'Warning',
-						content: '123'
+						content: this.$t('ROOM.FORM.MESSAGE.SPACE')
 					});
 				} else {
 					await postRoom(data)
 						.then(res => {
-							// this.new_room.id = res.data.id
 							console.log(res);
 							MakeToast({
 								variant: 'success',
 								title: this.$t('TOAST.SUCCESS'),
-								content: this.$t('MANAGER.FORM.SUCCESS')
+								content: this.$t('ROOM.FORM.SUCCESS')
 							});
 							this.handleGetListRoom();
 							this.showModal = false;
@@ -312,6 +376,45 @@
 						}
 					});
 			},
+			async handlePostIdea() {
+				let files = document.getElementById('upload-invoice').files;
+				let formData = new FormData();
+				formData.append('category_id', this.id);
+				formData.append('contents', this.data.contents);
+				for (var i = 0; i < files.length; i++) {
+					formData.append(`files[${i + 1}]`, files[i]);
+				}
+				try {
+					if (isEmptyOrWhiteSpace(this.data.contents)) {
+						MakeToast({
+							variant: 'warning',
+							title: 'Contents',
+							content: 'You do not empty this fields'
+						});
+					} else {
+						if (this.liences) {
+							const res = await postIdeas(formData);
+							if (res.status == 200) {
+								this.handleGetListIdeas();
+								this.isShowModalPost = false;
+								this.resetData();
+							}
+						} else {
+							MakeToast({
+								variant: 'warning',
+								title: 'Liences',
+								content: 'You must be accept the liences'
+							});
+						}
+					}
+				} catch (error) {
+					console.log(error);
+				}
+			},
+			showModalCreate(e) {
+				this.isShowModalPost = e;
+				this.isResetDataModal();
+			},
 			isResetDataModal() {
 				console.log('RESET DATA');
 				this.new_room = {
@@ -352,6 +455,11 @@
 		margin: 25px;
 		height: 40px;
 		z-index: 0;
+	}
+	.rooms-content .upload button {
+		width: 150px;
+		margin-left: 25px;
+		background-color: orange;
 	}
 	.rooms-content button {
 		background: #1572a1;
