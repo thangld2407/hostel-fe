@@ -2,11 +2,10 @@
 	<div>
 		<li v-for="(item, index) in routes" :key="`router-${index}`">
 			<router-link :to="item['path']">
-				<i :class="(item['meta']['icon'])" />
+				<i :class="item['meta']['icon']" />
 				{{ $t(item['meta']['title']) }}
 			</router-link>
 		</li>
-		
 	</div>
 </template>
 
@@ -45,8 +44,7 @@
 							content: this.$t('LOGOUT.LOGOUT_ERROR')
 						});
 					});
-			},
-	
+			}
 		}
 	};
 </script>
@@ -61,7 +59,7 @@
 		a {
 			color: $white !important;
 			text-decoration: none;
-			i{
+			i {
 				width: 16px;
 				margin: 0px 20px 0px 15px;
 			}

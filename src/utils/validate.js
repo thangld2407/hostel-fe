@@ -10,6 +10,13 @@ export function validPassword(password) {
 }
 
 export function isEmptyOrWhiteSpace(value) {
-    const re = /^\s*$/;
-    return re.test(value);
-  }
+	const re = /^\s*$/;
+	return re.test(value);
+}
+export function isValidateExcel(file) {
+	if (file['type'] === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+		return true;
+	}
+
+	return false;
+}

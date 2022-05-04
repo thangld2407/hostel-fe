@@ -5,7 +5,7 @@
 		</div>
 		<div class="content mt-3">
 			<div class="title">{{ $t('ROOM_DETAIL.TITLE') }}</div>
-			<div class="container">
+			<div class="container" v-if="rooms">
 				<div class="row">
 					<div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
 						<h3>{{ $t('ROOM_DETAIL.NAME') }} : {{ rooms.room.room_name }}</h3>
@@ -30,13 +30,10 @@
 								</tr>
 								<tr>
 									<td>{{ $t('ROOM_DETAIL.SERVICE') }}</td>
-									<td>
-										<p
-											><input type="checkbox" value="220000" disabled="" />
-											Internet Cáp Quang (220 000VND)</p
-										>
-										<p><input type="text" disabled /></p>
-									</td>
+									<td>{{ rooms.room.service[0].name }}</td>
+									<!-- <td v-for="item in rooms" :key="item.id">
+										{{item.room.service[0].name}}
+									</td> -->
 								</tr>
 								<tr>
 									<td>{{ $t('ROOM_DETAIL.PRICE') }}</td>
@@ -90,23 +87,9 @@
 								<label class="col-sm-2 form-control-label">Internet</label>
 								<div class="col-sm-10">
 									<input
-										v-model="internet"
 										type="text"
 										class="form-control"
 										placeholder="Giá Internet"
-									/>
-								</div>
-							</div>
-							<div class="form-group row">
-								<label class="col-sm-2 form-control-label">{{
-									$t('ROOM_DETAIL.FORM.FEES')
-								}}</label>
-								<div class="col-sm-10">
-									<input
-										v-model="other"
-										type="text"
-										class="form-control"
-										placeholder="Phí Phát Sinh"
 									/>
 								</div>
 							</div>
@@ -348,13 +331,17 @@
 				isShowModalAdd: false,
 				id: this.$route.params.roomid,
 				detailRoom: [],
-				rooms: {},
+				rooms: null,
 				isLoading: true,
 				showModal: false,
 				water: 0,
 				electric: 0,
-				internet: '',
-				other: ''
+				other_service: [
+					{
+						name: '',
+						price: ''
+					}
+				]
 			};
 		},
 		computed: {
@@ -386,12 +373,9 @@
 				// 	console.log(error);
 				// }
 				const id = { id: this.id };
-				console.log(id, 'dsadsd');
 				await getOneRoom(id)
 					.then(res => {
-						console.log(res, 'asdasffas');
 						this.rooms = res.data;
-						console.log(typeof this.rooms, 'asass');
 					})
 					.catch(err => {
 						console.log(err);
@@ -415,14 +399,14 @@
 					.then(value => {
 						if (value === true) {
 							cancelRoom({ room_id: this.id })
-								.then(res => {
+								.then(async res => {
 									MakeToast({
 										variant: 'success',
 										title: this.$t('TOAST.SUCCESS'),
 										content: 'Successfully to cancel this room'
 									});
 									console.log(res);
-									this.handleGetRoom();
+									await this.handleGetRoom();
 								})
 								.catch(err => {
 									console.log(err);

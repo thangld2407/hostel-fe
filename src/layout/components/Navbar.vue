@@ -2,11 +2,11 @@
 	<div id="navbar">
 		<nav>
 			<span>{{ $t('NAVBAR.AREA') }}</span>
-			<input type="text" v-model="area_name"/>
+			<input type="text" v-model="area_name" disabled/>
 		</nav>
 		<nav>
 			<span>{{ $t('NAVBAR.ADDRESS') }}</span>
-			<input type="text" v-model="address"/>
+			<input disabled type="text" v-model="address"/>
 		</nav>
 		<b-navbar toggleable="lg" type="dark">
 			<b-navbar-toggle target="nav-collapse">

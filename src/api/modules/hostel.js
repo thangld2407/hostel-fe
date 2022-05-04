@@ -6,8 +6,8 @@ export function postHostel(data) {
 	return RequestApi.postOne(`${URL}/create`, data);
 }
 
-export function getHostelTable() {
-	return RequestApi.getAll(`${URL}/getall`);
+export function getHostelTable(data) {
+	return RequestApi.getAll(`${URL}/getall`,data);
 }
 
 export function editHostel(data) {

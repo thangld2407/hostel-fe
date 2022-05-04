@@ -5,7 +5,8 @@ const RoomRegister = {
 	name: 'RoomRegister',
 	meta: {
 		title: 'ROUTER.ROOM_REGISTER',
-		icon:"fas fa-address-book"
+		icon:"fas fa-address-book",
+		roles:['admin','manager']
 	},
 	component: Layout,
 	redirect: {

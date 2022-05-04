@@ -62,29 +62,58 @@
 					<label class="col-sm-2 form-control-label">Tổng Tiền: 360000</label>
 				</div>
 				<div>
-					<button class="btn btn-primary" @click="handlePayment()"
+					<button class="btn btn-primary" @click="handleModal()" v-b-modal.modal-1
 						><i class="fas fa-credit-card"></i> Thanh Toán</button
 					>
 				</div>
 			</form>
+			<b-modal id="modal-1" v-model="showModal" :title="$t('ROOM.FORM.TITLE')" centered>
+				<div class="col-6 col-sm-12">
+					<div>
+						<label for="">Bank</label>
+						<b-form-select :selected="payment.bankCode" v-model="payment.bankCode">
+							<b-form-select-option :value="null">Chọn địa điểm</b-form-select-option>
+							<b-form-select-option v-for="bank in options_bank" :key="bank.id">
+								{{ bank.vn_name }}
+							</b-form-select-option>
+						</b-form-select>
+					</div>
+				</div>
+				<template #modal-footer>
+					<div>
+						<b-button class="btn btn-primary" @click="handlePayment()">
+							{{ $t('ROOM.FORM.CREATE') }}
+						</b-button>
+
+						<b-button class="btn btn-danger" @click="showModal = false">
+							{{ $t('ROOM.FORM.CLOSE') }}
+						</b-button>
+					</div>
+				</template>
+			</b-modal>
 		</div>
 	</div>
 </template>
 
 <script>
-	import { Payment } from '@/api/modules/payment';
+	import { Payment, getListBank } from '@/api/modules/payment';
 	import { getToken } from '../../const/cookie';
 	import { MakeToast } from '@/toast/toastMessage';
 	export default {
 		name: 'bill',
 		data() {
 			return {
+				showModal: false,
 				selected: null,
 				month: [
 					{
 						name: 'Tháng 1'
 					}
-				]
+				],
+				payment: {
+					bankCode: ''
+				},
+				options_bank: []
 			};
 		},
 		computed: {
@@ -96,13 +125,26 @@
 				return this.$store.getters.language;
 			}
 		},
+		created() {
+			this.getBank();
+		},
 		methods: {
+			async getBank() {
+				await getListBank()
+					.then(res => {
+						this.options_bank = res.bank;
+					})
+					.catch(err => {
+						console.log(err);
+					});
+			},
+			async handleModal() {},
 			async handlePayment() {
 				const data = {
-					bankCode: 'NCB',
+					bankCode: this.payment.bankCode,
 					user_id: this.id,
 					language: this.lang,
-					date_month: ''
+					date_month: '1/2121'
 				};
 				console.log(data);
 				await Payment(data)

@@ -6,8 +6,8 @@ export function postUser(data) {
 	return RequestApi.postOne(`${URL}/create`, data);
 }
 
-export function getUserTable() {
-	return RequestApi.getAll(`${URL}/getall`);
+export function getUserTable(data) {
+	return RequestApi.getAll(`${URL}/getall`,data);
 }
 
 export function editUser(data) {

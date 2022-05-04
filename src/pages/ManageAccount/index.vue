@@ -2,11 +2,45 @@
 	<div class="account">
 		<div class="title">{{ $t('USER.TITLE') }}</div>
 		<div class="account-content">
+			<div class="account-management__searching">
+				<div class="account-management__searching-filter">
+					<label for="filer">{{ $t('USER.SEARCH_BY.ROLE') }}</label>
+					<b-form-select v-model="role" @change="handleFilterRole()">
+						<b-form-select-option :value="null">{{
+							$t('USER.SELECT_ROLE')
+						}}</b-form-select-option>
+						<b-form-select-option
+							v-for="role in options"
+							:key="role.id"
+							:value="role._id"
+						>
+							{{ role.role_name }}
+						</b-form-select-option>
+					</b-form-select>
+				</div>
+
+				<div class="account-management__searching-keyword">
+					<label for="keyword">{{ $t('USER.SEARCH_BY.KEYWORD') }}</label>
+					<b-input-group>
+						<b-form-input
+							:placeholder="$t('USER.SEARCH_BY.PLACEHOLDER_KEYWORD')"
+							v-model="keySearch"
+							@keyup.enter="handleSearch()"
+							type="text"
+						></b-form-input>
+						<b-input-group-append>
+							<b-button variant="primary" @click="handleSearch()"
+								><i class="fas fa-search"></i
+							></b-button>
+						</b-input-group-append>
+					</b-input-group>
+				</div>
+			</div>
 			<div class="panel-heading">
 				<p><i class="fas fa-user"></i>{{ $t('USER.TABLE.NAME') }}</p>
-				<b-button variant="light" @click="handleModal()" v-b-modal.modal-xl
-					>{{ $t('USER.CREATE_USER') }}</b-button
-				>
+				<b-button variant="light" @click="handleModal()" v-b-modal.modal-xl>{{
+					$t('USER.CREATE_USER')
+				}}</b-button>
 			</div>
 			<table class="table table-bordered">
 				<thead>
@@ -23,7 +57,7 @@
 				<tbody>
 					<tr v-for="(item, index) in listUser" :key="index">
 						<th scope="row">{{ index + 1 }}</th>
-						<td>{{ item.user_id.username }}</td>
+						<td>{{ item.user_id.fullname }}</td>
 						<td>{{ item.user_id.email }}</td>
 						<td>{{ item.role_id.role_name }}</td>
 						<td>{{ item.hostels.hostel_name }}</td>
@@ -100,7 +134,11 @@
 									</div>
 									<div>
 										<label for="">{{ $t('USER.FORM.AREA') }}</label>
-										<b-form-select :selected="new_account.area_id" v-model="new_account.area_id">
+										<b-form-select
+											:selected="new_account.area_id"
+											v-model="new_account.area_id"
+											@change="getHostel(new_account.area_id)"
+										>
 											<b-form-select-option :value="null"
 												>Chọn khu vực</b-form-select-option
 											>
@@ -176,13 +214,6 @@
 										</b-form-select>
 									</div>
 									<div>
-										<label for="">{{ $t('USER.FORM.RENTAL_DATE') }}</label>
-										<b-form-input
-											v-model="new_account.rental_date"
-											type="date"
-										></b-form-input>
-									</div>
-									<div>
 										<label for="">{{ $t('USER.FORM.HOMETOWN') }}</label>
 										<b-form-input v-model="new_account.hometown"></b-form-input>
 									</div>
@@ -230,8 +261,10 @@
 		name: 'ManageAccount',
 		data() {
 			return {
+				keySearch: '',
 				listUser: [],
 				selected: null,
+				role: '',
 				hostel_name: '',
 				new_account: {
 					username: '',
@@ -245,8 +278,7 @@
 					date_of_birth: '',
 					telephone: '',
 					hometown: '',
-					gender: '',
-					rental_date: ''
+					gender: ''
 				},
 				isLoading: false,
 				roles: [],
@@ -261,7 +293,7 @@
 		created() {
 			this.handleGetListUser();
 			this.getRole();
-			this.getHostel(), this.getArea();
+			this.getArea();
 		},
 		methods: {
 			async handleModal(id) {
@@ -277,12 +309,11 @@
 							this.new_account.role_id = res.data['0'].role_id._id;
 							this.new_account.hostel_id = res.data.dataUser.hostel_id._id;
 							this.new_account.area_id = res.data.dataUser.hostel_id.area_id;
-							this.new_account.id_card_number = res.data.dataUser.id_card_number,
-							this.new_account.date_of_birth = res.data.dataUser.date_of_birth,
-							this.new_account.telephone = res.data.dataUser.telephone,
-							this.new_account.hometown = res.data.dataUser.hometown,
-							this.new_account.gender = res.data.dataUser.gender,
-							this.new_account.rental_date = res.data.dataUser.rental_date;
+							(this.new_account.id_card_number = res.data.dataUser.id_card_number),
+								(this.new_account.date_of_birth = res.data.dataUser.date_of_birth),
+								(this.new_account.telephone = res.data.dataUser.telephone),
+								(this.new_account.hometown = res.data.dataUser.hometown),
+								(this.new_account.gender = res.data.dataUser.gender);
 						})
 						.catch(err => {
 							console.log(err);
@@ -304,8 +335,9 @@
 						console.log(err);
 					});
 			},
-			async getHostel() {
-				await getHostelTable()
+			async getHostel(id) {
+				console.log(this.options_area._id);
+				await getHostelTable({ area_id: id })
 					.then(res => {
 						this.options_hostel = res.data;
 					})
@@ -324,7 +356,7 @@
 			},
 			async handleGetListUser() {
 				this.isLoading = true;
-				await getUserTable()
+				await getUserTable({ fullname: this.keySearch, role: this.role })
 					.then(res => {
 						this.listUser = res.data;
 						console.log(this.listUser);
@@ -334,7 +366,14 @@
 						console.log(err);
 					});
 			},
+			handleSearch() {
+				console.log('SSS');
+				this.handleGetListUser();
+			},
 
+			handleFilterRole() {
+				this.handleGetListUser();
+			},
 			async handleCreateUser() {
 				const data = {
 					username: this.new_account.username,
@@ -348,8 +387,7 @@
 					date_of_birth: this.new_account.date_of_birth,
 					telephone: this.new_account.telephone,
 					hometown: this.new_account.hometown,
-					gender: this.new_account.gender,
-					rental_date: this.new_account.rental_date
+					gender: this.new_account.gender
 				};
 				console.log(data);
 				if (
@@ -361,8 +399,7 @@
 					isEmptyOrWhiteSpace(data.date_of_birth) ||
 					isEmptyOrWhiteSpace(data.telephone) ||
 					isEmptyOrWhiteSpace(data.hometown) ||
-					isEmptyOrWhiteSpace(data.gender) ||
-					isEmptyOrWhiteSpace(data.rental_date) ||
+					// isEmptyOrWhiteSpace(data.gender) ||
 					this.new_account.role_id === null ||
 					this.new_account.area_id === null ||
 					this.new_account.hostel_id === null
@@ -404,8 +441,7 @@
 					area_id: this.new_account.area_id,
 					telephone: this.new_account.telephone,
 					hometown: this.new_account.hometown,
-					gender: this.new_account.gender,
-					rental_date: this.new_account.rental_date
+					gender: this.new_account.gender
 				};
 				if (
 					isEmptyOrWhiteSpace(data.fullname) ||
@@ -415,7 +451,6 @@
 					// isEmptyOrWhiteSpace(data.id_card_number) ||
 					// isEmptyOrWhiteSpace(data.hometown) ||
 					// isEmptyOrWhiteSpace(data.gender) ||
-					// isEmptyOrWhiteSpace(data.rental_date) ||
 					this.new_account.hostel_id === null ||
 					this.new_account.role_id === null ||
 					this.new_account.area_id === null
@@ -494,8 +529,7 @@
 					date_of_birth: '',
 					telephone: '',
 					hometown: '',
-					gender: '',
-					rental_date: ''
+					gender: ''
 				};
 			}
 		}
@@ -514,6 +548,15 @@
 		color: white;
 		padding-left: 20px;
 	}
+	.account-management__searching{
+		display: flex;
+		margin-bottom: 20px;
+	}
+	.account-management__searching > div {
+		width: 25%;
+		margin-right: 40px;
+		z-index: 0;
+	}
 	.account .account-content {
 		position: relative;
 		top: 80px;
@@ -521,6 +564,9 @@
 	}
 	.account-content table {
 		text-align: center;
+		overflow-y: scroll !important;
+		width: 100%;
+		max-height: 500px;
 	}
 	.account-content table div {
 		margin: 10px;
