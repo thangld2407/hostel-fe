@@ -14,7 +14,7 @@ const service = axios.create({
 service.interceptors.request.use(
 	config => {
 		config.headers['Accept-Language'] = getLanguage();
-		config.headers['Authorization'] = `Bearer ${TOKEN}`;
+		config.headers['Authorization'] = `Bearer ${getToken('access_token')}`;
 		return config;
 	},
 	error => {

@@ -5,7 +5,8 @@ const Notification = {
 	name: 'Notification',
 	meta: {
 		title: 'ROUTER.NOTIFICATION',
-		icon:"fas fa-bell"
+		icon:"fas fa-bell",
+		roles:['admin','manager']
 	},
 	component: Layout,
 	redirect: {

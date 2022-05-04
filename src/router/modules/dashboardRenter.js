@@ -5,7 +5,8 @@ const Dashboard = {
 	name: 'DashboardRenter',
 	meta: {
 		title: 'ROUTER.DASHBOARD',
-		icon:"fas fa-tachometer-alt",
+		icon: 'fas fa-tachometer-alt',
+		roles: ['customer']
 	},
 	component: Layout,
 	redirect: {
@@ -16,7 +17,7 @@ const Dashboard = {
 			path: 'index',
 			name: 'DashboardRenterIndex',
 			meta: {
-				title: 'ROUTER.DASHBOARD',
+				title: 'ROUTER.DASHBOARD'
 			},
 			component: () => import('../../pages/Dashboard/DashboardRenter/index.vue')
 		}

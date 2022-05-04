@@ -5,7 +5,8 @@ const Notification = {
 	name: 'Report',
 	meta: {
 		title: 'ROUTER.REPORT',
-		icon:"fas fa-bug"
+		icon:"fas fa-bug",
+		roles:['customer']
 	},
 	component: Layout,
 	redirect: {

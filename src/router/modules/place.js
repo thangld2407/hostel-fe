@@ -4,7 +4,8 @@ const Area = {
 	name: 'PlaceManagement',
 	meta: {
 		title: 'ROUTER.PLACE',
-		icon:"fas fa-map-marker"
+		icon:"fas fa-map-marker",
+		roles: ['admin']
 	},
 	component: Layout,
 	redirect: {

@@ -181,6 +181,7 @@ export default {
 		FORM: {
 			TITLE: 'Create new room',
 			EDIT:'Edit Room',
+			EDIT_SUCCESS:'Edit Successfully',
 			ROOM_PRICE: 'Room Price',
 			HOSTEL: 'Hostel',
 			NAME:'Room Name',

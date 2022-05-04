@@ -4,8 +4,8 @@ export function getOne(url, data) {
 	return request.getRequest(url, data);
 }
 
-export function getAll(url) {
-	return request.getRequest(url);
+export function getAll(url, data) {
+	return request.getRequest(url, data);
 }
 
 export function postOne(url, data) {

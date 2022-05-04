@@ -6,7 +6,7 @@ const Dashboard = {
 	meta: {
 		title: 'ROUTER.DASHBOARD',
 		icon: 'fas fa-tachometer-alt',
-		roles: ['admin']
+		roles: ['admin','manager']
 	},
 	component: Layout,
 	redirect: {
