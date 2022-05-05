@@ -5,7 +5,8 @@ const AccountManagement = {
 	name: 'AccountManagement',
 	meta: {
 		title: 'ROUTER.ACCOUNT_MANAGEMENT',
-		icon:'fas fa-cog'
+		icon:'fas fa-cog',
+		roles:['admin']
 	},
 	component: Layout,
 	redirect: {

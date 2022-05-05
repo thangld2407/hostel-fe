@@ -5,7 +5,7 @@ const customer = {
 	meta: {
 		title: 'ROUTER.CUSTOMER',
 		icon: 'fas fa-users',
-		roles: ['admin', 'customer']
+		roles: ['admin']
 	},
 	component: Layout,
 	redirect: {

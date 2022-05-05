@@ -6,6 +6,7 @@ export default {
 	},
 	ROUTER: {
 		LOGIN: 'Login',
+		PROFILE:'Profile',
 		PAGE_NOT_FOUND: 'Page Not Found',
 		DASHBOARD: 'Dashboard',
 		ACCOUNT_MANAGEMENT: 'Account Management',
@@ -181,6 +182,7 @@ export default {
 		FORM: {
 			TITLE: 'Create new room',
 			EDIT:'Edit Room',
+			EDIT_SUCCESS:'Edit Successfully',
 			ROOM_PRICE: 'Room Price',
 			HOSTEL: 'Hostel',
 			NAME:'Room Name',
@@ -198,6 +200,9 @@ export default {
 				SPACE: 'You must enter a valid value'
 			}
 		},
+	},
+	INVOICE:{
+		SUCCESS:'Send Invoice Successfully'
 	},
 	NOTIFICATION:{
 		TITLE:'Notification',
@@ -238,7 +243,7 @@ export default {
 		BOX:{
 			RENTED_ROOM:'Rented Room',
 			REVENUE: 'Revenue',
-			DEBT: 'Debit customers',
+			TOTAL: 'Total Room',
 		},
 		TABLE:{
 			AREA:'Area',

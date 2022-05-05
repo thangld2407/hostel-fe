@@ -6,6 +6,6 @@ export function Payment(data) {
 	return RequestApi.postOne(`${URL}/create-url`, data);
 }
 
-export function getIssuesTable() {
-	return RequestApi.getAll(`${URL}/getall`);
+export function getListBank() {
+	return RequestApi.getAll(`${URL}/bank`);
 }

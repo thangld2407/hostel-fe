@@ -4,7 +4,8 @@ const Revenue = {
 	name: 'Revenue',
 	meta: {
 		title: 'ROUTER.REVENUE',
-		icon:"fas fa-dollar-sign"
+		icon:"fas fa-dollar-sign",
+		roles:['admin']
 	},
 	component: Layout,
 	redirect: {
