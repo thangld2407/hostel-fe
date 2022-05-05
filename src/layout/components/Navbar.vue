@@ -38,8 +38,8 @@
 						</template>
 						<b-dropdown-item
 							class="text"
-							:disabled="routePath === '/dashboard/profile'"
-							@click="$router.push('/dashboard/profile')"
+							:disabled="routePath === '/profile'"
+							@click="$router.push('/profile')"
 						>
 							{{ $t('NAVBAR.PROFILE') }}
 						</b-dropdown-item>

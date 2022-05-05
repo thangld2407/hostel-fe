@@ -3,7 +3,7 @@
     <div class="header-userName">
         <h2>Hi, {{name}}!</h2>
         <p>Email : {{email}}</p>
-        <p>Role : ADMIN</p>
+        <p>Role : {{role}}</p>
     </div>
         <div class="header-img">
             <img alt="Vue logo" src="@/assets/images/wellcome.png">

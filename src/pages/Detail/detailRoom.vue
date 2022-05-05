@@ -30,10 +30,9 @@
 								</tr>
 								<tr>
 									<td>{{ $t('ROOM_DETAIL.SERVICE') }}</td>
-									<td>{{ rooms.room.service[0].name }}</td>
-									<!-- <td v-for="item in rooms" :key="item.id">
-										{{item.room.service[0].name}}
-									</td> -->
+									<div v-for="index in room_service" :key="index">
+										<td>{{ index.name }}</td>
+									</div>	
 								</tr>
 								<tr>
 									<td>{{ $t('ROOM_DETAIL.PRICE') }}</td>
@@ -42,7 +41,6 @@
 								<tr>
 									<td>
 										<p>{{ $t('ROOM_DETAIL.TOTAL') }}:</p>
-										<!-- <p>(chưa bao gồm điện,nước)</p> -->
 									</td>
 									<td>{{ total }}</td>
 								</tr>
@@ -83,14 +81,14 @@
 				<div>
 					<b-modal id="modal-prevent-closing" v-model="showModal" title=" Calculate bill">
 						<form>
-							<div class="form-group row">
-								<label class="col-sm-2 form-control-label">Internet</label>
+							<div
+								class="form-group row"
+								v-for="item in room_service"
+								:key="item.id"
+							>
+								<label class="col-sm-2 form-control-label">{{ item.name }}</label>
 								<div class="col-sm-10">
-									<input
-										type="text"
-										class="form-control"
-										placeholder="Giá Internet"
-									/>
+									<input type="text" class="form-control" v-model="item.price" />
 								</div>
 							</div>
 							<div class="form-group row">
@@ -157,9 +155,57 @@
 									>{{ $t('ROOM_DETAIL.FORM.WATER_PRICE') }}:{{ priceWater }}</div
 								>
 							</div>
-							<!-- <div class="form-group row">
-								<label class="col-sm-2 form-control-label">Nợ</label>
-							</div> -->
+							<div class="form-group row">
+								<label class="col-sm-2 form-control-label">Other Service</label>
+								<div class="col-sm-10">
+									<div class = "zone-table-service">
+										<b-table-simple
+											:bordered="true"
+											:outlined="false"
+											:fixed="false"
+										>
+											<b-thead>
+												<b-tr>
+													<b-th>
+														<span>Name</span>
+													</b-th>
+
+													<b-th>
+														<span>Price</span>
+													</b-th>
+
+													<b-th >
+														<span>Actions</span>
+													</b-th>
+												</b-tr>
+											</b-thead>
+
+											<b-tbody>
+												<b-tr v-for="other in other_service" :key="other.id">
+													<b-td>
+														<b-form-input v-model="other.name" />
+													</b-td>
+
+													<b-td>
+														<b-form-input v-model="other.price" />
+													</b-td>
+
+													<b-td >
+														<b-button
+															@click="handleDeleteService(other)"
+														>
+															Delete
+														</b-button>
+													</b-td>
+												</b-tr>
+											</b-tbody>
+										</b-table-simple>
+									</div>
+									<div class="zone-add-quiz">
+										<div @click="handleAddService()">+</div>
+									</div>
+								</div>
+							</div>
 							<div class="form-group row">
 								<label class="col form-control-label"
 									>{{ $t('ROOM_DETAIL.FORM.TOTAL') }}: {{ totalPrice }}</label
@@ -323,11 +369,13 @@
 	import { postInvoice } from '@/api/modules/invoice';
 	import { getDetail, cancelRoom } from '@/api/modules/roomRegister';
 	import { MakeToast } from '@/toast/toastMessage';
+	import { calcualateTotalService } from '../../utils/validate';
 	export default {
 		name: 'RoomDetail',
 
 		data() {
 			return {
+				room_service: [],
 				isShowModalAdd: false,
 				id: this.$route.params.roomid,
 				detailRoom: [],
@@ -339,9 +387,9 @@
 				other_service: [
 					{
 						name: '',
-						price: ''
+						price: 0
 					}
-				]
+				],
 			};
 		},
 		computed: {
@@ -354,28 +402,56 @@
 			priceElectric() {
 				return Math.round(this.rooms.room.hostel_id.price_electric * this.electric);
 			},
+			priceService() {
+				return calcualateTotalService(this.room_service);
+			},
+			priceOtherService(){
+				return calcualateTotalService(this.other_service)
+			},
 			totalPrice() {
-				return Math.round(this.priceWater + this.priceElectric + this.total);
+				return Math.round(this.priceWater + this.priceElectric + this.total+ this.priceService + this.priceOtherService);
 			}
 		},
-		// beforeMount() {
-		// 	this.handleGetRoom();
-		// },
 		created() {
 			this.handleGetRoom();
 		},
 		methods: {
 			async handleGetRoom() {
-				// try {
-				// 	const res = await getOneRoom({ id: this.id });
-				// 	this.rooms = res?.data;
-				// } catch (error) {
-				// 	console.log(error);
-				// }
 				const id = { id: this.id };
 				await getOneRoom(id)
 					.then(res => {
 						this.rooms = res.data;
+						this.room_service = res.data.room.service;
+					})
+					.catch(err => {
+						console.log(err);
+					});
+			},
+			handleSendInvoice(id) {
+				console.log(this.rooms.request.user_id._id);
+				id = this.id;
+				let d = new Date();
+				let year = d.getFullYear();
+				let month = d.getMonth() + 1;
+				let date = month + '/' + year;
+				console.log(date);
+				const data = {
+					room_id: this.id,
+					user_id: this.rooms.request.user_id._id,
+					date_month: date,
+					status: false,
+					other_service: this.other_service,
+					water_consumed_per_month: this.water,
+					electricity_consumed_per_month: this.electric,
+					total: this.totalPrice
+				};
+				postInvoice(data)
+					.then(res => {
+						MakeToast({
+							variant: 'success',
+							title: this.$t('TOAST.SUCCESS'),
+							content: this.$t('INVOICE.SUCCESS')
+						});
 					})
 					.catch(err => {
 						console.log(err);
@@ -417,6 +493,45 @@
 									});
 								});
 						}
+					});
+			},
+			handleAddService() {
+				const SERVICE = {
+					name: '',
+					price: ''
+				};
+				this.other_service.push(SERVICE);
+			},
+			handleDeleteService(other) {
+				this.$bvModal
+					.msgBoxConfirm('Do you want to delete this service?', {
+						title: 'Warning',
+						size: 'sm',
+						buttonSize: 'sm',
+						okVariant: 'danger',
+						okTitle: 'OK',
+						cancelTitle: 'Cancel',
+						footerClass: 'p-2',
+						hideHeaderClose: false,
+						centered: true
+					})
+					.then(value => {
+						if (value === true) {
+							for (let i = 0; i < this.other_service.length; i++) {
+								if (other._id === this.other_service[i]._id) {
+									this.other_service.splice(i, 1);
+								}
+							}
+							MakeToast({
+								variant: 'success',
+								title: this.$t('TOAST.SUCCESS'),
+								content: 'Successfully to delete this service'
+							});
+							console.log(res);
+						}
+					})
+					.catch(err => {
+						console.log(err);
 					});
 			},
 			Open() {
@@ -493,5 +608,22 @@
 		margin-top: 10px !important;
 		margin: 0;
 		padding: 0;
+	}
+	.zone-add-quiz {
+		background-color: orange;
+		border-radius: 50%;
+		width: 25px;
+		cursor: pointer;
+		margin: 10px 0px 0px 150px;
+	}
+	.zone-add-quiz div {
+		color: white;
+		text-align: center;
+		font-weight: 700;
+	}
+	.zone-table-service {
+		width: 100%;
+		max-height: 230px;
+		overflow-y: scroll;
 	}
 </style>

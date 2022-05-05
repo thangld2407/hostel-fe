@@ -6,6 +6,7 @@ export default {
 	},
 	ROUTER: {
 		LOGIN: 'Login',
+		PROFILE:'Profile',
 		PAGE_NOT_FOUND: 'Page Not Found',
 		DASHBOARD: 'Dashboard',
 		ACCOUNT_MANAGEMENT: 'Account Management',
@@ -200,6 +201,9 @@ export default {
 			}
 		},
 	},
+	INVOICE:{
+		SUCCESS:'Send Invoice Successfully'
+	},
 	NOTIFICATION:{
 		TITLE:'Notification',
 		SEARCH: {
@@ -239,7 +243,7 @@ export default {
 		BOX:{
 			RENTED_ROOM:'Rented Room',
 			REVENUE: 'Revenue',
-			DEBT: 'Debit customers',
+			TOTAL: 'Total Room',
 		},
 		TABLE:{
 			AREA:'Area',
