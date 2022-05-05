@@ -6,8 +6,7 @@
 				<div class="account-management__searching-filter">
 					<label for="filer">{{ $t('USER.SEARCH_BY.ROLE') }}</label>
 					<b-form-select v-model="role" @change="handleFilterRole()">
-						<b-form-select-option :value="null">{{
-							$t('USER.SELECT_ROLE')
+						<b-form-select-option :value="null">{{$t('USER.SELECT_ROLE')
 						}}</b-form-select-option>
 						<b-form-select-option
 							v-for="role in options"
@@ -60,8 +59,8 @@
 						<td>{{ item.user_id.fullname }}</td>
 						<td>{{ item.user_id.email }}</td>
 						<td>{{ item.role_id.role_name }}</td>
-						<td>{{ item.hostels.hostel_name }}</td>
 						<td>{{ item.hostels.area_id.area_name }}</td>
+						<td>{{ item.hostels.hostel_name }}</td>
 						<td>
 							<div class="btn btn-warning" @click="handleModal(item.user_id)">
 								<i class="fas fa-edit"></i>
@@ -201,13 +200,13 @@
 											>
 											<b-form-select-option
 												v-model="new_account.gender"
-												:value="0"
+												:value="true"
 											>
 												Male
 											</b-form-select-option>
 											<b-form-select-option
 												v-model="new_account.gender"
-												:value="1"
+												:value="false"
 											>
 												Female
 											</b-form-select-option>
@@ -278,7 +277,7 @@
 					date_of_birth: '',
 					telephone: '',
 					hometown: '',
-					gender: ''
+					gender: true
 				},
 				isLoading: false,
 				roles: [],
@@ -309,11 +308,11 @@
 							this.new_account.role_id = res.data['0'].role_id._id;
 							this.new_account.hostel_id = res.data.dataUser.hostel_id._id;
 							this.new_account.area_id = res.data.dataUser.hostel_id.area_id;
-							(this.new_account.id_card_number = res.data.dataUser.id_card_number),
-								(this.new_account.date_of_birth = res.data.dataUser.date_of_birth),
-								(this.new_account.telephone = res.data.dataUser.telephone),
-								(this.new_account.hometown = res.data.dataUser.hometown),
-								(this.new_account.gender = res.data.dataUser.gender);
+							this.new_account.id_card_number = res.data.dataUser.id_card_number,
+							this.new_account.date_of_birth = res.data.dataUser.date_of_birth,
+							this.new_account.telephone = res.data.dataUser.telephone,
+							this.new_account.hometown = res.data.dataUser.hometown,
+							this.new_account.gender = res.data.dataUser.gender;
 						})
 						.catch(err => {
 							console.log(err);
@@ -367,7 +366,6 @@
 					});
 			},
 			handleSearch() {
-				console.log('SSS');
 				this.handleGetListUser();
 			},
 

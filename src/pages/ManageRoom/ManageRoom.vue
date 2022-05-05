@@ -370,7 +370,7 @@
 			async handleEditRoom() {
 				this.action = 'EDIT';
 				const data = {
-					room_name: this.room_name,
+					room_name: this.new_room.room_name,
 					room_id: this.ids,
 					price: this.new_room.price,
 					description: this.new_room.description,
@@ -499,9 +499,8 @@
 							MakeToast({
 								variant: 'success',
 								title: this.$t('TOAST.SUCCESS'),
-								content: 'Successfully to delete this room'
+								content: 'Successfully to delete this service'
 							});
-							this.handleGetListRoom();
 							console.log(res);
 						}
 					})

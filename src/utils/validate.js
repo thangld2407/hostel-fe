@@ -20,3 +20,9 @@ export function isValidateExcel(file) {
 
 	return false;
 }
+export function calcualateTotalService(array) {
+	const sum = array.reduce((acc, currentValue, currentIndex, arr) => {
+	  return acc + parseInt(currentValue.price);
+	}, 0);
+	return parseInt(sum);
+  }

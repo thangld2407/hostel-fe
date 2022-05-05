@@ -43,7 +43,7 @@
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button name="btnSubmit" class="btn btn-primary" @click="handleRegister()"
+						<button class="btn btn-primary" @click="handleRegister()"
 							>Đồng Ý</button
 						>
 						<!-- <router-link to="/manage-room"><button name="btnSubmit" type="submit" class="btn btn-primary" >Đồng Ý</button></router-link> -->

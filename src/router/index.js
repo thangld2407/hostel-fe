@@ -18,6 +18,7 @@ import DashboardRenter from './modules/dashboardRenter';
 import Bill from './modules/bill';
 import Report from './modules/report';
 import Place from './modules/place';
+import Profile from './modules/profile';
 
 export const constantRoutes = [
 	Login,
@@ -43,6 +44,7 @@ export const asyncRoutes = [
 	Bill,
 	Report,
 	Place,
+	Profile,
 	{
 		path: '*',
 		hidden: true,
