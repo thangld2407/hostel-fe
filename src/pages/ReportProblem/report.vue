@@ -13,7 +13,6 @@
 						v-model="name"
 						value="user_id"
 					></b-form-input>
-					{{ id }}
 				</div>
 				<div class="col-md-12 col-sm-12 col-lg-12">
 					<label for="">{{ $t('ISSUES.NAME') }}</label>
@@ -29,7 +28,7 @@
 					></b-form-textarea>
 				</div>
 			</div>
-			<b-button type="submit" variant="primary" @click="handleCreateIssues()">{{
+			<b-button variant="primary" @click="handleCreateIssues()">{{
 				$t('ISSUES.SUBMIT')
 			}}</b-button>
 		</div>
@@ -82,13 +81,6 @@
 					.catch(err => {
 						console.log(err);
 					});
-				//     await getOneUser(id)
-				// 				.then(res => {
-				// 					this.form.fullname = res.data.user_id.fullname;
-				// 				})
-				// 				.catch(err => {
-				// 					console.log(err);
-				// })
 			},
 
 			isResetDataModal() {
@@ -133,6 +125,6 @@
 		margin: 120px 300px 0px 50px;
 	}
 	#report .content button {
-		margin-left: 10px;
+		margin-top: 10px;
 	}
 </style>

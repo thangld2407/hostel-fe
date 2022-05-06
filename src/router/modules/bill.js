@@ -4,7 +4,8 @@ const Area = {
 	name: 'Bill',
 	meta: {
 		title: 'ROUTER.BILL',
-		icon:"fas fa-file-invoice-dollar"
+		icon:"fas fa-file-invoice-dollar",
+		roles:['customer']
 	},
 	component: Layout,
 	redirect: {

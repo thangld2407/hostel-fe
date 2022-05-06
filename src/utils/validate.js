@@ -10,6 +10,19 @@ export function validPassword(password) {
 }
 
 export function isEmptyOrWhiteSpace(value) {
-    const re = /^\s*$/;
-    return re.test(value);
+	const re = /^\s*$/;
+	return re.test(value);
+}
+export function isValidateExcel(file) {
+	if (file['type'] === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+		return true;
+	}
+
+	return false;
+}
+export function calcualateTotalService(array) {
+	const sum = array.reduce((acc, currentValue, currentIndex, arr) => {
+	  return acc + parseInt(currentValue.price);
+	}, 0);
+	return parseInt(sum);
   }

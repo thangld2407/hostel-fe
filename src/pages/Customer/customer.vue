@@ -21,7 +21,6 @@
 						<th scope="col">{{ $t('CUSTOMER.TABLE.PHONE') }}</th>
 						<th scope="col" class="col-3">{{ $t('CUSTOMER.TABLE.ADDRESS') }}</th>
 						<th scope="col">{{ $t('CUSTOMER.TABLE.START_AT') }}</th>
-						<th scope="col">{{ $t('CUSTOMER.TABLE.TOTAL_DEPT') }}</th>
 						<th scope="col" class="col-1"></th>
 					</tr>
 				</thead>
@@ -32,7 +31,6 @@
 						<td>{{ customer.user_id.telephone }}</td>
 						<td>{{ customer.user_id.hometown }}</td>
 						<td>{{ customer.createAt }}</td>
-						<td></td>
 						<td class="actions">
 							<div type="button" class="btn btn-danger">
 								<i class="fa fa-trash"></i>

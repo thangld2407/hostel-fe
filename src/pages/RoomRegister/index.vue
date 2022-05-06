@@ -19,57 +19,6 @@
 				</div>
 			</div>
 			<form>
-				<!-- <div class="form-group row">
-                    <legend >Thông tin người cho thuê</legend>
-                       <label class="col-sm-2 form-control-label">Họ Tên</label>
-                       <div class="col-sm-10">
-                           <input type="text" class="form-control" required placeholder="Nhập Họ Tên Người Thuê" v-model="room.user_id">
-                       </div>
-                   </div>
-                   <div class="form-group row">
-                       <label class="col-sm-2 form-control-label">CMND</label>
-                       <div class="col-sm-10">
-                           <input type="text" class="form-control" placeholder="Nhập CMND" required v-model="room.cmnd">
-                       </div>
-                   </div>
-                   <div class="form-group row">
-                       <label class="col-sm-2 form-control-label">Ngày Sinh</label>
-                       <div class="col-sm-10">
-                           <input type="date" class="form-control" placeholder="Nhập Ngày Sinh"  required v-model="room.dob">
-                       </div>
-                   </div>
-                   <div class="form-group row">
-                       <label class="col-sm-2 form-control-label">Quê Quán</label>
-                       <div class="col-sm-10">
-                           <input type="text" class="form-control" placeholder="Nhập Quê Quán" required v-model="room.address">
-                       </div>
-                   </div>
-                   <div class="form-group row">
-                       <label class="col-sm-2 form-control-label">Điện Thoại</label>
-                       <div class="col-sm-10">
-                           <input type="text" class="form-control" placeholder="Nhập số điện thoại" v-model="room.phone">
-                       </div>
-                   </div>
-
-
-                    <div class="form-group row">
-                        <label class="col-sm-2">Giới Tính</label>
-                        <div class="col-sm-10">
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" value="1" checked >
-                                     Nam
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" value="0" >
-                                     Nữ
-                                </label>
-                            </div>
-                        </div>
-                    </div> -->
-
 				<div class="form-group row">
 					<legend>Thông tin đăng ký nhà trọ</legend>
 					<label class="col-sm-2 form-control-label">Ngày Thuê</label>
@@ -92,70 +41,9 @@
 						</select>
 					</div>
 				</div>
-
-				<div class="form-group row">
-					<label class="col-sm-2">Dịch Vụ</label>
-					<div class="col-sm-10">
-						<!-- <div class="checkbox">
-							<label>
-								<input type="checkbox" value="1" /> Internet (220 000 VND)
-							</label>
-						</div>
-
-						<input
-							type="text"
-							class="form-control"
-							placeholder="Nhập giá tiền các dịch vụ khác(phát sinh , rác ,gửi xe ,....)"
-						/> -->
-						<div class="zone-table-answer">
-							<b-table-simple :bordered="true" :outlined="false" :fixed="false">
-								<b-thead>
-									<b-tr>
-										<b-th class="zone-min-width">
-											<span>Name</span>
-										</b-th>
-
-										<b-th>
-											<span>Price</span>
-										</b-th>
-
-										<b-th class="zone-min-width">
-											<span>Actions</span>
-										</b-th>
-									</b-tr>
-								</b-thead>
-
-								<b-tbody>
-									<b-tr>
-										<b-td class="zone-min-width">
-											<b-form-input />
-										</b-td>
-
-										<b-td>
-											<b-form-input />
-										</b-td>
-
-										<b-td class="zone-min-width">
-											<b-button @click="handleDeleteAnswer(indexAnswer)">
-												Delete
-											</b-button>
-										</b-td>
-									</b-tr>
-								</b-tbody>
-							</b-table-simple>
-						</div>
-						<div class="zone-add-quiz">
-							<div @click="handleAddService()">+</div>
-						</div>
-					</div>
-				</div>
 				<div class="form-group row">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button
-							name="btnSubmit"
-							type="submit"
-							class="btn btn-primary"
-							@click="handleRegister()"
+						<button class="btn btn-primary" @click="handleRegister()"
 							>Đồng Ý</button
 						>
 						<!-- <router-link to="/manage-room"><button name="btnSubmit" type="submit" class="btn btn-primary" >Đồng Ý</button></router-link> -->
@@ -179,12 +67,6 @@
 				list: [],
 				options: [],
 				selected: null,
-				other_service: [
-					{
-						name: '',
-						price: ''
-					}
-				],
 				room: {
 					user_id: '',
 					room_id: '',
@@ -226,7 +108,8 @@
 			async handleRegister() {
 				const data = {
 					user_id: this.room.user_id,
-					room_id: this.room.room_id
+					room_id: this.room.room_id,
+					date: this.room.date
 				};
 				console.log(data);
 				if (isEmptyOrWhiteSpace(data.user_id) || isEmptyOrWhiteSpace(data.room_id)) {
@@ -241,27 +124,14 @@
 							MakeToast({
 								variant: 'success',
 								title: this.$t('TOAST.SUCCESS'),
-								content: this.$t('MANAGER.FORM.SUCCESS')
+								content: this.$t('REGISTER.SUCCESS')
 							});
 							this.$router.push(`/manage-room/list`);
 						})
 						.catch(err => {
 							console.log(err);
-							MakeToast({
-								variant: 'success',
-								title: this.$t('TOAST.WARNING'),
-								content: this.$t('MANAGER.FORM.SUCCESS')
-							});
 						});
 				}
-			},
-			handleAddService() {
-				const SERVICE = {
-					name: '',
-					price: ''
-				};
-
-				this.Quiz.question_answers.push(SERVICE);
 			}
 		}
 	};

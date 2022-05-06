@@ -12,37 +12,39 @@ import RoomRegister from './modules/RoomRegister';
 import Notification from './modules/Notification';
 import RoomDetail from './modules/DetailRoom';
 import Customer from './modules/customer';
-import RevenueAdmin from './modules/revenueAdmin';
+import Revenue from './modules/revenue';
 import Area from './modules/area';
 import DashboardRenter from './modules/dashboardRenter';
 import Bill from './modules/bill';
 import Report from './modules/report';
 import Place from './modules/place';
+import Profile from './modules/profile';
 
 export const constantRoutes = [
 	Login,
-	Dashboard,
 	{
 		path: '/',
-		redirect: { name: 'Dashboard' },
+		// redirect: { name: 'Dashboard' },
 		hidden: true
 	}
 ];
 
 export const asyncRoutes = [
+	Dashboard,
 	Room,
 	RoomRegister,
 	Notification,
 	errorRoute,
 	RoomDetail,
 	Customer,
-	RevenueAdmin,
+	Revenue,
 	AccountManagement,
 	Area,
 	DashboardRenter,
 	Bill,
 	Report,
 	Place,
+	Profile,
 	{
 		path: '*',
 		hidden: true,

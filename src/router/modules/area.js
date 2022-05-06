@@ -4,7 +4,8 @@ const Area = {
 	name: 'AreaManagement',
 	meta: {
 		title: 'ROUTER.AREA',
-		icon:"fas fa-map-marked"
+		icon:"fas fa-map-marked",
+		roles:['admin']
 	},
 	component: Layout,
 	redirect: {

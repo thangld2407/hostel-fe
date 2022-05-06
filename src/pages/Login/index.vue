@@ -96,7 +96,7 @@
 
 				postLogin('auth/login', Account)
 					.then(async res => {
-						const ROLES = res.data.role_id.role_name || [];
+						const ROLES = res.data.role_id.role_name || '';
 						console.log(ROLES);
 						setToken('access_token', res.accessToken);
 						setToken('roles', [ROLES]);
@@ -104,20 +104,35 @@
 						setToken('_id', res.data.user_id._id);
 						setToken('hostel_id', res.data.user_id.hostel_id);
 						setToken('email', res.data.user_id.email);
+						console.log(ROLES);
+
 						try {
-							const accessRoutes = this.$store.dispatch('permission/generateRoutes', {
-								roles: ROLES,
-								permissions: []
-							});
-							await setRoutes(accessRoutes);
+							this.$store
+								.dispatch('permission/generateRoutes', {
+									roles: [ROLES],
+									permissions: []
+								})
+								.then(res => {
+									console.log(res);
+									setRoutes(res);
+									if (ROLES === 'admin' || ROLES === 'manager') {
+										console.log(ROLES, '1321312');
+										this.$router.push('/dashboard');
+									}
+									else{
+										this.$router.push('/dashboard-renter');
+									}
+									
 
-							this.$router.push('/');
-
-							MakeToast({
-								variant: 'success',
-								title: this.$t('TOAST.SUCCESS'),
-								content: this.$t('LOGIN.LOGIN_SUCCESS')
-							});
+									MakeToast({
+										variant: 'success',
+										title: this.$t('TOAST.SUCCESS'),
+										content: this.$t('LOGIN.LOGIN_SUCCESS')
+									});
+								})
+								.catch(error => {
+									console.log(error);
+								});
 						} catch (error) {
 							console.log(error);
 							MakeToast({

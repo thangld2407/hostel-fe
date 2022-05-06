@@ -5,7 +5,7 @@ const Room = {
 	meta: {
 		title: 'ROUTER.ROOM_MANAGEMENT',
 		icon: 'fas fa-laptop',
-		roles: ['admin']
+		roles: ['admin','manager']
 	},
 	component: Layout,
 	redirect: {

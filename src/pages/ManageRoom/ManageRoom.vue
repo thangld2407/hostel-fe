@@ -8,9 +8,6 @@
 				>
 			</div>
 			<div class="rooms-content">
-				<!-- <div class="upload">
-					<b-button @click="isShowModalPost = !isShowModalPost">Upload Invoice</b-button>
-				</div> -->
 				<div class="zone-header-page">
 					<div class="form-group">
 						<input
@@ -29,7 +26,14 @@
 							</select>
 						</div>
 					</div>
-					<button><i class="fa fa-search"></i>{{ $t('ROOM.SEARCH.TITLE') }}</button>
+					<div>
+						<button><i class="fa fa-search"></i>{{ $t('ROOM.SEARCH.TITLE') }}</button>
+					</div>
+					<div class="upload">
+						<b-button @click="isShowModalPost = !isShowModalPost"
+							>Upload Invoice</b-button
+						>
+					</div>
 				</div>
 				<div class="container">
 					<table class="table table-bordered">
@@ -80,9 +84,8 @@
 								<label for="">{{ $t('IDEA.UPLOAD.ACTIONS') }}</label>
 
 								<b-form-file
-									multiple="multiple"
 									ref="file"
-									accept="/*"
+									accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 									id="upload-invoice"
 								></b-form-file>
 							</div>
@@ -96,7 +99,7 @@
 								<b-button
 									type="submit"
 									class="btn btn-primary"
-									@click="handlePostIdea()"
+									@click="handlePostInvoice()"
 								>
 									Post
 								</b-button>
@@ -140,6 +143,57 @@
 								></b-form-textarea>
 							</div>
 							<div class="col-md-12 col-sm-12 col-lg-12">
+								<label>Service</label>
+								<div>
+									<div class="zone-table-service">
+										<b-table-simple
+											:bordered="true"
+											:outlined="false"
+											:fixed="false"
+										>
+											<b-thead>
+												<b-tr>
+													<b-th class="zone-min-width">
+														<span>Name</span>
+													</b-th>
+
+													<b-th>
+														<span>Price</span>
+													</b-th>
+
+													<b-th class="zone-min-width">
+														<span>Actions</span>
+													</b-th>
+												</b-tr>
+											</b-thead>
+
+											<b-tbody>
+												<b-tr v-for="item in service" :key="item.id">
+													<b-td class="zone-min-width">
+														<b-form-input v-model="item.name" />
+													</b-td>
+
+													<b-td>
+														<b-form-input v-model="item.price" />
+													</b-td>
+
+													<b-td class="zone-min-width">
+														<b-button
+															@click="handleDeleteService(item)"
+														>
+															Delete
+														</b-button>
+													</b-td>
+												</b-tr>
+											</b-tbody>
+										</b-table-simple>
+									</div>
+									<div class="zone-add-quiz">
+										<div @click="handleAddService()">+</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12 col-sm-12 col-lg-12">
 								<label for="">{{ $t('ROOM.FORM.STATUS') }}</label>
 								<input
 									v-model="new_room.status"
@@ -180,7 +234,7 @@
 
 <script>
 	import { MakeToast } from '@/toast/toastMessage';
-	import { isEmptyOrWhiteSpace } from '../../utils/validate';
+	import { isEmptyOrWhiteSpace, isValidateExcel } from '../../utils/validate';
 	import { getRoomTable, postRoom, deleteRoom, getOneRoom, editRoom } from '@/api/modules/room';
 	import { getOneUser } from '@/api/modules/user';
 	import { UploadInvoice } from '@/api/modules/invoice';
@@ -198,6 +252,12 @@
 					status: false,
 					description: ''
 				},
+				service: [
+					{
+						name: '',
+						price: ''
+					}
+				],
 				isLoading: false,
 				showModal: false,
 				list: [],
@@ -245,10 +305,11 @@
 					this.action = 'EDIT';
 					await getOneRoom({ id: this.ids })
 						.then(res => {
-							this.new_room.room_name = res.data.room_name;
-							this.new_room.price = res.data.price;
-							this.new_room.description = res.data.description;
-							this.new_room.status = res.data.status;
+							this.new_room.room_name = res.data.room.room_name;
+							this.new_room.price = res.data.room.price;
+							this.new_room.description = res.data.room.description;
+							this.new_room.status = res.data.room.status;
+							this.service = res.data.room.service
 						})
 						.catch(err => {
 							console.log(err);
@@ -278,7 +339,8 @@
 					room_name: this.new_room.room_name,
 					price: this.new_room.price,
 					description: this.new_room.description,
-					status: this.new_room.status
+					status: this.new_room.status,
+					service: this.service
 				};
 				console.log(data);
 				if (isEmptyOrWhiteSpace(data.price) || isEmptyOrWhiteSpace(data.description)) {
@@ -308,11 +370,12 @@
 			async handleEditRoom() {
 				this.action = 'EDIT';
 				const data = {
-					room_name: this.room_name,
+					room_name: this.new_room.room_name,
 					room_id: this.ids,
 					price: this.new_room.price,
 					description: this.new_room.description,
-					status: this.new_room.status
+					status: this.new_room.status,
+					service: this.service
 				};
 				if (isEmptyOrWhiteSpace(data.price) || isEmptyOrWhiteSpace(data.description)) {
 					MakeToast({
@@ -327,7 +390,7 @@
 							MakeToast({
 								variant: 'success',
 								title: this.$t('TOAST.SUCCESS'),
-								content: '123'
+								content: this.$t('ROOM.FORM.EDIT_SUCCESS')
 							});
 							this.handleGetListRoom();
 							this.showModal = false;
@@ -376,39 +439,22 @@
 						}
 					});
 			},
-			async handlePostIdea() {
+			async handlePostInvoice() {
 				let files = document.getElementById('upload-invoice').files;
-				let formData = new FormData();
-				formData.append('category_id', this.id);
-				formData.append('contents', this.data.contents);
-				for (var i = 0; i < files.length; i++) {
-					formData.append(`files[${i + 1}]`, files[i]);
-				}
-				try {
-					if (isEmptyOrWhiteSpace(this.data.contents)) {
-						MakeToast({
-							variant: 'warning',
-							title: 'Contents',
-							content: 'You do not empty this fields'
+				console.log(files);
+				if (isValidateExcel(files[0])) {
+					console.log('456');
+					let formData = new FormData();
+					formData.append('file', files[0]);
+					await UploadInvoice(formData)
+						.then(res => {
+							console.log(res);
+						})
+						.catch(err => {
+							console.log(err);
 						});
-					} else {
-						if (this.liences) {
-							const res = await postIdeas(formData);
-							if (res.status == 200) {
-								this.handleGetListIdeas();
-								this.isShowModalPost = false;
-								this.resetData();
-							}
-						} else {
-							MakeToast({
-								variant: 'warning',
-								title: 'Liences',
-								content: 'You must be accept the liences'
-							});
-						}
-					}
-				} catch (error) {
-					console.log(error);
+				} else {
+					console.log('123');
 				}
 			},
 			showModalCreate(e) {
@@ -422,6 +468,45 @@
 					description: '',
 					status: ''
 				};
+			},
+			handleAddService() {
+				const SERVICE = {
+					name: '',
+					price: ''
+				};
+				this.service.push(SERVICE);
+			},
+			handleDeleteService(item) {
+				this.$bvModal
+					.msgBoxConfirm('Do you want to delete this service?', {
+						title: 'Warning',
+						size: 'sm',
+						buttonSize: 'sm',
+						okVariant: 'danger',
+						okTitle: 'OK',
+						cancelTitle: 'Cancel',
+						footerClass: 'p-2',
+						hideHeaderClose: false,
+						centered: true
+					})
+					.then(value => {
+						if (value === true) {
+							for (let i = 0; i < this.service.length; i++) {
+								if (item._id === this.service[i]._id) {
+									this.service.splice(i, 1);
+								}
+							}
+							MakeToast({
+								variant: 'success',
+								title: this.$t('TOAST.SUCCESS'),
+								content: 'Successfully to delete this service'
+							});
+							console.log(res);
+						}
+					})
+					.catch(err => {
+						console.log(err);
+					});
 			}
 		}
 	};
@@ -456,9 +541,11 @@
 		height: 40px;
 		z-index: 0;
 	}
-	.rooms-content .upload button {
+	.rooms-content .zone-header-page .upload {
+		margin-left: auto;
+	}
+	.rooms-content .zone-header-page .upload button{
 		width: 150px;
-		margin-left: 25px;
 		background-color: orange;
 	}
 	.rooms-content button {
@@ -487,5 +574,22 @@
 		height: 35px;
 		width: 40px;
 		margin-left: 5px;
+	}
+	.zone-add-quiz {
+		background-color: orange;
+		border-radius: 50%;
+		width: 25px;
+		cursor: pointer;
+		margin: 10px 0px 0px 200px;
+	}
+	.zone-add-quiz div {
+		color: white;
+		text-align: center;
+		font-weight: 700;
+	}
+	.zone-table-service {
+		width: 100%;
+		max-height: 230px;
+		overflow-y: scroll;
 	}
 </style>
