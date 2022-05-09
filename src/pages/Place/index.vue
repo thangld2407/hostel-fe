@@ -1,7 +1,7 @@
 <template>
 	<div id="place">
 		<div class="title">
-			<span>Địa điểm</span>
+			<span>Hostel</span>
 			<b-button variant="light" @click="handleModal()" v-b-modal.modal-1
 				>Create Hostel</b-button
 			>
@@ -154,7 +154,7 @@
 						.then(res => {
 							this.new_hostel.hostel_name = res.data.hostel_name;
 							this.new_hostel.address = res.data.address;
-							this.new_hostel.createAt = res.data[0].createAt;
+							this.new_hostel.createAt = res.data.createAt;
 							this.new_hostel.area_id = res.data.area_id._id;
 							this.new_hostel.price_water = res.data.price_water;
 							this.new_hostel.price_electric = res.data.price_electric;

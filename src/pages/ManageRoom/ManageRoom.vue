@@ -104,7 +104,7 @@
 					>
 						<div class="row mt-2">
 							<div class="col-md-12 col-sm-12 col-lg-12 mt-3">
-								<label for="">{{ $t('IDEA.UPLOAD.ACTIONS') }}</label>
+								<label for="">Choose file</label>
 
 								<b-form-file
 									ref="file"
