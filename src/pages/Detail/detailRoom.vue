@@ -30,9 +30,9 @@
 								</tr>
 								<tr>
 									<td>{{ $t('ROOM_DETAIL.SERVICE') }}</td>
-									<div v-for="index in room_service" :key="index">
-										<td>{{ index.name }}</td>
-									</div>	
+									<div v-for="(serviceName, index) in room_service" :key="index">
+										<td>{{ serviceName.name }}</td>
+									</div>
 								</tr>
 								<tr>
 									<td>{{ $t('ROOM_DETAIL.PRICE') }}</td>
@@ -83,7 +83,7 @@
 						<form>
 							<div
 								class="form-group row"
-								v-for="item in room_service"
+								v-for="item in rooms.room.service"
 								:key="item.id"
 							>
 								<label class="col-sm-2 form-control-label">{{ item.name }}</label>
@@ -158,7 +158,7 @@
 							<div class="form-group row">
 								<label class="col-sm-2 form-control-label">Other Service</label>
 								<div class="col-sm-10">
-									<div class = "zone-table-service">
+									<div class="zone-table-service">
 										<b-table-simple
 											:bordered="true"
 											:outlined="false"
@@ -174,14 +174,17 @@
 														<span>Price</span>
 													</b-th>
 
-													<b-th >
+													<b-th>
 														<span>Actions</span>
 													</b-th>
 												</b-tr>
 											</b-thead>
 
 											<b-tbody>
-												<b-tr v-for="other in other_service" :key="other.id">
+												<b-tr
+													v-for="other in other_service"
+													:key="other.id"
+												>
 													<b-td>
 														<b-form-input v-model="other.name" />
 													</b-td>
@@ -190,7 +193,7 @@
 														<b-form-input v-model="other.price" />
 													</b-td>
 
-													<b-td >
+													<b-td>
 														<b-button
 															@click="handleDeleteService(other)"
 														>
@@ -214,7 +217,11 @@
 						</form>
 						<template #modal-footer>
 							<div>
-								<b-button class="btn btn-primary" @click="handleSendInvoice()">
+								<b-button
+									class="btn btn-primary"
+									@click="handleSendInvoice()"
+									v-model="showModal"
+								>
 									{{ $t('ROOM.FORM.SEND') }}
 								</b-button>
 
@@ -239,27 +246,30 @@
 									<th scope="col">Giới Tính</th>
 									<th scope="col" @click="isShowModalAdd = !isShowModalAdd"
 										><a class="btn btn-primary">
-											<i class="fa fa-plus"></i> Thêm</a
+											<i class="fa fa-plus"></i> Add</a
 										></th
 									>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<th scope="row"></th>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
+								<tr
+									v-for="(roommate, index) in rooms.request.room_mate"
+									:key="index"
+								>
+									<th scope="row">{{ roommate.username }}</th>
+									<td>{{ roommate.id_card_number || '' }}</td>
+									<td>{{ roommate.date_of_birth || '' }}</td>
+									<td>{{ roommate.hometown || '' }}</td>
+									<td>{{ roommate.telephone || '' }}</td>
+									<td>{{ roommate.gender || '' }}</td>
 									<td class="actions">
 										<div
 											type="button"
 											class="btn btn-outline-danger"
 											style="border: 1px solid red"
-											@click="Delete(item)"
+											@click="Delete(index)"
 										>
-											<i class="fa fa-trash"></i> Xoá
+											<i class="fa fa-trash"></i> Delete
 										</div>
 									</td>
 								</tr>
@@ -272,70 +282,22 @@
 							size="lg"
 						>
 							<div class="form-group row">
-								<label class="col-sm-2 form-control-label">Họ Tên</label>
+								<label class="col-sm-2 form-control-label">User</label>
 								<div class="col-sm-10">
-									<input
-										type="text"
-										class="form-control"
-										placeholder="Nhập Họ Tên Người Thuê"
-									/>
-								</div>
-							</div>
-							<div class="form-group row">
-								<label class="col-sm-2 form-control-label">CMND</label>
-								<div class="col-sm-10">
-									<input
-										type="text"
-										class="form-control"
-										placeholder="Nhập CMND"
-									/>
-								</div>
-							</div>
-							<div class="form-group row">
-								<label class="col-sm-2 form-control-label">Ngày Sinh</label>
-								<div class="col-sm-10">
-									<input
-										type="date"
-										class="form-control"
-										placeholder="Nhập Ngày Sinh"
-									/>
-								</div>
-							</div>
-							<div class="form-group row">
-								<label class="col-sm-2 form-control-label">Quê Quán</label>
-								<div class="col-sm-10">
-									<input
-										type="text"
-										class="form-control"
-										placeholder="Nhập Quê QUán"
-									/>
-								</div>
-							</div>
-							<div class="form-group row">
-								<label class="col-sm-2 form-control-label">SDT</label>
-								<div class="col-sm-10">
-									<input
-										type="text"
-										class="form-control"
-										placeholder="Nhập SDT"
-									/>
-								</div>
-							</div>
-							<div class="form-group row">
-								<label class="col-sm-2">Giới Tính</label>
-								<div class="col-sm-10">
-									<div class="radio">
-										<label>
-											<input type="radio" value="1" checked />
-											Nam
-										</label>
-									</div>
-									<div class="radio">
-										<label>
-											<input type="radio" value="0" />
-											Nữ
-										</label>
-									</div>
+									<b-form-select v-model="form.user">
+										<b-form-select-option :value="null"
+											>Select Customer</b-form-select-option
+										>
+										<b-form-select-option
+											v-for="(user, index) in list.filter(
+												user => user.role_id.role_name === 'customer'
+											)"
+											:key="index"
+											:value="user.user_id._id"
+										>
+											{{ user.user_id.username }}
+										</b-form-select-option>
+									</b-form-select>
 								</div>
 							</div>
 
@@ -350,9 +312,9 @@
 									<b-button
 										type="submit"
 										class="btn btn-primary"
-										@click="handlePostIdea()"
+										@click="handleAddRoommate()"
 									>
-										Post
+										Add
 									</b-button>
 								</div>
 							</template>
@@ -366,10 +328,13 @@
 
 <script>
 	import { getOneRoom } from '@/api/modules/room';
+	import { postRoommate } from '@/api/modules/roommate';
+	import { getUserTable, deleteUser } from '@/api/modules/user';
 	import { postInvoice } from '@/api/modules/invoice';
 	import { getDetail, cancelRoom } from '@/api/modules/roomRegister';
 	import { MakeToast } from '@/toast/toastMessage';
 	import { calcualateTotalService } from '../../utils/validate';
+	import { getToken } from '../../const/cookie';
 	export default {
 		name: 'RoomDetail',
 
@@ -384,12 +349,18 @@
 				showModal: false,
 				water: 0,
 				electric: 0,
+				selected: null,
 				other_service: [
 					{
 						name: '',
 						price: 0
 					}
 				],
+				form: {
+					user: [],
+					room_id: ''
+				},
+				list: []
 			};
 		},
 		computed: {
@@ -405,15 +376,26 @@
 			priceService() {
 				return calcualateTotalService(this.room_service);
 			},
-			priceOtherService(){
-				return calcualateTotalService(this.other_service)
+			priceOtherService() {
+				return calcualateTotalService(this.other_service);
 			},
 			totalPrice() {
-				return Math.round(this.priceWater + this.priceElectric + this.total+ this.priceService + this.priceOtherService);
+				return Math.round(
+					this.priceWater +
+						this.priceElectric +
+						this.total +
+						this.priceService +
+						this.priceOtherService
+				);
+			},
+			hostel_id() {
+				const hostel_id = getToken('hostel_id');
+				return hostel_id;
 			}
 		},
 		created() {
 			this.handleGetRoom();
+			this.getUser();
 		},
 		methods: {
 			async handleGetRoom() {
@@ -422,6 +404,15 @@
 					.then(res => {
 						this.rooms = res.data;
 						this.room_service = res.data.room.service;
+					})
+					.catch(err => {
+						console.log(err);
+					});
+			},
+			getUser() {
+				getUserTable({ hostel: this.hostel_id })
+					.then(res => {
+						this.list = res.data;
 					})
 					.catch(err => {
 						console.log(err);
@@ -452,6 +443,33 @@
 							title: this.$t('TOAST.SUCCESS'),
 							content: this.$t('INVOICE.SUCCESS')
 						});
+						this.showModal = false;
+					})
+					.catch(err => {
+						console.log(err);
+					});
+			},
+			async handleAddRoommate() {
+				let dt = this.rooms;
+				let tmp = [];
+				for (let idx of dt.request.room_mate) {
+					tmp.push(idx._id);
+				}
+				const data = {
+					user: [...tmp, this.form.user],
+					room_id: this.id
+				};
+				console.log(data);
+
+				await postRoommate(data)
+					.then(res => {
+						MakeToast({
+							variant: 'success',
+							title: this.$t('TOAST.SUCCESS'),
+							content: 'Add roommate successfully'
+						});
+						this.isShowModalAdd = false;
+						this.getUser();
 					})
 					.catch(err => {
 						console.log(err);
@@ -532,6 +550,48 @@
 					})
 					.catch(err => {
 						console.log(err);
+					});
+			},
+			Delete(id) {
+				this.$bvModal
+					.msgBoxConfirm('Do you want to delete this user?', {
+						title: 'Warning',
+						size: 'sm',
+						buttonSize: 'sm',
+						okVariant: 'danger',
+						okTitle: 'OK',
+						cancelTitle: 'Cancel',
+						footerClass: 'p-2',
+						hideHeaderClose: false,
+						centered: true
+					})
+					.then(value => {
+						if (value === true) {
+							let dt = this.rooms;
+							let tmp = [];
+							for (let idx of dt.request.room_mate) {
+								tmp.push(idx._id);
+							}
+							tmp.splice(id, 1);
+							const data = {
+								user: tmp,
+								room_id: this.id
+							};
+
+							postRoommate(data)
+								.then(res => {
+									MakeToast({
+										variant: 'success',
+										title: this.$t('TOAST.SUCCESS'),
+										content: this.$t('INVOICE.SUCCESS')
+									});
+									this.isShowModalAdd = false;
+									this.getUser();
+								})
+								.catch(err => {
+									console.log(err);
+								});
+						}
 					});
 			},
 			Open() {

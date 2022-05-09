@@ -4,9 +4,9 @@
 			<div class="title">Room registration</div>
 			<div>
 				<div class="card-body">
-					<h5>Khách Thuê</h5>
+					<h5>Customer</h5>
 					<b-form-select v-model="room.user_id">
-						<b-form-select-option :value="null">Chọn role</b-form-select-option>
+						<b-form-select-option :value="null">Select Customer</b-form-select-option>
 						<b-form-select-option
 							v-for="(user, index) in options.filter(
 								user => user.role_id.role_name === 'customer'
@@ -20,33 +20,30 @@
 			</div>
 			<form>
 				<div class="form-group row">
-					<legend>Thông tin đăng ký nhà trọ</legend>
-					<label class="col-sm-2 form-control-label">Ngày Thuê</label>
+					<legend>Hostel registration information</legend>
+					<label class="col-sm-2 form-control-label">Date of rent</label>
 					<div class="col-sm-10">
-						<input type="date" class="form-control" v-model="room.date" />
+						<input type="date" class="form-control w-25" v-model="room.date" />
 					</div>
 				</div>
 
 				<div class="form-group row">
-					<label class="col-sm-2 form-control-label">Chọn Phòng Đăng Ký</label>
+					<label class="col-sm-2 form-control-label">Select Registration Room</label>
 					<div class="col-sm-10">
-						<select v-model="room.room_id">
-							<option value="null">Chọn phòng</option>
-							<option
+						<b-form-select v-model="room.room_id" class="w-25">
+							<b-form-select-option value="null">Select Room</b-form-select-option>
+							<b-form-select-option
 								v-for="room in list.filter(room => !room.status)"
 								:key="room.id"
 								:value="room._id"
-								>{{ room.room_name }}</option
+								>{{ room.room_name }}</b-form-select-option
 							>
-						</select>
+						</b-form-select>
 					</div>
 				</div>
 				<div class="form-group row">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button class="btn btn-primary" @click="handleRegister()"
-							>Đồng Ý</button
-						>
-						<!-- <router-link to="/manage-room"><button name="btnSubmit" type="submit" class="btn btn-primary" >Đồng Ý</button></router-link> -->
+						<button class="btn btn-primary" @click="handleRegister()">Submit</button>
 					</div>
 				</div>
 			</form>
@@ -60,6 +57,7 @@
 	import { RegisterRoom } from '@/api/modules/roomRegister';
 	import { MakeToast } from '@/toast/toastMessage';
 	import { isEmptyOrWhiteSpace } from '../../utils/validate';
+	import { getToken } from '../../const/cookie';
 	export default {
 		name: 'roomRegister',
 		data() {
@@ -68,13 +66,9 @@
 				options: [],
 				selected: null,
 				room: {
-					user_id: '',
-					room_id: '',
+					user_id: null,
+					room_id: null,
 					date: ''
-					// phone:'',
-					// dob:'',
-					// cmnd:'',
-					// address:''
 				}
 			};
 		},
@@ -82,12 +76,18 @@
 			this.handleGetListRoom();
 			this.getUser();
 		},
+		computed: {
+			hostel_id() {
+				const hostel_id = getToken('hostel_id');
+				return hostel_id;
+			}
+		},
 		methods: {
 			clickAdd() {
 				console.log(this.room);
 			},
 			async handleGetListRoom() {
-				await getRoomTable()
+				await getRoomTable({ hostel: this.hostel_id })
 					.then(res => {
 						this.list = res.data;
 						console.log(this.list);

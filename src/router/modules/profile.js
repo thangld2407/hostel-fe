@@ -4,7 +4,7 @@ const Profile = {
     path: '/profile',
 	name: 'profile',
 	meta: {
-		title: 'ROUTER.PROFILE',
+		
 	},
     component: Layout,
 	redirect: {

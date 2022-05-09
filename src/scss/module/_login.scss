@@ -6,11 +6,16 @@
 	position: relative;
 
 	background-color: $white;
-
+	background-image: url("https://cdn.luxstay.com/users/383227/7Wd0IErLxSWrXJOkGJCSxdUp.jpg");
 	display: flex;
 	align-items: center;
 
 	.login-form {
+		height: 400px;
+		width: 600px;
+		background-color: white;
+		padding: 0px 40px 0px 40px;
+		border-radius: 20px;
 		.login-form-content {
 			&__logo {
 				img {
