@@ -29,12 +29,12 @@
 					</thead>
 					<tbody>
 						<tr v-for="issues in listIssues" :key="issues._id">
-							<th scope="row">{{issues.room.room_id.room_name}}</th>
+							<th scope="row">{{ issues.room.room_id.room_name }}</th>
 							<td>{{ issues.user_id.username }}</td>
 							<td>{{ issues.issues_name }}</td>
 							<td>{{ issues.issues_content }}</td>
 							<td>
-								<input type="checkbox" v-model="issues.status">{{issues.status}}
+								<input type="checkbox" v-model="issues.status" />
 							</td>
 							<td class="actions">
 								<div type="button" class="btn btn-danger">
@@ -56,7 +56,8 @@
 		data() {
 			return {
 				listIssues: [],
-				showModal: false
+				showModal: false,
+				status: false
 			};
 		},
 		created() {

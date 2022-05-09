@@ -41,12 +41,12 @@
 						</b-form-select>
 					</div>
 				</div>
-				<div class="form-group row">
-					<div class="col-sm-offset-2 col-sm-10">
-						<button class="btn btn-primary" @click="handleRegister()">Submit</button>
-					</div>
-				</div>
 			</form>
+			<div class="form-group row" style="margin-left: 10px">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button class="btn btn-primary" @click="handleRegister()">Submit</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
