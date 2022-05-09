@@ -6,8 +6,8 @@ export function postRoom(data) {
 	return RequestApi.postOne(`${URL}/create`, data);
 }
 
-export function getRoomTable() {
-	return RequestApi.getAll(`${URL}/getall`);
+export function getRoomTable(data) {
+	return RequestApi.getAll(`${URL}/getall`,data);
 }
 
 export function editRoom( data) {
