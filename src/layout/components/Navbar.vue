@@ -2,25 +2,18 @@
 	<div id="navbar">
 		<nav>
 			<span>{{ $t('NAVBAR.AREA') }}</span>
-			<input type="text" v-model="area_name" disabled/>
+			<input type="text" v-model="area_name" disabled />
 		</nav>
 		<nav>
 			<span>{{ $t('NAVBAR.ADDRESS') }}</span>
-			<input disabled type="text" v-model="address"/>
+			<input disabled type="text" v-model="hostel_name" />
 		</nav>
 		<b-navbar toggleable="lg" type="dark">
-			<b-navbar-toggle target="nav-collapse">
-				<template #default="{ expanded }">
-					<b-icon v-if="expanded" icon="chevron-bar-up" />
-					<b-icon v-else icon="chevron-bar-down" />
-				</template>
-			</b-navbar-toggle>
-
 			<b-collapse id="nav-collapse" is-nav>
 				<b-navbar-nav class="ml-auto">
-					<b-dropdown id="dropdown-profile" text="Change" block class="m-2">
-						<template #button-content1>
-							{{ $t('NAVBAR.LANGUAGE') }}
+					<b-dropdown id="dropdown-profile" block class="m-2">
+						<template #button-content>
+							<b-icon icon="globe" /><span> Change Language </span>
 						</template>
 						<b-dropdown-item href="#" @click="setLanguage('en')">
 							{{ $t('NAVBAR.ENGLISH') }}
@@ -64,8 +57,8 @@
 			return {
 				title: this.$route.meta.title,
 				hostel: [],
-				area_name:'',
-				address:''
+				area_name: '',
+				hostel_name: ''
 			};
 		},
 		computed: {
@@ -79,7 +72,7 @@
 				const name = getToken('username');
 				return name;
 			},
-			id(){
+			id() {
 				const id = getToken('_id');
 				return id;
 			}
@@ -93,15 +86,15 @@
 			this.getUser();
 		},
 		methods: {
-			async getUser(){
-				console.log(this.id,'asdasdds');
-				await getOneUser({id:this.id})
+			async getUser() {
+				console.log(this.id, 'asdasdds');
+				await getOneUser({ id: this.id })
 					.then(res => {
-							this.area_name = res.data.dataArea.area_name;
-							this.address = res.data.dataUser.hostel_id.address;
-						})
+						this.area_name = res.data.dataArea.area_name;
+						this.hostel_name = res.data.dataUser.hostel_id.hostel_name;
+					})
 					.catch(err => {
-							console.log(err);
+						console.log(err);
 					});
 			},
 			setLanguage(lang) {
@@ -109,7 +102,7 @@
 					.dispatch('app/setLanguage', lang)
 					.then(() => {
 						this.$i18n.locale = lang;
-						console.log(lang,'sda');
+						console.log(lang, 'sda');
 						MakeToast({
 							variant: 'success',
 							title: this.$t('TOAST.SUCCESS'),

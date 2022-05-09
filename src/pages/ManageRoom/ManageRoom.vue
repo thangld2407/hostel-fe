@@ -48,8 +48,31 @@
 								<th scope="col" class="col-1"></th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody v-if="role === 'admin'">
 							<tr v-for="(item, index) in list" :key="index">
+								<td>{{ item.room_name }}</td>
+								<td>{{ item.price }}</td>
+								<td>
+									<div class="btn btn-success" v-if="item.status">Active</div>
+									<div class="btn btn-danger" v-else>Trống</div>
+								</td>
+								<td>{{ item.description }}</td>
+								<td class="actions">
+									<!-- <router-link :to="'/detail-room/list/'+item._id">231</router-link> -->
+									<div class="btn btn-info" @click="handleDetailRoom(item._id)">
+										<i class="fas fa-info-circle"></i>
+									</div>
+									<div class="btn btn-warning" @click="handleModal(item._id)">
+										<i class="fa fa-edit"></i>
+									</div>
+									<div @click="handleDeleteRoom(item._id)" class="btn btn-danger">
+										<i class="fa fa-trash"></i>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+						<tbody v-if="role === 'manager'">
+							<tr v-for="(item, index) in roomHostel" :key="index">
 								<td>{{ item.room_name }}</td>
 								<td>{{ item.price }}</td>
 								<td>
@@ -266,7 +289,8 @@
 				hostel: '',
 				hostel_name: '',
 				price_electric: '',
-				price_water: ''
+				price_water: '',
+				roomHostel: []
 			};
 		},
 		created() {
@@ -281,6 +305,10 @@
 			hostelID() {
 				const id = getToken('hostel_id');
 				return id;
+			},
+			role() {
+				const role = getToken('roles');
+				return role;
 			}
 		},
 		methods: {
@@ -309,7 +337,7 @@
 							this.new_room.price = res.data.room.price;
 							this.new_room.description = res.data.room.description;
 							this.new_room.status = res.data.room.status;
-							this.service = res.data.room.service
+							this.service = res.data.room.service;
 						})
 						.catch(err => {
 							console.log(err);
@@ -323,15 +351,28 @@
 			},
 			async handleGetListRoom() {
 				this.isLoading = true;
-				await getRoomTable()
-					.then(res => {
-						this.list = res.data;
-						console.log(this.list);
-						this.isLoading = false;
-					})
-					.catch(err => {
-						console.log(err);
-					});
+				console.log(this.hostelID, '4');
+				console.log(this.role, '12');
+				if (this.role === 'admin') {
+					await getRoomTable()
+						.then(res => {
+							this.list = res.data;
+							console.log(this.list, '123312');
+							this.isLoading = false;
+						})
+						.catch(err => {
+							console.log(err);
+						});
+				} else if (this.role === 'manager') {
+					await getRoomTable({ hostel: this.hostelID })
+						.then(res => {
+							this.roomHostel = res.data;
+							this.isLoading = false;
+						})
+						.catch(err => {
+							console.log(err);
+						});
+				}
 			},
 			async handleCreateRoom() {
 				const data = {
@@ -443,14 +484,23 @@
 				let files = document.getElementById('upload-invoice').files;
 				console.log(files);
 				if (isValidateExcel(files[0])) {
-					console.log('456');
 					let formData = new FormData();
 					formData.append('file', files[0]);
 					await UploadInvoice(formData)
 						.then(res => {
+							MakeToast({
+								variant: 'success',
+								title: this.$t('TOAST.SUCCESS'),
+								content: 'Successfully to upload invoice'
+							});
 							console.log(res);
 						})
 						.catch(err => {
+							MakeToast({
+								variant: 'warning',
+								title: this.$t('TOAST.WARNING'),
+								content: 'You can not upload invoice'
+							});
 							console.log(err);
 						});
 				} else {
@@ -544,7 +594,7 @@
 	.rooms-content .zone-header-page .upload {
 		margin-left: auto;
 	}
-	.rooms-content .zone-header-page .upload button{
+	.rooms-content .zone-header-page .upload button {
 		width: 150px;
 		background-color: orange;
 	}
