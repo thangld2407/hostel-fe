@@ -3,7 +3,7 @@
 		<div class="title">
 			<span>Địa điểm</span>
 			<b-button variant="light" @click="handleModal()" v-b-modal.modal-1
-				>Tạo dãy trọ</b-button
+				>Create Hostel</b-button
 			>
 		</div>
 		<div class="container">
@@ -11,10 +11,10 @@
 				<thead>
 					<tr>
 						<th scope="col" class="col-1">ID</th>
-						<th scope="col" class="col-1">Tên khu vực</th>
-						<th scope="col" class="col-1">Tên dãy trọ</th>
-						<th scope="col" class="col-1">Địa chỉ</th>
-						<th scope="col" class="col-1">Ngày tạo</th>
+						<th scope="col" class="col-1">Area Name</th>
+						<th scope="col" class="col-1">Hostel Name</th>
+						<th scope="col" class="col-1">Address</th>
+						<th scope="col" class="col-1">Created At</th>
 						<th scope="col" class="col-1"></th>
 					</tr>
 				</thead>
@@ -44,9 +44,9 @@
 			>
 				<div class="row mt-2">
 					<div class="col-md-12 col-sm-12 col-lg-12">
-						<label for="">Khu vực</label>
+						<label for="">Area</label>
 						<b-form-select v-model="new_hostel.area_id">
-							<b-form-select-option :value="null">Chọn khu vực</b-form-select-option>
+							<b-form-select-option :value="null">Select Area</b-form-select-option>
 							<b-form-select-option
 								v-for="(area, index) in options_area"
 								:key="index"
@@ -57,23 +57,26 @@
 						</b-form-select>
 					</div>
 					<div class="col-md-12 col-sm-12 col-lg-12">
-						<label for="">Tên nhà trọ</label>
+						<label for="">Hostel Name</label>
 						<b-form-input type="text" v-model="new_hostel.hostel_name"></b-form-input>
 					</div>
 					<div class="col-md-12 col-sm-12 col-lg-12">
-						<label for="">Địa chỉ</label>
+						<label for="">Address</label>
 						<b-form-input v-model="new_hostel.address"></b-form-input>
 					</div>
 					<div class="col-md-12 col-sm-12 col-lg-12">
-						<label for="">Giá Nước</label>
+						<label for="">Water Price</label>
 						<b-form-input v-model="new_hostel.price_water" type="number"></b-form-input>
 					</div>
 					<div class="col-md-12 col-sm-12 col-lg-12">
-						<label for="">Giá Điện</label>
-						<b-form-input v-model="new_hostel.price_electric" type="number"></b-form-input>
+						<label for="">Electric Price</label>
+						<b-form-input
+							v-model="new_hostel.price_electric"
+							type="number"
+						></b-form-input>
 					</div>
 					<div class="col-md-12 col-sm-12 col-lg-12">
-						<label for="">Ngày tạo</label>
+						<label for="">Created At</label>
 						<b-form-input type="date" v-model="new_hostel.createAt"></b-form-input>
 					</div>
 				</div>
@@ -84,7 +87,7 @@
 							v-if="action === 'CREATE'"
 							@click="handleCreateHostel()"
 						>
-							Tạo
+							Create
 						</b-button>
 
 						<b-button
@@ -92,11 +95,11 @@
 							v-if="action === 'EDIT'"
 							@click="handleEditHostel()"
 						>
-							Lưu
+							Save
 						</b-button>
 
 						<b-button class="btn btn-danger" @click="showModal = false">
-							Đóng
+							Close
 						</b-button>
 					</div>
 				</template>
@@ -127,8 +130,8 @@
 					address: '',
 					area_id: null,
 					createAt: '',
-					price_water:'',
-					price_electric:''
+					price_water: '',
+					price_electric: ''
 				},
 				options_area: [],
 				isLoading: false,
@@ -151,7 +154,7 @@
 						.then(res => {
 							this.new_hostel.hostel_name = res.data.hostel_name;
 							this.new_hostel.address = res.data.address;
-							this.new_hostel.createAt = res.data.createAt;
+							this.new_hostel.createAt = res.data[0].createAt;
 							this.new_hostel.area_id = res.data.area_id._id;
 							this.new_hostel.price_water = res.data.price_water;
 							this.new_hostel.price_electric = res.data.price_electric;
@@ -200,9 +203,9 @@
 				if (
 					isEmptyOrWhiteSpace(data.hostel_name) ||
 					isEmptyOrWhiteSpace(data.address) ||
-					isEmptyOrWhiteSpace(data.createAt)||
-					isEmptyOrWhiteSpace(data.area_id)||
-					isEmptyOrWhiteSpace(data.price_water)||
+					isEmptyOrWhiteSpace(data.createAt) ||
+					isEmptyOrWhiteSpace(data.area_id) ||
+					isEmptyOrWhiteSpace(data.price_water) ||
 					isEmptyOrWhiteSpace(data.price_electric)
 				) {
 					MakeToast({
@@ -311,8 +314,8 @@
 					address: '',
 					area_id: null,
 					createAt: '',
-					price_water:'',
-					price_electric:''
+					price_water: '',
+					price_electric: ''
 				};
 			}
 		}

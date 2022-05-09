@@ -6,7 +6,8 @@
 				<div class="account-management__searching-filter">
 					<label for="filer">{{ $t('USER.SEARCH_BY.ROLE') }}</label>
 					<b-form-select v-model="role" @change="handleFilterRole()">
-						<b-form-select-option :value="null">{{$t('USER.SELECT_ROLE')
+						<b-form-select-option :value="null">{{
+							$t('USER.SELECT_ROLE')
 						}}</b-form-select-option>
 						<b-form-select-option
 							v-for="role in options"
@@ -120,7 +121,7 @@
 										<label for="">{{ $t('USER.FORM.ROLE') }}</label>
 										<b-form-select v-model="new_account.role_id">
 											<b-form-select-option :value="null"
-												>Chọn role</b-form-select-option
+												>Select role</b-form-select-option
 											>
 											<b-form-select-option
 												v-for="(role, index) in options"
@@ -139,7 +140,7 @@
 											@change="getHostel(new_account.area_id)"
 										>
 											<b-form-select-option :value="null"
-												>Chọn khu vực</b-form-select-option
+												>Select area</b-form-select-option
 											>
 											<b-form-select-option
 												v-for="(area, index) in options_area"
@@ -157,7 +158,7 @@
 											v-model="new_account.hostel_id"
 										>
 											<b-form-select-option :value="null"
-												>Chọn địa điểm</b-form-select-option
+												>Select hostel</b-form-select-option
 											>
 											<b-form-select-option
 												v-for="(hostel, index) in options_hostel"
@@ -200,13 +201,13 @@
 											>
 											<b-form-select-option
 												v-model="new_account.gender"
-												:value="true"
+												:value="0"
 											>
 												Male
 											</b-form-select-option>
 											<b-form-select-option
 												v-model="new_account.gender"
-												:value="false"
+												:value="1"
 											>
 												Female
 											</b-form-select-option>
@@ -263,7 +264,7 @@
 				keySearch: '',
 				listUser: [],
 				selected: null,
-				role: '',
+				role: null,
 				hostel_name: '',
 				new_account: {
 					username: '',
@@ -277,7 +278,7 @@
 					date_of_birth: '',
 					telephone: '',
 					hometown: '',
-					gender: true
+					gender: ''
 				},
 				isLoading: false,
 				roles: [],
@@ -308,11 +309,11 @@
 							this.new_account.role_id = res.data['0'].role_id._id;
 							this.new_account.hostel_id = res.data.dataUser.hostel_id._id;
 							this.new_account.area_id = res.data.dataUser.hostel_id.area_id;
-							this.new_account.id_card_number = res.data.dataUser.id_card_number,
-							this.new_account.date_of_birth = res.data.dataUser.date_of_birth,
-							this.new_account.telephone = res.data.dataUser.telephone,
-							this.new_account.hometown = res.data.dataUser.hometown,
-							this.new_account.gender = res.data.dataUser.gender;
+							(this.new_account.id_card_number = res.data.dataUser.id_card_number),
+								(this.new_account.date_of_birth = res.data.dataUser.date_of_birth),
+								(this.new_account.telephone = res.data.dataUser.telephone),
+								(this.new_account.hometown = res.data.dataUser.hometown),
+								(this.new_account.gender = res.data.dataUser.gender);
 						})
 						.catch(err => {
 							console.log(err);
@@ -546,7 +547,7 @@
 		color: white;
 		padding-left: 20px;
 	}
-	.account-management__searching{
+	.account-management__searching {
 		display: flex;
 		margin-bottom: 20px;
 	}

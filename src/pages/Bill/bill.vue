@@ -1,47 +1,99 @@
 <template>
 	<div id="bill">
 		<div class="title">
-			<p>Hóa đơn phòng số : 12</p>
+			<p>Hóa đơn phòng : {{ invoice[0]['room_id']['room_name'] }}</p>
 		</div>
 		<div class="revenue-management_searching-filter">
-			<b-form-select v-model="selected">
-				<b-form-select-option :value="null">Chọn Tháng</b-form-select-option>
-				<b-form-select-option v-for="(type, index) in month" :key="index">{{
-					type.name
-				}}</b-form-select-option>
-			</b-form-select>
+			<b-form-input
+				class="w-100"
+				type="date"
+				v-model="sort_date"
+				:value="sort_date"
+			></b-form-input>
 		</div>
 		<div class="container">
-			
-			<form>
-				<div class="form-group row" v-for="(service,index) in invoice[0].other_service" :key="index">
-					<label class="col-sm-2 form-control-label">{{service.name || ''}}</label>
+			<div>
+				<div
+					class="form-group row"
+					v-for="(service, index) in invoice[0].other_service"
+					:key="index"
+				>
+					<label class="col-sm-2 form-control-label">{{ service.name || '' }}</label>
 					<div class="col-sm-10">
 						<input type="text" class="form-control" v-model="service.price" readonly />
 					</div>
 				</div>
 				<div class="form-group row">
-					<label class="col-sm-2 form-control-label">Giá Phòng</label>
+					<label class="col-sm-2 form-control-label">Room Price</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control"  readonly />
+						<input
+							type="text"
+							class="form-control"
+							:value="invoice[0]['room_id']['price']"
+							readonly
+						/>
 					</div>
 				</div>
 				<div class="form-group row">
-					<label class="col-sm-2 form-control-label">Tiền Điện</label>
+					<label class="col-sm-2 form-control-label">Electric Price</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" v-model="invoice[0].electricity_consumed_per_month" readonly />
+						<input
+							type="text"
+							class="form-control"
+							:value="
+								invoice[0].electricity_consumed_per_month *
+								invoice[0]['room_id']['hostel_id']['price_electric']
+							"
+							readonly
+						/>
 					</div>
 				</div>
 				<div class="form-group row">
-					<label class="col-sm-2 form-control-label">Nước</label>
+					<label class="col-sm-2 form-control-label">Water Price</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" readonly v-model="invoice[0].water_consumed_per_month"/>
+						<input
+							type="text"
+							class="form-control"
+							readonly
+							:value="
+								invoice[0].water_consumed_per_month *
+								invoice[0]['room_id']['hostel_id']['price_water']
+							"
+						/>
+					</div>
+				</div>
+				<div
+					class="form-group row"
+					v-for="(service_room, idx) in invoice[0].room_id.service"
+					:key="idx + 1"
+				>
+					<label class="col-sm-2 form-control-label">{{ service_room.name || '' }}</label>
+					<div class="col-sm-10">
+						<input
+							type="text"
+							class="form-control"
+							:value="service_room.price"
+							readonly
+						/>
 					</div>
 				</div>
 				<div class="form-group row">
-					<label class="col-sm-2 form-control-label">Tổng Tiền</label>
+					<label class="col-sm-2 form-control-label">Total Price</label>
 					<div class="col-sm-10">
-						<label type="text" class="form-control" readonly>{{invoice[0].total || ''}}</label>
+						<label type="text" class="form-control" readonly>{{
+							invoice[0].total || ''
+						}}</label>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 form-control-label">Status</label>
+					<div class="col-sm-10">
+						<label v-if="invoice[0]['status']" type="text" class="form-control" readonly
+							>Đã thanh toán</label
+						>
+						<label v-else type="text" class="form-control" readonly
+							>Chưa thanh toán</label
+						>
 					</div>
 				</div>
 				<div>
@@ -49,14 +101,19 @@
 						><i class="fas fa-credit-card"></i> Thanh Toán</button
 					>
 				</div>
-			</form>
-			<b-modal id="modal-1" v-model="showModal" :title="$t('ROOM.FORM.TITLE')" centered>
+			</div>
+
+			<b-modal id="modal-1" v-model="showModal" :title="$t('BANK.TITLE')" centered>
 				<div class="col-6 col-sm-12">
 					<div>
 						<label for="">Bank</label>
 						<b-form-select :selected="payment.bankCode" v-model="payment.bankCode">
-							<b-form-select-option :value="null">Chọn địa điểm</b-form-select-option>
-							<b-form-select-option v-for="bank in options_bank" :key="bank.id" :value="bank.shortName">
+							<b-form-select-option :value="null">Select Bank</b-form-select-option>
+							<b-form-select-option
+								v-for="bank in options_bank"
+								:key="bank.id"
+								:value="bank.shortName"
+							>
 								{{ bank.vn_name }}
 							</b-form-select-option>
 						</b-form-select>
@@ -64,9 +121,7 @@
 				</div>
 				<template #modal-footer>
 					<div>
-						<b-button class="btn btn-primary" @click="handlePayment()">
-							{{ $t('ROOM.FORM.CREATE') }}
-						</b-button>
+						<b-button class="btn btn-primary" @click="handlePayment()"> OK </b-button>
 
 						<b-button class="btn btn-danger" @click="showModal = false">
 							{{ $t('ROOM.FORM.CLOSE') }}
@@ -82,25 +137,27 @@
 	import { Payment, getListBank } from '@/api/modules/payment';
 	import { getToken } from '../../const/cookie';
 	import { MakeToast } from '@/toast/toastMessage';
-	import { getInvoice,getOneInvoice } from '@/api/modules/invoice';
+	import { getInvoice, getOneInvoice } from '@/api/modules/invoice';
 	import { getOneRoom } from '@/api/modules/room';
 	export default {
 		name: 'bill',
 		data() {
 			return {
 				showModal: false,
-				rooms:[],
+				rooms: [],
 				selected: null,
-				invoice:[],
+				invoice: [],
 				month: [
 					{
 						name: 'Tháng 1'
 					}
 				],
 				payment: {
-					bankCode: ''
+					bankCode: null
 				},
-				options_bank: []
+				options_bank: [],
+				idx: '',
+				sort_date: ''
 			};
 		},
 		computed: {
@@ -110,12 +167,19 @@
 			},
 			lang() {
 				return this.$store.getters.language;
+			},
+			changeDate() {
+				return this.sort_date;
+			}
+		},
+		watch: {
+			changeDate() {
+				this.getBill();
 			}
 		},
 		created() {
 			this.getBank();
 			this.getBill();
-			this.getRoom()
 		},
 		methods: {
 			async getBank() {
@@ -127,28 +191,36 @@
 						console.log(err);
 					});
 			},
-			async getBill(id){
-				id = this.user_id,
-				await getOneInvoice({user_id : id, date: 'invoice.date_month'})
-					.then(res=>{
-						this.invoice = res.data
-						console.log(this.invoice[0].room_id);
-					})
-					.catch(err=>{
-						console.log(err);
-					})
+			async getBill() {
+				if (this.sort_date) {
+					const sortDate = new Date(this.sort_date);
+					let sortMonth = sortDate.getMonth() + 1;
+					let sortYear = sortDate.getFullYear();
+					const sortFullDateMonth = `${sortMonth}/${sortYear}`;
+					await getOneInvoice({ user_id: this.user_id, date: sortFullDateMonth })
+						.then(res => {
+							if (res.status === 'success') {
+								this.invoice = res.data;
+							}
+						})
+						.catch(err => {
+							console.log(err);
+						});
+				} else {
+					const currentDate = new Date();
+					let crMonth = currentDate.getMonth() + 1;
+					let crYear = currentDate.getFullYear();
+					const crDateFull = `${crMonth}/${crYear}`;
+					await getOneInvoice({ user_id: this.user_id, date: crDateFull })
+						.then(res => {
+							this.invoice = res.data;
+						})
+						.catch(err => {
+							console.log(err);
+						});
+				}
 			},
-			async getRoom(){
-				const id = {id:this.invoice[0].room_id}
-				await getOneRoom(id)
-					.then(res =>{
-						this.rooms = res.data
-						console.log(this.room);
-					})
-					.catch(err=>{
-						console.log(err);
-					})
-			},
+
 			async handleModal() {},
 			async handlePayment() {
 				let d = new Date();
@@ -172,6 +244,7 @@
 						// 	content: this.$t('MANAGER.FORM.SUCCESS')
 						// });
 						// this.isResetDataModal();
+						this.showModal = false;
 					})
 					.catch(err => {
 						console.log(err);
